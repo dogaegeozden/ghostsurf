@@ -173,7 +173,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """A function which changes your ip address by restarting the tor service"""
         # Executing the init script.
         system('sudo bash /opt/ghostsurf/bash_scripts/init.sh')
-        system('sudo systemctl restart tor')
+        system('sudo bash /opt/ghostsurf/bash_scripts/restart_tor.sh')
 
 if __name__ == "__main__":
     app = QApplication([])

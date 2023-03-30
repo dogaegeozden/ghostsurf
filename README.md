@@ -2,8 +2,9 @@
 ![GhostsurfLogo](https://raw.githubusercontent.com/dogaegeozden/ghostsurf/main/logos/ghostsurf_rounded.png)
 
 ## INSTALLATION
-1) ```curl -L https://github.com/dogaegeozden/ghostsurf/releases/download/tor/ghostsurf.deb```
-2) ```sudo dpkg -i ghostsurf.deb```
+1) Install the dependencies: ```apt install tor bleachbit netfilter-persistent iptables-persistent -y```
+2) Download the installer ```curl -L https://github.com/dogaegeozden/ghostsurf/releases/download/tor/ghostsurf.deb```
+2) Start the installer ```sudo dpkg -i ghostsurf.deb```
 3) Open a new terminal and type: ```ghostsurf```
 
 ## HELP
