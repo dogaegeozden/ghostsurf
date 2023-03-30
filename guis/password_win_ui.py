@@ -1,0 +1,61 @@
+# -*- coding: utf-8 -*-
+
+################################################################################
+## Form generated from reading UI file 'password_win.ui'
+##
+## Created by: Qt User Interface Compiler version 5.15.2
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
+
+from PySide2.QtCore import *
+from PySide2.QtGui import *
+from PySide2.QtWidgets import *
+
+import resources_rc
+
+class Ui_PasswordDialog(object):
+    def setupUi(self, PasswordDialog):
+        if not PasswordDialog.objectName():
+            PasswordDialog.setObjectName(u"PasswordDialog")
+        PasswordDialog.resize(250, 100)
+        icon = QIcon()
+        icon.addFile(u":/logos/ghostsurf.png", QSize(), QIcon.Normal, QIcon.Off)
+        PasswordDialog.setWindowIcon(icon)
+        PasswordDialog.setStyleSheet(u"#PasswordDialog {\n"
+"	background: #231f1f;\n"
+"}")
+        PasswordDialog.setInputMethodHints(Qt.ImhNone)
+        self.password_line_edit = QLineEdit(PasswordDialog)
+        self.password_line_edit.setObjectName(u"password_line_edit")
+        self.password_line_edit.setGeometry(QRect(50, 20, 150, 30))
+        self.password_line_edit.setInputMethodHints(Qt.ImhHiddenText|Qt.ImhNoAutoUppercase|Qt.ImhNoPredictiveText|Qt.ImhSensitiveData)
+        self.password_line_edit.setEchoMode(QLineEdit.Password)
+        self.password_line_edit.setAlignment(Qt.AlignCenter)
+        self.submit_button = QPushButton(PasswordDialog)
+        self.submit_button.setObjectName(u"submit_button")
+        self.submit_button.setGeometry(QRect(80, 60, 90, 25))
+        self.visibility_button = QPushButton(PasswordDialog)
+        self.visibility_button.setObjectName(u"visibility_button")
+        self.visibility_button.setGeometry(QRect(210, 28, 15, 15))
+        self.visibility_button.setStyleSheet(u"#visibility_button {\n"
+"	background: #231f1f;\n"
+"}")
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/eye_closed.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/icons/eye_open.svg", QSize(), QIcon.Normal, QIcon.On)
+        self.visibility_button.setIcon(icon1)
+
+        self.retranslateUi(PasswordDialog)
+
+        QMetaObject.connectSlotsByName(PasswordDialog)
+    # setupUi
+
+    def retranslateUi(self, PasswordDialog):
+        PasswordDialog.setWindowTitle(QCoreApplication.translate("PasswordDialog", u"Password", None))
+        self.password_line_edit.setText("")
+        self.password_line_edit.setPlaceholderText(QCoreApplication.translate("PasswordDialog", u"User Password...", None))
+        self.submit_button.setText(QCoreApplication.translate("PasswordDialog", u"Submit", None))
+        self.visibility_button.setText("")
+    # retranslateUi
+
