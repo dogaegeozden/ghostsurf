@@ -7,6 +7,8 @@
 2) Start the installer ```sudo dpkg -i ghostsurf.deb```
 3) Open a new terminal and type: ```ghostsurf```
 
+![AppScreenShot](https://raw.githubusercontent.com/dogaegeozden/ghostsurf/main/app_images/app_sc.png)
+
 ## HELP
 
 Ghost surf is identifying your ip address by sending a get request to https://ipinfo.io. And if the app sends too many requests it may not a get proper response.
