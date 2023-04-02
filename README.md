@@ -11,4 +11,4 @@
 
 ## HELP
 
-Ghost surf is identifying your ip address by sending a get request to https://ipinfo.io. And if the app sends too many requests it may not a get proper response.
+Ghost surf is identifying your ip address by sending a get request to https://ifconfig.io. And if the app sends too many requests it may not a get proper response.

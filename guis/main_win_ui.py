@@ -18,7 +18,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(410, 197)
+        MainWindow.resize(410, 200)
         icon = QIcon()
         icon.addFile(u":/logos/ghostsurf.png", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -57,7 +57,7 @@ class Ui_MainWindow(object):
         self.my_ip_button.setGeometry(QRect(285, 150, 90, 25))
         self.status_header_label = QLabel(self.centralwidget)
         self.status_header_label.setObjectName(u"status_header_label")
-        self.status_header_label.setGeometry(QRect(105, 70, 60, 30))
+        self.status_header_label.setGeometry(QRect(105, 70, 81, 30))
         font2 = QFont()
         font2.setBold(True)
         font2.setWeight(75)
@@ -67,7 +67,7 @@ class Ui_MainWindow(object):
 "}")
         self.status_label = QLabel(self.centralwidget)
         self.status_label.setObjectName(u"status_label")
-        self.status_label.setGeometry(QRect(160, 70, 101, 30))
+        self.status_label.setGeometry(QRect(190, 70, 91, 30))
         self.status_label.setFont(font2)
         self.status_label.setStyleSheet(u"#status_label {\n"
 "	color: red;\n"
@@ -102,7 +102,7 @@ class Ui_MainWindow(object):
         self.start_stop_button.setText(QCoreApplication.translate("MainWindow", u"Start", None))
         self.change_id_button.setText(QCoreApplication.translate("MainWindow", u"Change ID", None))
         self.my_ip_button.setText(QCoreApplication.translate("MainWindow", u"My IP", None))
-        self.status_header_label.setText(QCoreApplication.translate("MainWindow", u"Status:", None))
+        self.status_header_label.setText(QCoreApplication.translate("MainWindow", u"Tor Status:", None))
         self.status_label.setText(QCoreApplication.translate("MainWindow", u"Deactive", None))
         self.ip_address_label.setText("")
         self.ip_address_header_label.setText(QCoreApplication.translate("MainWindow", u"Ip Address:", None))

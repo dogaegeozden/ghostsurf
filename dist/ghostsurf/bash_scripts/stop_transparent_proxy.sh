@@ -50,10 +50,8 @@ allow_input_and_output_on_loopback_interface() {
     ip6tables -A OUTPUT -o lo -j ACCEPT
 }
 
-
 set_iptables_rules_v4and6 () {
     # A function which restores iptables policies
-
 
     # HTTP: Hypertext Transfer Protocol -> The purpose of the HTTP protocol is to provide a standard way for web browsers and servers to talk to each other.
     # These policies are required if you want to be able to connect to internet using http and https protocols. These are the most common ones and the standard way for web browsers and servers to talk to each other.
@@ -86,20 +84,22 @@ set_iptables_rules_v4and6 () {
     iptables -A INPUT -p tcp -m conntrack --ctstate ESTABLISHED --sport 22 -j ACCEPT
     ip6tables -A OUTPUT -p tcp -m conntrack --ctstate NEW,ESTABLISHED --dport 22 -j ACCEPT
     ip6tables -A INPUT -p tcp -m conntrack --ctstate ESTABLISHED --sport 22 -j ACCEPT
+
+    # Saving the iptables rules
+    iptables-save > /etc/iptables/rules.v4
+    ip6tables-save > /etc/iptables/rules.v6
 }
 
 stop_tor_service() {
     # A function which stops tor service
-
+    
     systemctl stop tor
 }
 
 delete_the_unneccesary_files() {
     # A function which deletes unneccesary files
 
-    rm backup
     rm tor.log
-    rm torrc
 }
 
 # Calling the main function.
