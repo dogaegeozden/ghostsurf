@@ -1,3 +1,5 @@
+#!/usr/bin/bash
+
 main () {
     # The main function which runs the entire script
     

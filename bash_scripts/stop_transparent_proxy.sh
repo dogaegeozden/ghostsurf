@@ -1,3 +1,5 @@
+#!/usr/bin/bash
+
 main() {
     # The main function which runs the entire script
 
@@ -67,23 +69,11 @@ set_iptables_rules_v4and6 () {
     ip6tables -A OUTPUT -p tcp -m tcp --dport 443 -j ACCEPT
 
     # DNS: Domain Name System -> The purpose of DNS is to translate a domain name into the appropriate IP address.
-    # Note: You should allow incoming and out going communications to this port if you want to use URLs instead of ipaddresses. ExURL: https://dogaege.pythonanywhere.com
+    # Note: You should allow incoming and out going communications to this port if you want to use URLs instead of ipaddresses. Ex-URL: www.google.com 
     iptables -A INPUT -p udp --sport 53 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
     iptables -A OUTPUT -p udp --dport 53 -m udp -j ACCEPT
     ip6tables -A INPUT -p udp --sport 53 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
     ip6tables -A OUTPUT -p udp --dport 53 -m udp -j ACCEPT
-    
-    # SSH: The Secure Shell Protocol (SSH) is a cryptographic network protocol for operating network services securely over an unsecured network. Its most notable applications are remote login and command-line execution.
-    # Puting input -> Packages coming into the destionation port(Destination Port: It is the other machine's port, thats why you are only allowing when the state is either new or established. Because your security is what matters most for you, not the other's.)
-    iptables -A INPUT -p tcp -m conntrack --ctstate NEW,ESTABLISHED --dport 22 -j ACCEPT
-    iptables -A OUTPUT -p tcp -m conntrack --ctstate ESTABLISHED --sport 22 -j ACCEPT
-    ip6tables -A INPUT -p tcp -m conntrack --ctstate NEW,ESTABLISHED --dport 22 -j ACCEPT
-    ip6tables -A OUTPUT -p tcp -m conntrack --ctstate ESTABLISHED --sport 22 -j ACCEPT
-    # Geting output -> Packages coming into  the source port(Source Port: It is your machine's port, that's why you are only allowing when the state is established. Becase your security is what matters most for you.)
-    iptables -A OUTPUT -p tcp -m conntrack --ctstate NEW,ESTABLISHED --dport 22 -j ACCEPT
-    iptables -A INPUT -p tcp -m conntrack --ctstate ESTABLISHED --sport 22 -j ACCEPT
-    ip6tables -A OUTPUT -p tcp -m conntrack --ctstate NEW,ESTABLISHED --dport 22 -j ACCEPT
-    ip6tables -A INPUT -p tcp -m conntrack --ctstate ESTABLISHED --sport 22 -j ACCEPT
 
     # Saving the iptables rules
     iptables-save > /etc/iptables/rules.v4
@@ -92,13 +82,15 @@ set_iptables_rules_v4and6 () {
 
 stop_tor_service() {
     # A function which stops tor service
-    
+
+    # Stopping the tor service
     systemctl stop tor
 }
 
 delete_the_unneccesary_files() {
     # A function which deletes unneccesary files
 
+    # Deleting the log file
     rm tor.log
 }
 

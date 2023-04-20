@@ -31,14 +31,14 @@ def manage_netfilter_service():
     """A function which starts and enables netfilter service if it's not"""
 
     # Checking if the netfilter-persistent service is inactive
-    if 'inactive' in popen(f'systemctl status netfilter-persistent').read():
+    if 'inactive' in popen(f'echo "{user_pwd}" | sudo -S systemctl status netfilter-persistent').read():
         # Starting the netfilter-persistent service
-        system('sudo systemctl start netfilter-persistent')
+        system(f'echo {user_pwd} | sudo -S systemctl start netfilter-persistent')
 
     # Checking if the netfilter-persistent service is disabled
-    if 'disabled' in popen(f'systemctl status netfilter-persistent').read():
+    if 'disabled' in popen(f'echo "{user_pwd}" | sudo -S systemctl status netfilter-persistent').read():
         # Enabling the netfilter service
-        system(f'sudo systemctl enable netfilter-persistent')
+        system(f'echo {user_pwd} | sudo -S systemctl enable netfilter-persistent')
 
 
 # Creating a dialog class called CreateNewSafeDialog
@@ -85,11 +85,13 @@ class PasswordDialog(QDialog, Ui_PasswordDialog):
         """A function which stores the password that the user entered in a global variable"""
         
         # Creating a global variable called user_pwd
-        global user_pwd
+        global user_pwd, user_name
         # Initializing the user_pwd variable with the password_line_edit's text
         user_pwd = self.password_line_edit.text()
         # Getting the username and the root privileges
         user_name = popen(f'echo "{user_pwd}" | sudo -S whoami').read()
+        # Getting the file owner's name
+        # file_owner_name = popen('stat -c %U /opt/ghostsurf/ghostsurf').read()
         # Checking if the username is equal to root
         if user_name == "root\n":
             # Closing password dialog window
@@ -121,7 +123,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         # Checking tor services status
-        tor_status = popen('systemctl status tor.service').read()
+        tor_status = popen(f'echo "{user_pwd}" | sudo -S systemctl status tor.service').read()
 
         # Checking if the tor service is inactive
         if "inactive" in tor_status:
@@ -154,9 +156,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Printing "Start button pressed" in debug mode.
             debug("Start button pressed")
             # Executing the init script.
-            system('sudo bash /opt/ghostsurf/bash_scripts/init.sh')
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/init.sh"')
             # Executing the start script.
-            system('sudo bash /opt/ghostsurf/bash_scripts/start_transparent_proxy.sh')
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
             # Changing the start_stop_button's text value to Stop.
             self.start_stop_button.setText("Stop")
         
@@ -165,14 +167,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Printing "Stop button pressed" in debug mode
             debug("Stop button pressed")
             # Executing the init script.
-            system('sudo bash /opt/ghostsurf/bash_scripts/init.sh')
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/init.sh"')
             # Executing the stop script.
-            system('sudo bash /opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh')
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
             # Changing the start_stop_button's text value to Stop.
             self.start_stop_button.setText("Start")
 
         # Reading the tor service's status by running a system command.
-        tor_status = popen('systemctl status tor.service').read()
+        tor_status = popen(f'echo "{user_pwd}" | sudo -S systemctl status tor.service').read()
 
         # Checking if tor service is inactive
         if "inactive" in tor_status:
@@ -194,7 +196,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Trying to send a get request to ipinfo.io to get the device's public ip address
         try:
             # Sending a get request to "https://ifconfig.io" to get the user's public ip address.
-            users_ip_address = popen("curl https://ifconfig.io").read()[:-1]
+            users_ip_address = popen('curl "https://ifconfig.io"').read()[:-1]
 
             # Checking if "Could not resolve host: ifconfig.io" is not in the users_ip_addres variable
             if "Could not resolve host: ifconfig.io" not in users_ip_address:
@@ -221,7 +223,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """A function which shows the tor service's status"""
 
         # Reading tor services status from a system command
-        tor_status = popen('systemctl status tor.service').read()
+        tor_status = popen(f'echo "{user_pwd}" | sudo -S systemctl status tor.service').read()
 
         # Checking if tor service is inactive
         if "inactive" in tor_status:
@@ -241,11 +243,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """A function which changes your ip address by restarting the transparent proxy"""
 
         # Executing the init script
-        system('sudo bash /opt/ghostsurf/bash_scripts/init.sh')
+        system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/init.sh"')
         # Executing the stop_transparent_proxy script
-        system('sudo bash /opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh')
+        system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
         # Executing the start_transparent_proxy script
-        system('sudo bash /opt/ghostsurf/bash_scripts/start_transparent_proxy.sh')
+        system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
 
 
 # Evaluate if the source is being run on its own or being imported somewhere else. With this conditional in place, your code can not be imported somewhere else.

@@ -1,5 +1,23 @@
 #!/usr/bin/bash
 
+# Delete the old files if they are exist
+echo "Deleting the dist folder..."
+if [[ -d dist/ ]]; then
+    rm -rf dist/
+fi
+echo "Deleting the build folder..."
+if [[ -d build/ ]]; then
+    rm -rf build/
+fi 
+echo "Deleting the package folder..."
+if [[ -d package/ ]]; then
+    rm -rf package/
+fi
+echo "Deleting the installer..."
+if [[ -f ghostsurf.deb ]]; then
+    rm ghostsurf.deb
+fi 
+
 # Create the executable file
 echo 'Creating the executable file...'
 pyinstaller ghostsurf.spec
@@ -8,10 +26,25 @@ pyinstaller ghostsurf.spec
 echo 'Creating the directory hierarchy...'
 mkdir -p package/opt
 mkdir -p package/usr/bin
+mkdir -p package/usr/share/applications/
+mkdir -p package/usr/share/icons/hicolor/scalable/apps/
 
-# Copy the application to package/opt
-echo 'Copying the executable application into package/opt/...'
+# Copy required files and folders into the package
+echo 'Copying the executable application into package/opt/'
 cp -r dist/ghostsurf package/opt/
+
+echo 'Copying the desktop file into package/usr/share/applications/'
+cp ghostsurf.desktop package/usr/share/applications/
+
+echo 'Copying the logo into package/usr/share/icons/hicolor/scalable/apps/'
+cp logos/ghostsurf_rounded.png package/usr/share/icons/hicolor/scalable/apps/
+
+echo 'Copying the launcher file into package/usr/bin/'
+cp launcher.sh package/usr/bin/ghostsurf
+
+# Set the permissions
+echo 'Setting the file permissions'
+chmod 755 -R package/
 
 # Create the installer
 echo 'Creating the installer...'
