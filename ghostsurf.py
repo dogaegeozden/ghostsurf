@@ -85,7 +85,7 @@ class PasswordDialog(QDialog, Ui_PasswordDialog):
         """A function which stores the password that the user entered in a global variable"""
         
         # Creating a global variable called user_pwd
-        global user_pwd, user_name
+        global user_pwd
         # Initializing the user_pwd variable with the password_line_edit's text
         user_pwd = self.password_line_edit.text()
         # Getting the username and the root privileges

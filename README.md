@@ -4,7 +4,7 @@
 Ghostsurf is a desktop application which redirects your internet traffic over tor. You can use it to stay anonymous while you are online. Make sure to read the major flaws section.
 
 ## MAJOR FLAWS  
-It's redirecting the root user's traffic. You can see this by executing the following command from your terminal -> sudo curl ifconfig.io
+It is not redirecting the root user's traffic. You can see this by executing the following command from your terminal -> sudo curl ifconfig.io
 
 ## INSTALLATION
 1) Install the dependencies: ```apt install tor bleachbit netfilter-persistent iptables-persistent -y```
