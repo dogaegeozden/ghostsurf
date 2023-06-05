@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>410</width>
-    <height>200</height>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,9 +46,9 @@
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>10</y>
+      <y>20</y>
       <width>250</width>
-      <height>60</height>
+      <height>50</height>
      </rect>
     </property>
     <property name="font">
@@ -59,7 +59,7 @@
     </property>
     <property name="styleSheet">
      <string notr="true">#title_label {
-	color: white;
+	color: #6bfffb;
 }</string>
     </property>
     <property name="text">
@@ -75,7 +75,7 @@
       <x>35</x>
       <y>150</y>
       <width>90</width>
-      <height>25</height>
+      <height>30</height>
      </rect>
     </property>
     <property name="font">
@@ -93,7 +93,7 @@
       <x>160</x>
       <y>150</y>
       <width>90</width>
-      <height>25</height>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -106,7 +106,7 @@
       <x>285</x>
       <y>150</y>
       <width>90</width>
-      <height>25</height>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -117,7 +117,7 @@
     <property name="geometry">
      <rect>
       <x>105</x>
-      <y>70</y>
+      <y>90</y>
       <width>81</width>
       <height>30</height>
      </rect>
@@ -141,7 +141,7 @@
     <property name="geometry">
      <rect>
       <x>190</x>
-      <y>70</y>
+      <y>90</y>
       <width>91</width>
       <height>30</height>
      </rect>
@@ -161,59 +161,61 @@
      <string>Deactive</string>
     </property>
    </widget>
-   <widget class="QLabel" name="ip_address_label">
-    <property name="geometry">
-     <rect>
-      <x>125</x>
-      <y>110</y>
-      <width>150</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">#ip_address_label {
-	color: white;
-}</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="ip_address_header_label">
-    <property name="geometry">
-     <rect>
-      <x>35</x>
-      <y>110</y>
-      <width>90</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">#ip_address_header_label{
-	color: white;
-}</string>
-    </property>
-    <property name="text">
-     <string>Ip Address:</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="status_button">
     <property name="geometry">
      <rect>
       <x>285</x>
-      <y>70</y>
+      <y>90</y>
       <width>90</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
      <string>Status</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="info_button">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>200</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">#info_button {
+	background: #231f1f;
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../resources.qrc">
+      <normaloff>:/icons/info.svg</normaloff>:/icons/info.svg</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pandora_bomb_button">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>200</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">#pandora_bomb_button {
+	background: #231f1f;
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../resources.qrc">
+      <normaloff>:/icons/bomb.png</normaloff>:/icons/bomb.png</iconset>
     </property>
    </widget>
   </widget>

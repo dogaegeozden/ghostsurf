@@ -3,10 +3,19 @@ main() {
 
     # Calling the declare_variables function.
     declare_variables
-    # Calling configure_tor function.
+
+    # Calling configure_tor function.s
     configure_tor
+
     # Calling declare_variables function.
     declare_variables
+
+    # Calling the disable_ipv6 function.
+    disable_ipv6
+
+    # Calling the setup_configuration_files function.
+    setup_configuration_files
+
     # Calling set_up_iptables_rules function.
     set_up_iptables_rules
 }
@@ -14,8 +23,6 @@ main() {
 configure_tor() {
     # A function which configures tor
 
-    # Starting tor with a the torrc file that just have been created and, storing the logs in a file called tor.log
-    tor -f /opt/ghostsurf/tor_configuration_files/torrc.custom > tor.log &
     # Starting the tor service
     systemctl start tor
 }
@@ -23,20 +30,45 @@ configure_tor() {
 declare_variables() {
     # A function which declares variables
    
-    # Getting the tor app's uid 
+    # Tor uid for Debian/Ubuntu
     tor_uid="$(id -u debian-tor)"
-    non_tor="192.168.1.0/24 192.168.0.0/24"
+    
+    # LAN destinations that shouldn't be routed through Tor
+    non_tor="127.0.0.0/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16"
+    
+    # Tor TransPort
     trans_port="9040"
+
+    # Tor DNSPort
     dns_port="5353"
+
+    # Tor VirtualAddrNetworkIPv4
+    virtual_address="10.192.0.0/10"
+}
+
+disable_ipv6() {
+    # A function which disables ipv6 connections
+    
+    # disable IPv6
+    sysctl -w net.ipv6.conf.all.disable_ipv6=1 >/dev/null 2>&1
+    sysctl -w net.ipv6.conf.default.disable_ipv6=1 >/dev/null 2>&1
+}
+
+setup_configuration_files() {
+    # A function which backs up the resolv.conf file
+
+    # Changing the resolv.cfile
+    cp /opt/ghostsurf/configuration_files/resolv.conf.custom /etc/resolv.conf
+
+    # Changing the torrc file
+    cp /opt/ghostsurf/configuration_files/torrc.custom /etc/tor/torrc
+
+    # Reloading system daemons
+    systemctl --system daemon-reload
 }
 
 set_up_iptables_rules() {
     # A function which sets up iptables rules
-
-    # Accept all traffic first to avoid ssh lockdown  via iptables firewall rules #
-    iptables -P INPUT ACCEPT
-    iptables -P FORWARD ACCEPT
-    iptables -P OUTPUT ACCEPT
     
     # Flush All Iptables Chains/Firewall rules
     iptables -F
@@ -48,31 +80,79 @@ set_up_iptables_rules() {
     iptables -Z 
 
     # Flush and delete all nat and mangle
-    iptables -t nat -F
-    iptables -t nat -X
     iptables -t mangle -F
     iptables -t mangle -X
     iptables -t raw -F
     iptables -t raw -X
 
+    iptables -t filter -F
+    iptables -t filter -X
+    iptables -t nat -F
+    iptables -t nat -X
+
+    # Accept all traffic
+    iptables -P INPUT ACCEPT
+    iptables -P FORWARD ACCEPT
+    iptables -P OUTPUT ACCEPT
+
+
     # This is where I left.
-    iptables -t nat -A OUTPUT -m owner --uid-owner 0 -j RETURN
-    iptables -t nat -A OUTPUT -p udp --dport 53 -j REDIRECT --to-ports $dns_port
-
-    for net in $non_tor 127.0.0.0/9 127.128.0.0/10; do
-        iptables -t nat -A OUTPUT -d $net -j RETURN
-    done
-
-    iptables -t nat -A OUTPUT -p tcp --syn -j REDIRECT --to-ports $trans_port
-
-    iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
     
-    for net in $non_tor 127.0.0.0/8; do
-        iptables -A OUTPUT -d $net -j ACCEPT
+    ## *nat OUTPUT (For local redirection)
+    #
+    # nat .onion addresses
+    iptables -t nat -A OUTPUT -d $virtual_address -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports $trans_port
+
+    # nat dns requests to Tor
+    iptables -t nat -A OUTPUT -d 127.0.0.1/32 -p udp -m udp --dport 53 -j REDIRECT --to-ports $dns_port
+
+    # Don't nat the Tor process, the loopback, or the local network
+    iptables -t nat -A OUTPUT -m owner --uid-owner $tor_uid -j RETURN
+    iptables -t nat -A OUTPUT -o lo -j RETURN
+
+    # Allow lan access for hosts in $non_tor
+    for lan in $non_tor; do
+        iptables -t nat -A OUTPUT -d $lan -j RETURN
     done
 
-    iptables -A OUTPUT -m owner --uid-owner 0 -j ACCEPT
-    iptables -A OUTPUT -j REJECT
+    # Redirects all other pre-routing and output to Tor's TransPort
+    iptables -t nat -A OUTPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports $trans_port
+
+    ## *filter INPUT
+    iptables -A INPUT -m state --state ESTABLISHED -j ACCEPT
+    iptables -A INPUT -i lo -j ACCEPT
+
+    # Drop everything else
+    iptables -A INPUT -j DROP
+
+    ## *filter FORWARD
+    iptables -A FORWARD -j DROP
+
+    ## *filter OUTPUT
+    #
+    # Fix for potential kernel transproxy packet leaks
+    # see: https://lists.torproject.org/pipermail/tor-talk/2014-March/032507.html
+    iptables -A OUTPUT -m conntrack --ctstate INVALID -j DROP
+
+    iptables -A OUTPUT -m state --state INVALID -j DROP
+    iptables -A OUTPUT -m state --state ESTABLISHED -j ACCEPT
+
+    # Allow Tor process output
+    iptables -A OUTPUT -m owner --uid-owner $tor_uid -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j ACCEPT
+
+    # Allow loopback output
+    iptables -A OUTPUT -d 127.0.0.1/32 -o lo -j ACCEPT
+
+    # Tor transproxy magic
+    iptables -A OUTPUT -d 127.0.0.1/32 -p tcp -m tcp --dport $trans_port --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
+
+    # Drop everything else
+    iptables -A OUTPUT -j DROP
+
+    ## Set default policies to DROP
+    iptables -P INPUT DROP
+    iptables -P FORWARD DROP
+    iptables -P OUTPUT DROP
 }
 
 # Calling the main function.

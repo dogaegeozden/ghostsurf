@@ -5,16 +5,24 @@ main() {
 
     # Calling clear_iptables_rules function.
     clear_iptables_rules
+
+    # Calling the enable_ipv6 function.
+    enable_ipv6
+    
     # Calling default_drop function.
     default_drop
+
     # Calling allow_input_and_output_on_loopback_interface function.
     allow_input_and_output_on_loopback_interface
+
     # Calling set_iptables_rules_v4and6 function.
     set_iptables_rules_v4and6
+
     # Calling stop_tor_service function.
     stop_tor_service    
-    # Calling delete_the_unneccesary_files function.
-    delete_the_unneccesary_files
+
+    # Calling restore_default_configuration_files function.
+    restore_default_configuration_files
 }
 
 clear_iptables_rules() {
@@ -87,11 +95,24 @@ stop_tor_service() {
     systemctl stop tor
 }
 
-delete_the_unneccesary_files() {
-    # A function which deletes unneccesary files
+restore_default_configuration_files() {
+    # A function which restores the default configuration files
 
-    # Deleting the log file
-    rm tor.log
+    # Restoring the torrc file
+    cp /etc/tor/torrc.backup /etc/tor/torrc
+
+    # Restoring the resolv.conf file
+    cp /etc/resolv.conf.backup /etc/resolv.conf
+
+    # Reloading systemd daemons
+    sudo systemctl --system daemon-reload
+}
+
+enable_ipv6() {
+    # A function which enables ipv6 connections
+
+    sysctl -w net.ipv6.conf.all.disable_ipv6=0 >/dev/null 2>&1
+    sysctl -w net.ipv6.conf.default.disable_ipv6=0 >/dev/null 2>&1
 }
 
 # Calling the main function.
