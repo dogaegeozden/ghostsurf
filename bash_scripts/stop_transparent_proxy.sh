@@ -25,17 +25,14 @@ main() {
     restore_default_configuration_files
 }
 
-clear_iptables_rules() {
-    # A function which clears the iptables rules
+set_iptables_rules_v4and6 () {
+    # A function which restores iptables policies
 
+    # Clearing the previous rules
     iptables -t filter -F
     iptables -t filter -X
     iptables -t nat -F
     iptables -t nat -X
-}
-
-default_drop () {
-    # A function which drops all the connections on all chains
 
     # Default Drop: Drop all packages coming into, coming into the server but that are routed to somewhere else and coming out of the server. So, the packages can be accepted, sended or, routed only in the ways that you stated.
     # INPUT Chain: Network packages coming into the server.
@@ -47,10 +44,6 @@ default_drop () {
     ip6tables -P INPUT DROP
     ip6tables -P FORWARD DROP
     ip6tables -P OUTPUT DROP
-}
-
-allow_input_and_output_on_loopback_interface() {
-    # A function which allows, packages to come in and go out of the interface.
 
     # Loopback: The loopback device is a special, virtualnetwork interface that your computer uses to communicate with itself. It is used mainly for diagnostics and troubleshooting, and to connect to servers running on the local machine. · The Purpose of Loopback · When a network interface is disconnected--for example, when an Ethernet port is unplugged or Wi-Fi is turned off or not associated with an access point--no communication on that interface is possible, not even communication between your computer and itself. The loopback interface does not represent any actual hardware, but exists so applications running on your computer can always connect to servers on the same machine. · This is important for troubleshooting (it can be compared to looking in a mirror). The loopback device is sometimes explained as purely a diagnostic tool. But it is also helpful when a server offering a resource you need is running on your own machine.
     # You need the allow the communications with this interface to be able use your computer to communicate with services.
@@ -58,10 +51,6 @@ allow_input_and_output_on_loopback_interface() {
     iptables -A OUTPUT -o lo -j ACCEPT
     ip6tables -A INPUT -i lo -j ACCEPT
     ip6tables -A OUTPUT -o lo -j ACCEPT
-}
-
-set_iptables_rules_v4and6 () {
-    # A function which restores iptables policies
 
     # HTTP: Hypertext Transfer Protocol -> The purpose of the HTTP protocol is to provide a standard way for web browsers and servers to talk to each other.
     # These policies are required if you want to be able to connect to internet using http and https protocols. These are the most common ones and the standard way for web browsers and servers to talk to each other.
