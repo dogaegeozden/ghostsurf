@@ -3,17 +3,8 @@
 main() {
     # The main function which runs the entire script
 
-    # Calling clear_iptables_rules function.
-    clear_iptables_rules
-
     # Calling the enable_ipv6 function.
     enable_ipv6
-    
-    # Calling default_drop function.
-    default_drop
-
-    # Calling allow_input_and_output_on_loopback_interface function.
-    allow_input_and_output_on_loopback_interface
 
     # Calling set_iptables_rules_v4and6 function.
     set_iptables_rules_v4and6
@@ -25,6 +16,13 @@ main() {
     restore_default_configuration_files
 }
 
+enable_ipv6() {
+    # A function which enables ipv6 connections
+
+    sysctl -w net.ipv6.conf.all.disable_ipv6=0 >/dev/null 2>&1
+    sysctl -w net.ipv6.conf.default.disable_ipv6=0 >/dev/null 2>&1
+}
+
 set_iptables_rules_v4and6 () {
     # A function which restores iptables policies
 
@@ -33,6 +31,11 @@ set_iptables_rules_v4and6 () {
     iptables -t filter -X
     iptables -t nat -F
     iptables -t nat -X
+    ip6tables -t filter -F
+    ip6tables -t filter -X
+    ip6tables -t nat -F
+    ip6tables -t nat -X
+
 
     # Default Drop: Drop all packages coming into, coming into the server but that are routed to somewhere else and coming out of the server. So, the packages can be accepted, sended or, routed only in the ways that you stated.
     # INPUT Chain: Network packages coming into the server.
@@ -95,13 +98,6 @@ restore_default_configuration_files() {
 
     # Reloading systemd daemons
     sudo systemctl --system daemon-reload
-}
-
-enable_ipv6() {
-    # A function which enables ipv6 connections
-
-    sysctl -w net.ipv6.conf.all.disable_ipv6=0 >/dev/null 2>&1
-    sysctl -w net.ipv6.conf.default.disable_ipv6=0 >/dev/null 2>&1
 }
 
 # Calling the main function.
