@@ -95,8 +95,7 @@ set_up_iptables_rules() {
     iptables -P FORWARD ACCEPT
     iptables -P OUTPUT ACCEPT
 
-
-    # This is where I left.
+    # Note to my self -> Study the part below. It's taken from kalitorify
     
     ## *nat OUTPUT (For local redirection)
     #
