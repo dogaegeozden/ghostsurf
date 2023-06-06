@@ -16,7 +16,7 @@ Ghostsurf is a desktop application which redirects your internet traffic over to
 
 2) Download the installer
 
-		curl -L https://github.com/dogaegeozden/ghostsurf/releases/download/tor/ghostsurf.deb
+		curl -L https://github.com/dogaegeozden/ghostsurf/releases/download/tor/ghostsurf.deb -o ghostsurf.deb
 		
 3) Start the installer 
 
