@@ -101,9 +101,9 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Ghost Surf", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Ghostsurf", None))
         self.logo_label.setText("")
-        self.title_label.setText(QCoreApplication.translate("MainWindow", u"Ghost Surf", None))
+        self.title_label.setText(QCoreApplication.translate("MainWindow", u"Ghostsurf", None))
         self.start_stop_button.setText(QCoreApplication.translate("MainWindow", u"Start", None))
         self.change_id_button.setText(QCoreApplication.translate("MainWindow", u"Change ID", None))
         self.my_ip_button.setText(QCoreApplication.translate("MainWindow", u"My IP", None))
