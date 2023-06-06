@@ -49,11 +49,48 @@ def manage_netfilter_service():
 def wipe_the_memory():
     """A function which drops caches, wipes the memory securely and notifies the user"""
 
-    # Executing the bomb.sh file to wipe the memory securely
-    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/bomb.sh"')
+    # Creating a question dialog window
+    question_dialog = QMessageBox()
 
-    # Sending a notification to let the user know what the application just did
-    system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Caches are dropped and memory is wiped"')
+    # Setting the question dialog window's icon
+    question_dialog.setIcon(QMessageBox.Question)
+
+    # Setting the dialog's window title
+    question_dialog.setWindowTitle("Important")
+
+    # Setting the question dialog's text
+    question_dialog.setText("Do you want fast and less secure operation?")
+
+    # Setting standard buttons
+    question_dialog.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
+
+    # Showing the question dialog
+    question_dialog.exec_()
+
+    # Checking no button is clicked
+    if question_dialog == QMessageBox.No:
+
+        # Sending a notification to inform the user that the process is starting
+        system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Trying to wipe the memory and drop caches. This might take some time!"')
+
+        # Executing the bomb.sh file to wipe the memory securely
+        system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/secure_bomb.sh"')
+
+        # Sending a notification to let the user know what the application just did
+        system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Caches are dropped and memory is wiped"')
+    
+    # Checking if the no button is not clicked
+    else:
+
+        # Sending a notification to inform the user that the process is starting
+        system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Trying to wipe the memory and drop caches. This might take some time!"')
+
+        # Executing the bomb.sh file to wipe the memory securely
+        system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/fast_bomb.sh"')
+
+        # Sending a notification to let the user know what the application just did
+        system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Caches are dropped and memory is wiped"')
+
 
 def get_the_public_ip_address():
     """A function which tries to displays the user's public ip address with notifications"""
@@ -70,7 +107,7 @@ def get_the_public_ip_address():
     # Trying to execute the code block that is located inside this block
     try:
         # Sending a get request to "https://ifconfig.io" to get the public ip address.
-        public_ip_address = popen(f'echo "{user_pwd}" | sudo -S curl --connect-timeout 4.15 "https://ifconfig.io"').read()[:-1]
+        public_ip_address = popen(f'echo "{user_pwd}" | sudo -S curl --connect-timeout 14.15 "https://ifconfig.io"').read()[:-1]
 
         # Creating a pattern for ip address validation
         ip_addr_regex = compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}')
@@ -165,9 +202,6 @@ class PasswordDialog(QDialog, Ui_PasswordDialog):
 
         # Getting the username and the root privileges
         user_name = popen(f'echo "{user_pwd}" | sudo -S whoami').read()
-
-        # Getting the file owner's name
-        # file_owner_name = popen('stat -c %U /opt/ghostsurf/ghostsurf').read()
 
         # Checking if the username is equal to root
         if user_name == "root\n":
@@ -274,22 +308,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Printing "Start button pressed" in debug mode.
             debug("Start button pressed")
 
-            # Creating a warning dialog window
+            # Creating a question dialog window
             question_dialog = QMessageBox()
 
-            # Setting the warning dialog window's icon
+            # Setting the question dialog window's icon
             question_dialog.setIcon(QMessageBox.Question)
 
             # Setting the dialog's window title
             question_dialog.setWindowTitle("Important")
 
-            # Setting the warning dialog's text
+            # Setting the question dialog's text
             question_dialog.setText("Are you allowing to killing of dangerous applications and cleaning of dangerous caches?")
 
             # Setting standard buttons
-            question_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            question_dialog.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
 
-            # Showing the warning dialog
+            # Showing the question dialog
             question_dialog.exec_()
 
             # Checking yes button is clicked
@@ -316,22 +350,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Printing "Stop button pressed" in debug mode
             debug("Stop button pressed")
 
-            # Creating a warning dialog window
+            # Creating a question dialog window
             question_dialog = QMessageBox()
 
-            # Setting the warning dialog window's icon
+            # Setting the question dialog window's icon
             question_dialog.setIcon(QMessageBox.Question)
 
             # Setting the dialog's window title
             question_dialog.setWindowTitle("Important")
 
-            # Setting the warning dialog's text
+            # Setting the question dialog's text
             question_dialog.setText("Are you allowing to killing of dangerous applications and cleaning of dangerous caches?")
 
             # Setting standard buttons
-            question_dialog.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+            question_dialog.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
 
-            # Showing the warning dialog
+            # Showing the question dialog
             question_dialog.exec_()
 
             # Checking yes button is clicked
