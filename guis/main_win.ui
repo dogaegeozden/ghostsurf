@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Ghost Surf</string>
+   <string>Ghostsurf</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
@@ -63,7 +63,7 @@
 }</string>
     </property>
     <property name="text">
-     <string>Ghost Surf</string>
+     <string>Ghostsurf</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
