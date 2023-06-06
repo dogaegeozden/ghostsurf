@@ -30,7 +30,7 @@ Ghostsurf is a desktop application which redirects your internet traffic over to
 
 ## HELP
 
-Ghostsurf is identifying your ip address by sending a get request to https://ifconfig.io. And, if the app sends too many requests in short time that may cause issues and it may not a get proper response.
+Ghostsurf is identifying your ip address by sending a get request to https://ifconfig.io. And, if the app sends too many requests in short time that may cause issues and you may not get a proper response.
 
 ---
 ---
