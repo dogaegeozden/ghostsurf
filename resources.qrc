@@ -5,6 +5,9 @@
         <file alias="info.svg">icons/info.svg</file>
         <file alias="settings.svg">icons/settings.svg</file>
         <file alias="bomb.png">icons/bomb.png</file>
+        <file alias="reset.svg">icons/reset.svg</file>
+        <file alias="mac_changer.svg">icons/mac_changer.svg</file>
+        <file alias="log_shredder.svg">icons/log_shredder.svg</file>
     </qresource>
     <qresource prefix="/logos">
         <file alias="ghostsurf.png">logos/ghostsurf.png</file>
