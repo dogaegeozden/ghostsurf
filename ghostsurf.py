@@ -45,34 +45,6 @@ def main():
     # Executing the app
     app.exec_()
 
-def start_transparent_proxy():
-    """A function which executes a bash script to start transparent proxy"""
-
-    # Sending a notification to inform the user that the operation is starting
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Initializing transparent proxy"')
-    
-    # Executing the start script
-    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
-    
-    # Sending a notification to inform the user that the operation is done
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Transparent proxy established"')
-
-
-def enable_transparent_proxy():
-    """A function which executes 2 scripts to enable ghostsurf at boot"""
-
-    # Sending a notification to inform the user that the operation is starting
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Enabling ghostsurf at boot"')
-
-    # Executing the start script
-    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
-
-    # Executing the save script
-    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/save_iptables_rules.sh"')
-
-    # Sending a notification to inform the user that the operation is done
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Ghostsurf is enabled at boot"')
-
             
 def reset_ghostsurf_settings():
     """A function which resets the ghostsurf settings"""
@@ -486,12 +458,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Printing what's going on in debug mode
             debug("Enabling ghostsurf at boot")
 
-            # Creating a thread which calls enable_transparent_proxy function asyncronously
-            enabler_thread = Thread(target=enable_transparent_proxy)
-            
-            # Starting the thread
-            enabler_thread.start()
+            # Executing the start script
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
 
+            # Executing the save script
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/save_iptables_rules.sh"')
 
             # Opening the ghostsurf.conf file in read mode
             with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "r") as a:
@@ -609,11 +580,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # Executing the init script.
                 system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/init.sh"')
 
-                # Creating a thread which calls the start_transparent_proxy function asyncronously
-                simple_starter_thread = Thread(target=start_transparent_proxy)
-
-                # Starting the thread
-                simple_starter_thread.start()
+                # Executing the start script
+                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
 
                 # Changing the start_stop_button's text value to Stop.
                 self.start_stop_button.setText("Stop")
@@ -624,11 +592,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # Printing the name of the button that is clicked in debug mode
                 debug("No button is clicked")
 
-                # Creating a thread which calls the start_transparent_proxy function asyncronously
-                simple_starter_thread = Thread(target=start_transparent_proxy)
-
-                # Starting the thread
-                simple_starter_thread.start()
+                # Executing the start script
+                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
 
                 # Changing the start_stop_button's text value to Stop.
                 self.start_stop_button.setText("Stop")

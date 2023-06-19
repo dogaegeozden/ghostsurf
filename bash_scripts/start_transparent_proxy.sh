@@ -103,25 +103,6 @@ set_random_hostname(){
     # Selecting a random hostname using the index variable and changing the original hostname with the random one 
     hostnamectl set-hostname "${array[$index]}"
 
-    # Iterating over each interface in the list_of_network_interfaces
-	for interface in $list_of_network_interfaces; do
-
-        # Checking if the interface is not the loop back interface
-        if [[ $interface != "lo" ]]; then
-
-            # Restarting the NetworkManager.service
-            systemctl restart NetworkManager.service
-
-            # Instructing the computer to wait for seconds before connecting to the internet
-            sleep 4 
-
-            # Connecting to internet
-            nmcli d connect $interface
-
-        fi
-
-    done
-    
 }
 
 disable_ipv6() {

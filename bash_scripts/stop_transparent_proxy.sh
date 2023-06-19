@@ -54,8 +54,6 @@ drop_random_hostname() {
     # Restoring the original hostname
     cp "/opt/ghostsurf/backup_files/hostname.backup" "/etc/hostname"
 
-    # Restarting the NetworkManager.service
-    systemctl restart NetworkManager.service
 }
 
 enable_ipv6() {

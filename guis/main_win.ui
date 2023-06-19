@@ -183,6 +183,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>See the help page</string>
+    </property>
     <property name="styleSheet">
      <string notr="true">#info_button {
 	background: #231f1f;
