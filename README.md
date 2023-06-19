@@ -109,7 +109,7 @@ Ghostsurf cihazın internet trafiğini tor üzerinden yönlendiren bir bilgisaya
 ## YÜKLEME
 1) Bağımlılıkları yükle: 	
 
-		sudo apt install tor netfilter-persistent iptables-persistent secure-delete bleachbit -y
+		sudo apt install tor netfilter-persistent iptables-persistent secure-delete bleachbit macchanger net-tools -y
 
 2) Yükleyiciyi indir
 
