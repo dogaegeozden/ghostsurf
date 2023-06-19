@@ -7,7 +7,6 @@ from logging import basicConfig, DEBUG, debug, disable, CRITICAL
 from webbrowser import open as wbopen
 from threading import Thread
 from time import sleep
-from bs4 import BeautifulSoup
 from re import compile
 
 # PySide2
@@ -31,6 +30,86 @@ basicConfig(level=DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 # Creating a variable called base_dir which leads to the current working directory.
 base_dir = path.dirname(__file__)
 
+def main():
+    """The function which runs the entire application"""
+
+    # Creating an app object from QApplication
+    app = QApplication([])
+
+    # Creating a password_dialog object from PasswordDialog class
+    password_dialog = PasswordDialog()
+
+    # Showing the password dialog
+    password_dialog.show()
+
+    # Executing the app
+    app.exec_()
+
+def start_transparent_proxy():
+    """A function which executes a bash script to start transparent proxy"""
+
+    # Sending a notification to inform the user that the operation is starting
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Initializing transparent proxy"')
+    
+    # Executing the start script
+    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
+    
+    # Sending a notification to inform the user that the operation is done
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Transparent proxy established"')
+
+
+def enable_transparent_proxy():
+    """A function which executes 2 scripts to enable ghostsurf at boot"""
+
+    # Sending a notification to inform the user that the operation is starting
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Enabling ghostsurf at boot"')
+
+    # Executing the start script
+    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
+
+    # Executing the save script
+    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/save_iptables_rules.sh"')
+
+    # Sending a notification to inform the user that the operation is done
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Ghostsurf is enabled at boot"')
+
+            
+def reset_ghostsurf_settings():
+    """A function which resets the ghostsurf settings"""
+
+    # Sending a notification to inform the user that the operation is starting
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Executing the reset.sh script"')
+
+    # Executing the reset.sh script.
+    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/reset.sh"')
+
+    # Sending a notification to inform the user that the operation is done
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Reseting is done"')
+
+def kill_log_files():
+    """A function which overrides the log files in the system"""
+    
+    # Sending a notification to inform the user that the operation is starting
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Executing the log_shredder.sh script"')
+
+    # Executing the mac_changer script.
+    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/mac_changer.sh"')
+
+    # Sending a notification to inform the user that the operation is done
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Log shredding is done"')
+
+def change_the_mac_address():
+    """A function which changes the mac address"""
+
+    # Sending a notification to inform the user that the operation is starting
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Executing the mac_changer.sh script"')
+
+    # Executing the mac_changer script.
+    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/mac_changer.sh"')
+
+    # Sending a notification to inform the user that the operation is done
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Mac Changing operation is done"')
+
 def manage_netfilter_service():
     """A function which starts and enables netfilter service if it's not"""
 
@@ -49,6 +128,42 @@ def manage_netfilter_service():
 def wipe_the_memory():
     """A function which drops caches, wipes the memory securely and notifies the user"""
 
+    def wipe_button_question_dialog_processor(i):
+        """A function which process the input coming from the dialog box that is opened after the wipe button is pressed to identify what app should do"""
+        
+        # Getting the user's answer from the i's text value to identify if the user pressed to yes or no
+        user_answer = i.text()
+
+        # Checking if the user pressed to the yes button.
+        if user_answer == "&Yes":
+            
+            # Sending a notification to inform the user that the process is starting
+            system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Trying to wipe the memory and drop caches. This might take some time!"')
+
+            # Executing the bomb.sh file to wipe the memory securely
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/fast_bomb.sh"')
+
+            # Sending a notification to let the user know what the application just did
+            system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Caches are dropped and memory is wiped"')
+            
+        # Checking if the user pressed to the no button
+        elif user_answer == "&No":
+
+            # Sending a notification to inform the user that the process is starting
+            system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Trying to wipe the memory and drop caches. This might take some time!"')
+
+            # Executing the bomb.sh file to wipe the memory securely
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/secure_bomb.sh"')
+
+            # Sending a notification to let the user know what the application just did
+            system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Caches are dropped and memory is wiped"')
+
+        # Checking if the didn't pressed to bot yes and not buttons 
+        else:
+
+            # Printing "Operation canceled in debug mode"
+            debug("Operation canceled")
+
     # Creating a question dialog window
     question_dialog = QMessageBox()
 
@@ -64,32 +179,11 @@ def wipe_the_memory():
     # Setting standard buttons
     question_dialog.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
 
+    # Adding functionality to Yes and No buttons
+    question_dialog.buttonClicked.connect(wipe_button_question_dialog_processor)
+
     # Showing the question dialog
     question_dialog.exec_()
-
-    # Checking no button is clicked
-    if question_dialog == QMessageBox.No:
-
-        # Sending a notification to inform the user that the process is starting
-        system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Trying to wipe the memory and drop caches. This might take some time!"')
-
-        # Executing the bomb.sh file to wipe the memory securely
-        system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/secure_bomb.sh"')
-
-        # Sending a notification to let the user know what the application just did
-        system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Caches are dropped and memory is wiped"')
-    
-    # Checking if the no button is not clicked
-    else:
-
-        # Sending a notification to inform the user that the process is starting
-        system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Trying to wipe the memory and drop caches. This might take some time!"')
-
-        # Executing the bomb.sh file to wipe the memory securely
-        system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/fast_bomb.sh"')
-
-        # Sending a notification to let the user know what the application just did
-        system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Caches are dropped and memory is wiped"')
 
 
 def get_the_public_ip_address():
@@ -247,6 +341,60 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Checking tor services status
         tor_status = popen(f'echo "{user_pwd}" | sudo -S systemctl status tor.service').read()
+        
+        # Opening the ghostsurf.conf file in reading mode
+        with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "r") as c:
+            
+            # Reading the lines of ghostsurf.conf file
+            c_contents = c.readlines()
+
+            # Checking if "enabled_at_boot=yes" is in the line
+            if "enabled_at_boot=yes\n" in c_contents:
+
+                # Creating a variable to keep track if ghostsurf is enabled at boot
+                is_ghostsurf_enabled_at_boot = True
+
+            # Checking if "enabled_at_boot=no" is not in the line
+            else:
+
+                # Creating a variable to keep track if ghostsurf is enabled at boot
+                is_ghostsurf_enabled_at_boot = False
+
+        # Checking if is_ghostsurf_enabled_at_boot is equal to True
+        if is_ghostsurf_enabled_at_boot == True: 
+
+            # Changing the start_stop_button's text value to "Stop".
+            self.start_stop_button.setText("Stop")
+
+            # Setting the status_label widget's stylesheet
+            self.status_label.setStyleSheet(u"#status_label {color: green;}")
+
+            # Setting the status_label's text to "Active"
+            self.status_label.setText('Active')
+            
+            # Changing the ultra_ghost_button's text to "enabled"
+            self.ultra_ghost_button.setText("enabled")
+
+            # Setting the style sheet of the ultra_ghost_button 
+            self.ultra_ghost_button.setStyleSheet(u"#ultra_ghost_button {background: #00ff00; border-radius: 4px; border: 1px solid black}")
+
+        # Checking if is_ghostsurf_enabled_at_boot is not equal to True
+        else:
+
+            # Changing the start_stop_button's text value to "Start".
+            self.start_stop_button.setText("Start")
+
+            # Setting the status_label widget's stylesheet
+            self.status_label.setStyleSheet(u"#status_label {color: red;}")
+
+            # Setting the status_label's text to "Inactive"
+            self.status_label.setText('Inactive')
+            
+            # Changing the ultra_ghost_button's text to "disabled"
+            self.ultra_ghost_button.setText("disabled")
+
+            # Setting the style sheet of the ultra_ghost_button 
+            self.ultra_ghost_button.setStyleSheet(u"#ultra_ghost_button {background: red; border-radius: 4px; border: 1px solid black}")
 
         # Checking if the tor service is inactive
         if "inactive" in tor_status:
@@ -284,6 +432,149 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Connecting the pandora_bomb_button with the wipe_memory_securely function in a way that the function will going to trigger with a press signal
         self.pandora_bomb_button.pressed.connect(self.wipe_memory_securely)
 
+        # Connecting the ultra_ghost_button with the ultra_ghost_mode function in a way that the function will going to trigger with a press signal
+        self.ultra_ghost_button.pressed.connect(self.ultra_ghost_mode)
+
+        # Connecting the mac_changer_button with the change_mac_address function in a way that the function will going to trigger with a press signal
+        self.mac_changer_button.pressed.connect(self.change_mac_address)
+
+        # Connecting the log_shredder_button with the shred_log_files function in a way that the function will going to trigger with a press signal
+        self.log_shredder_button.pressed.connect(self.shred_log_files)
+
+        # Connecting the reset_button with the reset_settings function in a way that the function will going to trigger with a press signal
+        self.reset_button.pressed.connect(self.reset_settings)
+
+    def reset_settings(self):
+        """A function which resets ghostsurf settings"""
+
+        # Creating a thread that resets the ghostsurf settings
+        reset_thread = Thread(target=reset_ghostsurf_settings)
+
+        # Starting the thread
+        reset_thread.start()
+
+
+    def shred_log_files(self):
+        """A function which shreds the log files"""
+
+        # Creating a thread that kills the log files
+        log_kill_thread = Thread(target=kill_log_files)
+
+        # Starting the thread
+        log_kill_thread.start()
+
+
+    def change_mac_address(self):
+        """A function which changes the mac address"""
+        
+        # Creating a thread that changes the mac address
+        mac_changer_thread = Thread(target=change_the_mac_address)
+
+        # Starting the thread
+        mac_changer_thread.start()
+
+
+    def ultra_ghost_mode(self):
+        """A function which enables/disables ghostsurf at boot"""
+
+        # Getting the ultra ghost mode's status from the button's text
+        ultra_ghost_mode_status = self.ultra_ghost_button.text()
+
+        # Checking if ultra_ghost_mode_status is equal to "disabled"
+        if ultra_ghost_mode_status == "disabled":
+
+            # Printing what's going on in debug mode
+            debug("Enabling ghostsurf at boot")
+
+            # Creating a thread which calls enable_transparent_proxy function asyncronously
+            enabler_thread = Thread(target=enable_transparent_proxy)
+            
+            # Starting the thread
+            enabler_thread.start()
+
+
+            # Opening the ghostsurf.conf file in read mode
+            with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "r") as a:
+
+                # Reading the lines of the ghostsurf.conf file
+                a_contents = a.readlines()
+                    
+                # Checking if "enabled_at_boot=no\n"" is in the list of lines
+                if "enabled_at_boot=no\n" in a_contents:
+                    
+                    # Finding the index number of "enabled_at_boot=no\n" string
+                    line_index = a_contents.index("enabled_at_boot=no\n")
+
+                    # Updating the a_contents list
+                    a_contents[line_index]="enabled_at_boot=yes\n"
+
+            # Opening the ghostsurf.conf file in write mode
+            with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "w") as b:
+
+                # Writing the new contents to file
+                b.write('\n'.join(a_contents))
+
+            # Changing the start_stop_button's text value to "Stop".
+            self.start_stop_button.setText("Stop")
+
+            # Setting the status_label widget's stylesheet
+            self.status_label.setStyleSheet(u"#status_label {color: green;}")
+
+            # Setting the status_label's text to "Active"
+            self.status_label.setText('Active')
+            
+            # Changing the ultra_ghost_button's text to "enabled"
+            self.ultra_ghost_button.setText("enabled")
+
+            # Setting the style sheet of the ultra_ghost_button 
+            self.ultra_ghost_button.setStyleSheet(u"#ultra_ghost_button {background: #00ff00; border-radius: 4px; border: 1px solid black}")
+
+        # Checking if ultra_ghost_mode_status is not equal to "disabled"
+        else:
+
+            # Printing what's going on in debug mode
+            debug("Disabling ghostsurf at boot")
+
+            # Executing the stop script
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
+
+            # Opening the ghostsurf.conf file in read mode
+            with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "r") as a:
+                
+                # Reading the lines of ghostsurf.conf file and creating a list out of them
+                a_contents = a.readlines()
+
+                # Checking if "enabled_at_boot=enabled" is in the line
+                if "enabled_at_boot=yes\n" in a_contents:
+                    
+                    # Finding the index of the line
+                    line_index = a_contents.index("enabled_at_boot=yes\n")
+
+                    # Changing the line corresponding to the index number
+                    a_contents[line_index]="enabled_at_boot=no\n"
+
+            # Opening the ghostsurf.conf file in write mode
+            with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "w") as b:
+                
+                # Writing the new contents in to file
+                b.write('\n'.join(a_contents))
+
+            # Changing the start_stop_button's text value to "Start".
+            self.start_stop_button.setText("Start")
+
+            # Setting the status_label widget's stylesheet
+            self.status_label.setStyleSheet(u"#status_label {color: red;}")
+
+            # Setting the status_label's text to "Inactive"
+            self.status_label.setText('Inactive')
+            
+            # Changing the ultra_ghost_button's text to "disabled"
+            self.ultra_ghost_button.setText("disabled")
+
+            # Setting the style sheet of the ultra_ghost_button 
+            self.ultra_ghost_button.setStyleSheet(u"#ultra_ghost_button {background: red; border-radius: 4px; border: 1px solid black}")
+            
+
     def wipe_memory_securely(self):
         """A function which wipes the memory securely"""
 
@@ -297,10 +588,144 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """A function which opens the info page in the default browser"""
 
         # Opening the info page of this application in the default browser
-        wbopen("https://www.github.com/dogaegeozden/ghostsurf")
+        wbopen("https://www.github.com/dogaegeozden/ghostsurf#readme")
+
 
     def start_stop(self):
         """A function which redirects all internet traffic over tor"""
+
+        def start_button_question_dialog_processor(i):
+            """A function which process the input coming from the dialog box that is opened after the start button is pressed to identify what app should do"""
+
+            # Getting the user's answer from the i's text value to identify if the user pressed to yes or no
+            user_answer = i.text()
+
+            # Checking if the user pressed to the yes button.
+            if user_answer == "&Yes":
+
+                # Printing the name of the button that is clicked in debug mode
+                debug("Yes button is clicked")
+
+                # Executing the init script.
+                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/init.sh"')
+
+                # Creating a thread which calls the start_transparent_proxy function asyncronously
+                simple_starter_thread = Thread(target=start_transparent_proxy)
+
+                # Starting the thread
+                simple_starter_thread.start()
+
+                # Changing the start_stop_button's text value to Stop.
+                self.start_stop_button.setText("Stop")
+
+            # Checking if the user pressed to the no button
+            elif user_answer == "&No":
+
+                # Printing the name of the button that is clicked in debug mode
+                debug("No button is clicked")
+
+                # Creating a thread which calls the start_transparent_proxy function asyncronously
+                simple_starter_thread = Thread(target=start_transparent_proxy)
+
+                # Starting the thread
+                simple_starter_thread.start()
+
+                # Changing the start_stop_button's text value to Stop.
+                self.start_stop_button.setText("Stop")
+
+            # Checking if the didn't pressed to bot yes and not buttons 
+            else:
+
+                # Printing "Operation canceled in debug mode"
+                debug("Operation canceled")
+
+        
+        def stop_button_question_dialog_processor(i):
+            """A function which process the input coming from the dialog box that is opened after the stop button is pressed to identify what app should do"""
+
+            # Getting the user's answer from the i's text value to identify if the user pressed to yes or no
+            user_answer = i.text()
+
+            # Checking if the user pressed to the yes button.
+            if user_answer == "&Yes":
+
+                 # Executing the init script.
+                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/init.sh"')
+
+                # Executing the stop script.
+                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
+
+                # Opening the ghostsurf.conf file in read mode
+                with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "r") as d:
+
+                    # Reading the lines of the file
+                    d_contents = d.readlines()
+
+                    # Checking if "enabled_at_boot=yes\n" in the list of lines
+                    if "enabled_at_boot=yes\n" in d_contents:
+                        
+                        # Finding the index number of the line corresponding to the string
+                        line_index = d_contents.index("enabled_at_boot=yes\n")
+
+                        # Modiftying the list item corresponding to the index number
+                        d_contents[line_index] = "enabled_at_boot=no\n"
+
+                # Opening the ghostsurf.conf file in write mode
+                with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "w") as e:
+
+                    # Writing the new contents into file
+                    e.write("\n".join(d_contents))
+
+                # Changing the start_stop_button's text value to Stop.
+                self.start_stop_button.setText("Start")
+
+                # Changing the ultra_ghost_button's text to "disabled"
+                self.ultra_ghost_button.setText("disabled")
+
+                # Setting the style sheet of the ultra_ghost_button 
+                self.ultra_ghost_button.setStyleSheet(u"#ultra_ghost_button {background: red; border-radius: 4px; border: 1px solid black}")
+
+            # Checking if the user pressed to the no button
+            elif user_answer == "&No":
+
+                # Executing the stop script.
+                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
+
+                # Opening the ghostsurf.conf file in read mode
+                with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "r") as d:
+
+                    # Reading the lines of the file
+                    d_contents = d.readlines()
+
+                    # Checking if "enabled_at_boot=yes\n" in the list of lines
+                    if "enabled_at_boot=yes\n" in d_contents:
+                        
+                        # Finding the index number of the line corresponding to the string
+                        line_index = d_contents.index("enabled_at_boot=yes\n")
+
+                        # Modiftying the list item corresponding to the index number
+                        d_contents[line_index] = "enabled_at_boot=no\n"
+
+                # Opening the ghostsurf.conf file in write mode
+                with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "w") as e:
+
+                    # Writing the new contents into file
+                    e.write("\n".join(d_contents))
+
+                # Changing the start_stop_button's text value to Stop.
+                self.start_stop_button.setText("Start")
+
+                # Changing the ultra_ghost_button's text to "disabled"
+                self.ultra_ghost_button.setText("disabled")
+
+                # Setting the style sheet of the ultra_ghost_button 
+                self.ultra_ghost_button.setStyleSheet(u"#ultra_ghost_button {background: red; border-radius: 4px; border: 1px solid black}")
+
+            # Checking if the didn't pressed to bot yes and not buttons 
+            else:
+
+                # Printing "Operation canceled in debug mode"
+                debug("Operation canceled")
         
         # Checking if the start_stop_button's text is equal to "Start"
         if self.start_stop_button.text() == "Start":
@@ -323,27 +748,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Setting standard buttons
             question_dialog.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
 
+            # Adding functionality to Yes and No buttons
+            question_dialog.buttonClicked.connect(start_button_question_dialog_processor)
+
             # Showing the question dialog
             question_dialog.exec_()
-
-            # Checking yes button is clicked
-            if question_dialog == QMessageBox.Yes:
-
-                # Executing the init script.
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/init.sh"')
-
-                # Executing the start script.
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
             
-            # Checking if the yes button is not clicked
-            else:
-
-                # Executing the start script.
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
-
-            # Changing the start_stop_button's text value to Stop.
-            self.start_stop_button.setText("Stop")
-        
         # Checking if the start_stop_button's text is not equal to "Start"
         else:
 
@@ -365,26 +775,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Setting standard buttons
             question_dialog.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
 
+            # Adding functionality to Yes and No buttons
+            question_dialog.buttonClicked.connect(stop_button_question_dialog_processor)
+
             # Showing the question dialog
-            question_dialog.exec_()
+            question_dialog.exec_() 
 
-            # Checking yes button is clicked
-            if question_dialog == QMessageBox.Yes:
-
-                # Executing the init script.
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/init.sh"')
-
-                # Executing the stop script.
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
-
-            # Checking if the yes button is not clicked
-            else:
-
-                # Executing the stop script.
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
-
-            # Changing the start_stop_button's text value to Stop.
-            self.start_stop_button.setText("Start")
 
         # Reading the tor service's status by running a system command.
         tor_status = popen(f'echo "{user_pwd}" | sudo -S systemctl status tor.service').read()
@@ -449,14 +845,5 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # Evaluate if the source is being run on its own or being imported somewhere else. With this conditional in place, your code can not be imported somewhere else.
 if __name__ == "__main__":
 
-    # Creating an app object from QApplication
-    app = QApplication([])
-
-    # Creating a password_dialog object from PasswordDialog class
-    password_dialog = PasswordDialog()
-
-    # Showing the password dialog
-    password_dialog.show()
-
-    # Executing the app
-    app.exec_()
+    # Calling the main function
+    main()

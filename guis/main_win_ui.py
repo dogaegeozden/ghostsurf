@@ -93,6 +93,41 @@ class Ui_MainWindow(object):
         icon2 = QIcon()
         icon2.addFile(u":/icons/bomb.png", QSize(), QIcon.Normal, QIcon.Off)
         self.pandora_bomb_button.setIcon(icon2)
+        self.ultra_ghost_button = QPushButton(self.centralwidget)
+        self.ultra_ghost_button.setObjectName(u"ultra_ghost_button")
+        self.ultra_ghost_button.setGeometry(QRect(150, 202, 90, 26))
+        self.ultra_ghost_button.setStyleSheet(u"#ultra_ghost_button {\n"
+"	background: red;\n"
+"	border-radius: 4px;\n"
+"	border: 1px solid black;\n"
+"}")
+        self.reset_button = QPushButton(self.centralwidget)
+        self.reset_button.setObjectName(u"reset_button")
+        self.reset_button.setGeometry(QRect(10, 200, 30, 30))
+        self.reset_button.setStyleSheet(u"#reset_button {\n"
+"	background: #231f1f;\n"
+"}")
+        icon3 = QIcon()
+        icon3.addFile(u":/icons/reset.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.reset_button.setIcon(icon3)
+        self.mac_changer_button = QPushButton(self.centralwidget)
+        self.mac_changer_button.setObjectName(u"mac_changer_button")
+        self.mac_changer_button.setGeometry(QRect(290, 200, 30, 30))
+        self.mac_changer_button.setStyleSheet(u"#mac_changer_button {\n"
+"	background: #231f1f;\n"
+"}")
+        icon4 = QIcon()
+        icon4.addFile(u":/icons/mac_changer.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.mac_changer_button.setIcon(icon4)
+        self.log_shredder_button = QPushButton(self.centralwidget)
+        self.log_shredder_button.setObjectName(u"log_shredder_button")
+        self.log_shredder_button.setGeometry(QRect(250, 200, 30, 30))
+        self.log_shredder_button.setStyleSheet(u"#log_shredder_button {\n"
+"	background: #231f1f;\n"
+"}")
+        icon5 = QIcon()
+        icon5.addFile(u":/icons/log_shredder.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.log_shredder_button.setIcon(icon5)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -111,6 +146,25 @@ class Ui_MainWindow(object):
         self.status_label.setText(QCoreApplication.translate("MainWindow", u"Deactive", None))
         self.status_button.setText(QCoreApplication.translate("MainWindow", u"Status", None))
         self.info_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.pandora_bomb_button.setToolTip(QCoreApplication.translate("MainWindow", u"Wipe the memory", None))
+#endif // QT_CONFIG(tooltip)
         self.pandora_bomb_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.ultra_ghost_button.setToolTip(QCoreApplication.translate("MainWindow", u"Enable/Disable ghostsurf at boot", None))
+#endif // QT_CONFIG(tooltip)
+        self.ultra_ghost_button.setText(QCoreApplication.translate("MainWindow", u"disabled", None))
+#if QT_CONFIG(tooltip)
+        self.reset_button.setToolTip(QCoreApplication.translate("MainWindow", u"Reset the configurations", None))
+#endif // QT_CONFIG(tooltip)
+        self.reset_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.mac_changer_button.setToolTip(QCoreApplication.translate("MainWindow", u"Change the mac address", None))
+#endif // QT_CONFIG(tooltip)
+        self.mac_changer_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.log_shredder_button.setToolTip(QCoreApplication.translate("MainWindow", u"Shred log files", None))
+#endif // QT_CONFIG(tooltip)
+        self.log_shredder_button.setText("")
     # retranslateUi
 

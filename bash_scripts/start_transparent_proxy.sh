@@ -1,3 +1,5 @@
+#!/bin/bash
+
 main() {
     # The main function which runs the entire script
 
@@ -7,17 +9,23 @@ main() {
     # Calling configure_tor function.s
     configure_tor
 
-    # Calling declare_variables function.
-    declare_variables
-
     # Calling the disable_ipv6 function.
     disable_ipv6
+
+    # Calling the set_timezone_change function.
+    set_timezone_change
 
     # Calling the setup_configuration_files function.
     setup_configuration_files
 
+    # Calling the set_browser_anonymization function
+    set_browser_anonymization
+
     # Calling set_up_iptables_rules function.
     set_up_iptables_rules
+
+    # Calling the set_random_hostname function.
+    set_random_hostname
 }
 
 configure_tor() {
@@ -25,6 +33,7 @@ configure_tor() {
 
     # Starting the tor service
     systemctl start tor
+    
 }
 
 declare_variables() {
@@ -44,6 +53,75 @@ declare_variables() {
 
     # Tor VirtualAddrNetworkIPv4
     virtual_address="10.192.0.0/10"
+
+    # Creating a variable called username which is equal to the logged in user's username
+    username=${SUDO_USER:-${USER}}
+
+    # Creating path which lead to the preferences script of firefox
+    pref_path=`find /home/$username -name prefs.js`
+
+    # Creating a list of network interfaces
+    list_of_network_interfaces=$(ip -o link show | awk -F': ' '{print $2}')
+
+}
+
+set_timezone_change() {
+    # A function which changes the timezone
+
+    # Setting a new timezone
+    timedatectl set-timezone UTC &> /dev/null
+
+}
+
+set_random_hostname(){
+    # A function which sets a random hostname
+
+    # Creating an array of random hostnames
+    array[0]="Windows10-Enterprise "
+    array[1]="Windows10-Pro"
+    array[2]="Windows10-Enterprise-LTSC "
+    array[3]="Windows8.1O-EM"
+    array[4]="Windows8-Enterprise"
+    array[5]="Windows8.1-Pro"
+    array[6]="Windows7-Professional"
+    array[7]="Windows7-Enterprise"
+    array[8]="Windows7-Ultimate"
+    array[9]="Windows-Vista-Business"
+    array[10]="WindowsXP-Professional"
+    array[11]="macOS11"
+    array[12]="OSX10.11"
+    array[13]="MacBook-Air"
+    array[14]="MacBook"
+    array[15]="MacBook-Pro"
+    
+    # Identifying the size of the array
+    size=${#array[@]}
+
+    # Creating a random index variable
+    index=$(($RANDOM % $size))
+    
+    # Selecting a random hostname using the index variable and changing the original hostname with the random one 
+    hostnamectl set-hostname "${array[$index]}"
+
+    # Iterating over each interface in the list_of_network_interfaces
+	for interface in $list_of_network_interfaces; do
+
+        # Checking if the interface is not the loop back interface
+        if [[ $interface != "lo" ]]; then
+
+            # Restarting the NetworkManager.service
+            systemctl restart NetworkManager.service
+
+            # Instructing the computer to wait for seconds before connecting to the internet
+            sleep 4 
+
+            # Connecting to internet
+            nmcli d connect $interface
+
+        fi
+
+    done
+    
 }
 
 disable_ipv6() {
@@ -52,6 +130,7 @@ disable_ipv6() {
     # disable IPv6
     sysctl -w net.ipv6.conf.all.disable_ipv6=1 >/dev/null 2>&1
     sysctl -w net.ipv6.conf.default.disable_ipv6=1 >/dev/null 2>&1
+
 }
 
 setup_configuration_files() {
@@ -65,7 +144,22 @@ setup_configuration_files() {
 
     # Reloading system daemons
     systemctl --system daemon-reload
+
 }
+
+set_browser_anonymization() {
+    # A function which changes the firefox configurations to set browser anonymization
+    
+    # Checking if the file in the $pref_path is exists
+    if [ -f $pref_path ]; then
+
+        # Reading the contents of the custom prefs file and appending it to the original
+        cat "/opt/ghostsurf/scripts/firefox_prefs.js.custom" >> $pref_path
+
+    fi
+
+}
+
 
 set_up_iptables_rules() {
     # A function which sets up iptables rules
@@ -136,22 +230,23 @@ set_up_iptables_rules() {
     iptables -A OUTPUT -m state --state INVALID -j DROP
     iptables -A OUTPUT -m state --state ESTABLISHED -j ACCEPT
 
-    # Allow Tor process output
+    # Allowing Tor process output
     iptables -A OUTPUT -m owner --uid-owner $tor_uid -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j ACCEPT
 
-    # Allow loopback output
+    # Allowing loopback output
     iptables -A OUTPUT -d 127.0.0.1/32 -o lo -j ACCEPT
 
-    # Tor transproxy magic
+    # Doing the Tor transproxy magic
     iptables -A OUTPUT -d 127.0.0.1/32 -p tcp -m tcp --dport $trans_port --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
 
-    # Drop everything else
+    # Dropping everything else
     iptables -A OUTPUT -j DROP
 
-    ## Set default policies to DROP
+    # Setting the default policies to DROP
     iptables -P INPUT DROP
     iptables -P FORWARD DROP
     iptables -P OUTPUT DROP
+    
 }
 
 # Calling the main function.

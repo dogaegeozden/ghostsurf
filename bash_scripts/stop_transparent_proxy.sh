@@ -1,10 +1,22 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 main() {
     # The main function which runs the entire script
 
+    # Calling the declare_variables function.
+    declare_variables
+
+    # Calling the drop_timezone_change function.
+    drop_timezone_change
+
+    # Calling the drop_random_hostname function.
+    drop_random_hostname
+
     # Calling the enable_ipv6 function.
     enable_ipv6
+
+    # Calling the stop_browser_anonymization function
+    stop_browser_anonymization
 
     # Calling set_iptables_rules_v4and6 function.
     set_iptables_rules_v4and6
@@ -14,6 +26,36 @@ main() {
 
     # Calling restore_default_configuration_files function.
     restore_default_configuration_files
+
+}
+
+declare_variables() {
+    # A function which declares variables
+
+    # Reading the original timezone from the backup
+    original_timezone=$(cat /opt/ghostsurf/backup_files/timezone.backup)
+
+    # Creating path which lead to the preferences script of firefox
+    pref_path=`find /home -name prefs.js`
+
+}
+
+drop_timezone_change() {
+    # A function which changes the timezone
+
+    # Restoring the timezone
+    timedatectl set-timezone $original_timezone
+
+}
+
+drop_random_hostname() {
+    # A function which restores the original hostname
+	
+    # Restoring the original hostname
+    cp "/opt/ghostsurf/backup_files/hostname.backup" "/etc/hostname"
+
+    # Restarting the NetworkManager.service
+    systemctl restart NetworkManager.service
 }
 
 enable_ipv6() {
@@ -21,6 +63,20 @@ enable_ipv6() {
 
     sysctl -w net.ipv6.conf.all.disable_ipv6=0 >/dev/null 2>&1
     sysctl -w net.ipv6.conf.default.disable_ipv6=0 >/dev/null 2>&1
+
+}
+
+stop_browser_anonymization() {
+    # A function which restores the original prefs.js file to drop browser anonymization 
+    
+    # Checking if the file in the pref_path is exists 
+    if [[ -f $pref_path ]]; then
+
+        # Copying the back up file and overriding the original one with it
+        cp "/opt/ghostsurf/backup_files/prefs.js.backup" "$pref_path"
+
+    fi
+
 }
 
 set_iptables_rules_v4and6 () {
@@ -78,6 +134,7 @@ set_iptables_rules_v4and6 () {
     # Saving the iptables rules
     iptables-save > /etc/iptables/rules.v4
     ip6tables-save > /etc/iptables/rules.v6
+
 }
 
 stop_tor_service() {
@@ -85,19 +142,21 @@ stop_tor_service() {
 
     # Stopping the tor service
     systemctl stop tor
+    
 }
 
 restore_default_configuration_files() {
-    # A function which restores the default configuration files
+    # A function which restores the default configuration files. Hint: Ghostsurf defaults baby!!. Reset if you don't like them.
 
     # Restoring the torrc file
-    cp /etc/tor/torrc.backup /etc/tor/torrc
+    cp /opt/ghostsurf/backup_files/torrc.backup /etc/tor/torrc
 
-    # Restoring the resolv.conf file
-    cp /etc/resolv.conf.backup /etc/resolv.conf
+    # Changing the dns configurations
+    cp /opt/ghostsurf/configuration_files/dns_changer.resolv.conf /etc/resolv.conf
 
     # Reloading systemd daemons
-    sudo systemctl --system daemon-reload
+    systemctl --system daemon-reload
+
 }
 
 # Calling the main function.

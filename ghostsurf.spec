@@ -8,7 +8,7 @@ a = Analysis(
     ['ghostsurf.py'],
     pathex=[],
     binaries=[],
-    datas=[('bash_scripts', 'bash_scripts'), ('icons', 'icons'), ('configuration_files', 'configuration_files')],
+    datas=[('bash_scripts', 'bash_scripts'), ('icons', 'icons'), ('configuration_files', 'configuration_files'), ('backup_files', 'backup_files'), ('scripts', 'scripts')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
