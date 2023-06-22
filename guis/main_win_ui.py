@@ -41,6 +41,7 @@ class Ui_MainWindow(object):
         font1 = QFont()
         font1.setFamily(u"Dyuthi")
         font1.setPointSize(35)
+        font1.setStrikeOut(False)
         self.title_label.setFont(font1)
         self.title_label.setStyleSheet(u"#title_label {\n"
 "	color: #6bfffb;\n"
@@ -51,6 +52,7 @@ class Ui_MainWindow(object):
         self.start_stop_button.setGeometry(QRect(20, 240, 90, 30))
         font2 = QFont()
         font2.setFamily(u"Ubuntu")
+        font2.setStrikeOut(False)
         self.start_stop_button.setFont(font2)
         self.change_ip_button = QPushButton(self.centralwidget)
         self.change_ip_button.setObjectName(u"change_ip_button")
@@ -79,6 +81,7 @@ class Ui_MainWindow(object):
         font4.setBold(True)
         font4.setUnderline(True)
         font4.setWeight(75)
+        font4.setStrikeOut(False)
         font4.setKerning(True)
         self.status_label.setFont(font4)
         self.status_label.setStyleSheet(u"#status_label {\n"
@@ -168,6 +171,7 @@ class Ui_MainWindow(object):
         font5.setBold(False)
         font5.setItalic(False)
         font5.setWeight(50)
+        font5.setStrikeOut(False)
         self.control_deck_label.setFont(font5)
         self.control_deck_label.setStyleSheet(u"#control_deck_label {\n"
 "	color: white;\n"
@@ -195,7 +199,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Ghostsurf", None))
 #if QT_CONFIG(tooltip)
-        MainWindow.setToolTip(QCoreApplication.translate("MainWindow", u"Change the nameservers to appropriate ones", None))
+        MainWindow.setToolTip("")
 #endif // QT_CONFIG(tooltip)
         self.logo_label.setText("")
         self.title_label.setText(QCoreApplication.translate("MainWindow", u"Ghostsurf", None))
