@@ -8,6 +8,8 @@
         <file alias="reset.svg">icons/reset.svg</file>
         <file alias="mac_changer.svg">icons/mac_changer.svg</file>
         <file alias="log_shredder.svg">icons/log_shredder.svg</file>
+        <file alias="hostname_changer.svg">icons/hostname_changer.svg</file>
+        <file alias="dns_changer.svg">icons/dns_changer.svg</file>
     </qresource>
     <qresource prefix="/logos">
         <file alias="ghostsurf.png">logos/ghostsurf.png</file>

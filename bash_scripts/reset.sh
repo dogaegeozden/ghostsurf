@@ -20,6 +20,16 @@ main () {
 
 }
 
+declare_variables() {
+    # A function which declares variables
+
+    # Getting the original hostname from the backup file
+    original_hostname="$(cat /opt/ghostsurf/backup_files/hostname.backup)"
+
+    # Getting the current hostname using a system command
+    current_hostname="$(hostname)"
+}
+
 reset_configuration_files() {
     # A function which backs up the configuration files that will be replaced by this application
 
@@ -33,7 +43,10 @@ reset_configuration_files() {
     timedatectl set-timezone $(cat /opt/ghostsurf/backup_files/timezone.backup)
 
     # Restoring the original hostname
-    cp "/opt/ghostsurf/backup_files/hostname.backup" "/etc/hostname" 
+    cp "/opt/ghostsurf/backup_files/hostname.backup" "/etc/hostname"
+
+    # Replacing the current_hostname in the /etc/hosts file with the original hostname
+    sed -i "s/$current_hostname/$original_hostname/g" /etc/hosts
 
     # Restoring the original prefs.js file
     cp "/opt/ghostsurf/backup_files/prefs.js.backup" "$pref_path" 

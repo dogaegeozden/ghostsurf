@@ -9,9 +9,6 @@ main() {
     # Calling the drop_timezone_change function.
     drop_timezone_change
 
-    # Calling the drop_random_hostname function.
-    drop_random_hostname
-
     # Calling the enable_ipv6 function.
     enable_ipv6
 
@@ -36,7 +33,7 @@ declare_variables() {
     original_timezone=$(cat /opt/ghostsurf/backup_files/timezone.backup)
 
     # Creating path which lead to the preferences script of firefox
-    pref_path=`find /home -name prefs.js`
+    pref_path="$(find /home -name prefs.js)"
 
 }
 
@@ -45,14 +42,6 @@ drop_timezone_change() {
 
     # Restoring the timezone
     timedatectl set-timezone $original_timezone
-
-}
-
-drop_random_hostname() {
-    # A function which restores the original hostname
-	
-    # Restoring the original hostname
-    cp "/opt/ghostsurf/backup_files/hostname.backup" "/etc/hostname"
 
 }
 
@@ -145,6 +134,11 @@ stop_tor_service() {
 
 restore_default_configuration_files() {
     # A function which restores the default configuration files. Hint: Ghostsurf defaults baby!!. Reset if you don't like them.
+
+    ## Benefits of changing nameservers:
+    ### Prevents internet service providers from logging and tracking your queries
+    ### Bypassing DNS filtering or cencorships
+    ### Overcoming geographical restirictions
 
     # Restoring the torrc file
     cp /opt/ghostsurf/backup_files/torrc.backup /etc/tor/torrc

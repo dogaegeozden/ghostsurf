@@ -49,9 +49,9 @@ class Ui_MainWindow(object):
         font1 = QFont()
         font1.setFamily(u"Ubuntu")
         self.start_stop_button.setFont(font1)
-        self.change_id_button = QPushButton(self.centralwidget)
-        self.change_id_button.setObjectName(u"change_id_button")
-        self.change_id_button.setGeometry(QRect(160, 150, 90, 30))
+        self.change_ip_button = QPushButton(self.centralwidget)
+        self.change_ip_button.setObjectName(u"change_ip_button")
+        self.change_ip_button.setGeometry(QRect(160, 150, 90, 30))
         self.my_ip_button = QPushButton(self.centralwidget)
         self.my_ip_button.setObjectName(u"my_ip_button")
         self.my_ip_button.setGeometry(QRect(285, 150, 90, 30))
@@ -95,7 +95,7 @@ class Ui_MainWindow(object):
         self.pandora_bomb_button.setIcon(icon2)
         self.ultra_ghost_button = QPushButton(self.centralwidget)
         self.ultra_ghost_button.setObjectName(u"ultra_ghost_button")
-        self.ultra_ghost_button.setGeometry(QRect(150, 202, 90, 26))
+        self.ultra_ghost_button.setGeometry(QRect(80, 202, 80, 26))
         self.ultra_ghost_button.setStyleSheet(u"#ultra_ghost_button {\n"
 "	background: red;\n"
 "	border-radius: 4px;\n"
@@ -128,6 +128,24 @@ class Ui_MainWindow(object):
         icon5 = QIcon()
         icon5.addFile(u":/icons/log_shredder.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.log_shredder_button.setIcon(icon5)
+        self.hostname_changer_button = QPushButton(self.centralwidget)
+        self.hostname_changer_button.setObjectName(u"hostname_changer_button")
+        self.hostname_changer_button.setGeometry(QRect(210, 200, 30, 30))
+        self.hostname_changer_button.setStyleSheet(u"#hostname_changer_button {\n"
+"	background: #231f1f;\n"
+"}")
+        icon6 = QIcon()
+        icon6.addFile(u":/icons/hostname_changer.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.hostname_changer_button.setIcon(icon6)
+        self.dns_changer_button = QPushButton(self.centralwidget)
+        self.dns_changer_button.setObjectName(u"dns_changer_button")
+        self.dns_changer_button.setGeometry(QRect(170, 200, 30, 30))
+        self.dns_changer_button.setStyleSheet(u"#dns_changer_button {\n"
+"	background: #231f1f;\n"
+"}")
+        icon7 = QIcon()
+        icon7.addFile(u":/icons/dns_changer.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.dns_changer_button.setIcon(icon7)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -137,10 +155,13 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Ghostsurf", None))
+#if QT_CONFIG(tooltip)
+        MainWindow.setToolTip(QCoreApplication.translate("MainWindow", u"Change the nameservers to appropriate ones", None))
+#endif // QT_CONFIG(tooltip)
         self.logo_label.setText("")
         self.title_label.setText(QCoreApplication.translate("MainWindow", u"Ghostsurf", None))
         self.start_stop_button.setText(QCoreApplication.translate("MainWindow", u"Start", None))
-        self.change_id_button.setText(QCoreApplication.translate("MainWindow", u"Change ID", None))
+        self.change_ip_button.setText(QCoreApplication.translate("MainWindow", u"Change IP", None))
         self.my_ip_button.setText(QCoreApplication.translate("MainWindow", u"My IP", None))
         self.status_header_label.setText(QCoreApplication.translate("MainWindow", u"Tor Status:", None))
         self.status_label.setText(QCoreApplication.translate("MainWindow", u"Deactive", None))
@@ -169,5 +190,10 @@ class Ui_MainWindow(object):
         self.log_shredder_button.setToolTip(QCoreApplication.translate("MainWindow", u"Shred log files", None))
 #endif // QT_CONFIG(tooltip)
         self.log_shredder_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.hostname_changer_button.setToolTip(QCoreApplication.translate("MainWindow", u"Change the hostname", None))
+#endif // QT_CONFIG(tooltip)
+        self.hostname_changer_button.setText("")
+        self.dns_changer_button.setText("")
     # retranslateUi
 

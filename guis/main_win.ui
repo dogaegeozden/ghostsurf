@@ -17,6 +17,9 @@
    <iconset resource="../resources.qrc">
     <normaloff>:/logos/ghostsurf.png</normaloff>:/logos/ghostsurf.png</iconset>
   </property>
+  <property name="toolTip">
+   <string>Change the nameservers to appropriate ones</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
     <string notr="true">#centralwidget {
@@ -87,7 +90,7 @@
      <string>Start</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="change_id_button">
+   <widget class="QPushButton" name="change_ip_button">
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -97,7 +100,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Change ID</string>
+     <string>Change IP</string>
     </property>
    </widget>
    <widget class="QPushButton" name="my_ip_button">
@@ -227,9 +230,9 @@
    <widget class="QPushButton" name="ultra_ghost_button">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>80</x>
       <y>202</y>
-      <width>90</width>
+      <width>80</width>
       <height>26</height>
      </rect>
     </property>
@@ -320,6 +323,53 @@
     <property name="icon">
      <iconset resource="../resources.qrc">
       <normaloff>:/icons/log_shredder.svg</normaloff>:/icons/log_shredder.svg</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="hostname_changer_button">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>200</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Change the hostname</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">#hostname_changer_button {
+	background: #231f1f;
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../resources.qrc">
+      <normaloff>:/icons/hostname_changer.svg</normaloff>:/icons/hostname_changer.svg</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="dns_changer_button">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>200</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">#dns_changer_button {
+	background: #231f1f;
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../resources.qrc">
+      <normaloff>:/icons/dns_changer.svg</normaloff>:/icons/dns_changer.svg</iconset>
     </property>
    </widget>
   </widget>

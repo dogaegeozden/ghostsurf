@@ -44,7 +44,6 @@ def main():
 
     # Executing the app
     app.exec_()
-
             
 def reset_ghostsurf_settings():
     """A function which resets the ghostsurf settings"""
@@ -73,14 +72,69 @@ def kill_log_files():
 def change_the_mac_address():
     """A function which changes the mac address"""
 
+    def mac_changer_button_question_dialog_processor(i):
+        """A function which checks the user's answer for the mac changer question and instructs the computer about what to do based on that answer"""
+
+        # Getting the user's answer from the i's text value to identify if the user pressed to yes or no
+        user_answer = i.text()
+
+        # Checking if the user pressed to the yes button.
+        if user_answer == "&Yes":
+            
+            # Getting the active internet adaptors name 
+            internet_adaptor_name = popen("ip route show default | awk '/default/ {print $5}'").read()[:-1]
+
+            # Executing the mac_changer script.
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/mac_changer.sh"')
+
+            # Waiting for 4 seconds
+            sleep(4)
+
+            # Connecting to internet
+            system(f'echo "{user_pwd}" | sudo -S nmcli d connect {internet_adaptor_name}')
+
+            # Sending a notification to inform the user that the operation is done
+            system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Mac address has been changed"')
+
+        # Checking if the user pressed to the no button
+        elif user_answer == "&No":
+            
+            # Executing the mac_changer script.
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/mac_changer.sh"')
+
+            # Sending a notification to inform the user that the operation is done
+            system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Mac Changing operation is done"')
+
+        # Checking if the didn't pressed to bot yes and not buttons 
+        else:
+
+            # Printing "Operation canceled in debug mode"
+            debug("Operation canceled")
+
+
     # Sending a notification to inform the user that the operation is starting
     system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Executing the mac_changer.sh script"')
 
-    # Executing the mac_changer script.
-    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/mac_changer.sh"')
+    # Creating a question dialog window
+    question_dialog = QMessageBox()
 
-    # Sending a notification to inform the user that the operation is done
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Mac Changing operation is done"')
+    # Setting the question dialog window's icon
+    question_dialog.setIcon(QMessageBox.Question)
+
+    # Setting the dialog's window title
+    question_dialog.setWindowTitle("Important")
+
+    # Setting the question dialog's text
+    question_dialog.setText("Do you want connect back to internet?")
+
+    # Setting standard buttons
+    question_dialog.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
+
+    # Adding functionality to Yes and No buttons
+    question_dialog.buttonClicked.connect(mac_changer_button_question_dialog_processor)
+
+    # Showing the question dialog
+    question_dialog.exec_()
 
 def manage_netfilter_service():
     """A function which starts and enables netfilter service if it's not"""
@@ -156,7 +210,6 @@ def wipe_the_memory():
 
     # Showing the question dialog
     question_dialog.exec_()
-
 
 def get_the_public_ip_address():
     """A function which tries to displays the user's public ip address with notifications"""
@@ -395,8 +448,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Connecting the status_button with the show_status function in a way that the function will going to trigger with a press signal
         self.status_button.pressed.connect(self.show_status)
 
-        # Connecting the change_id_button with the change_id function in a way that the function will going to trigger with a press signal
-        self.change_id_button.pressed.connect(self.change_id)
+        # Connecting the change_ip_button with the change_id function in a way that the function will going to trigger with a press signal
+        self.change_ip_button.pressed.connect(self.change_id)
 
         # Connecting the info_button with the open_info_page function in a way that the function will going to trigger with a press signal
         self.info_button.pressed.connect(self.open_info_page) 
@@ -415,6 +468,80 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Connecting the reset_button with the reset_settings function in a way that the function will going to trigger with a press signal
         self.reset_button.pressed.connect(self.reset_settings)
+
+        # Connecting the dns_changer_button with the change_dns function in a way that the function will going to trigger with a press signal
+        self.dns_changer_button.pressed.connect(self.change_dns)
+
+        # Connecting the hostname_changer_button with the change_hostname function in a way that the function will going to trigger with a press signal
+        self.hostname_changer_button.pressed.connect(self.change_hostname)
+
+
+    def change_hostname(self):
+        """A function which changes the hostname"""
+
+        # Creating a question dialog window
+        question_dialog = QMessageBox()
+
+        # Setting the question dialog window's icon
+        question_dialog.setIcon(QMessageBox.Question)
+
+        # Setting the dialog's window title
+        question_dialog.setWindowTitle("Important")
+
+        # Setting the question dialog's text
+        question_dialog.setText("This operation requires reboot. Do you allow to reboot this system?")
+
+        # Setting standard buttons
+        question_dialog.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
+
+        # Showing the question dialog
+        question_dialog_answer = question_dialog.exec_()
+
+        # Checking if the user pressed to the yes button.
+        if question_dialog_answer == QMessageBox.Yes:
+
+            # Priting what's going on in debug mode
+            debug("Rebooting the system")
+
+            # Executing the stop script
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
+
+            # Executing the hostname_changer script
+            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/hostname_changer.sh"')
+
+            # Rebooting the system
+            system(f'echo "{user_pwd}" | sudo -S reboot')
+
+        # Checking if user didn't pressed to the yes button
+        else:
+
+            # Printing "Operation canceled" in debug mode
+            debug("Operation canceled")
+
+
+    def change_dns(self):
+        """A function which changes the nameservers in the resolv.conf file"""
+
+        # Sending a notification to inform the user that the operation is starting
+        system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Changing the nameservers"')
+
+        # Getting the working status of the application from the start_stop_button's text
+        working_status = self.start_stop_button.text()
+
+        # Checking if transparent proxy is on
+        if working_status == "Stop":
+            
+            # Copying and pasting custom nameservers for tor on resolv.conf file
+            system(f'echo "{user_pwd}" | sudo -S cp "/opt/ghostsurf/configuration_files/resolv.conf.custom" "/etc/resolv.conf"')
+
+        # Checking if transparent proxy is off
+        else:
+
+            # Copying and pasting dns_changer nameservers to on resolv.conf file
+            system(f'echo "{user_pwd}" | sudo -S cp "/opt/ghostsurf/configuration_files/dns_changer.resolv.conf" "/etc/resolv.conf"')
+
+        # Sending a notification to inform the user that the operation is done
+        system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Nameservers has been changed"')
 
     def reset_settings(self):
         """A function which resets ghostsurf settings"""

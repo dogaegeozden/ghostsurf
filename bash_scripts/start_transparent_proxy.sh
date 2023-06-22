@@ -24,8 +24,6 @@ main() {
     # Calling set_up_iptables_rules function.
     set_up_iptables_rules
 
-    # Calling the set_random_hostname function.
-    set_random_hostname
 }
 
 configure_tor() {
@@ -58,7 +56,7 @@ declare_variables() {
     username=${SUDO_USER:-${USER}}
 
     # Creating path which lead to the preferences script of firefox
-    pref_path=`find /home/$username -name prefs.js`
+    pref_path="$(find /home/$username -name prefs.js)"
 
     # Creating a list of network interfaces
     list_of_network_interfaces=$(ip -o link show | awk -F': ' '{print $2}')
@@ -70,38 +68,6 @@ set_timezone_change() {
 
     # Setting a new timezone
     timedatectl set-timezone UTC &> /dev/null
-
-}
-
-set_random_hostname(){
-    # A function which sets a random hostname
-
-    # Creating an array of random hostnames
-    array[0]="Windows10-Enterprise "
-    array[1]="Windows10-Pro"
-    array[2]="Windows10-Enterprise-LTSC "
-    array[3]="Windows8.1O-EM"
-    array[4]="Windows8-Enterprise"
-    array[5]="Windows8.1-Pro"
-    array[6]="Windows7-Professional"
-    array[7]="Windows7-Enterprise"
-    array[8]="Windows7-Ultimate"
-    array[9]="Windows-Vista-Business"
-    array[10]="WindowsXP-Professional"
-    array[11]="macOS11"
-    array[12]="OSX10.11"
-    array[13]="MacBook-Air"
-    array[14]="MacBook"
-    array[15]="MacBook-Pro"
-    
-    # Identifying the size of the array
-    size=${#array[@]}
-
-    # Creating a random index variable
-    index=$(($RANDOM % $size))
-    
-    # Selecting a random hostname using the index variable and changing the original hostname with the random one 
-    hostnamectl set-hostname "${array[$index]}"
 
 }
 
@@ -131,11 +97,18 @@ setup_configuration_files() {
 set_browser_anonymization() {
     # A function which changes the firefox configurations to set browser anonymization
     
-    # Checking if the file in the $pref_path is exists
+    # Checking if the file in the $pref_path is exists. Hint: Do not touch to the part that reads the custom file and modifies the prefs file
     if [ -f $pref_path ]; then
 
-        # Reading the contents of the custom prefs file and appending it to the original
-        cat "/opt/ghostsurf/scripts/firefox_prefs.js.custom" >> $pref_path
+        while IFS= read -r line; do
+
+            if ! grep -qF "$line" $pref_path; then
+
+                echo "$line" >> $pref_path
+
+            fi
+
+        done < "/opt/ghostsurf/scripts/firefox_prefs.js.custom"
 
     fi
 
