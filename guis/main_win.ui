@@ -10,6 +10,11 @@
     <height>291</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <strikeout>false</strikeout>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Ghostsurf</string>
   </property>
@@ -119,7 +124,7 @@
    <widget class="QLabel" name="status_header_label">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>210</x>
       <y>100</y>
       <width>80</width>
       <height>20</height>
@@ -129,6 +134,9 @@
      <font>
       <weight>75</weight>
       <bold>true</bold>
+      <underline>false</underline>
+      <strikeout>false</strikeout>
+      <kerning>true</kerning>
      </font>
     </property>
     <property name="styleSheet">
@@ -139,13 +147,16 @@
     <property name="text">
      <string>Tor Status:</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
    <widget class="QLabel" name="status_label">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>290</x>
       <y>100</y>
-      <width>80</width>
+      <width>70</width>
       <height>20</height>
      </rect>
     </property>
@@ -153,6 +164,8 @@
      <font>
       <weight>75</weight>
       <bold>true</bold>
+      <underline>true</underline>
+      <kerning>true</kerning>
      </font>
     </property>
     <property name="styleSheet">
@@ -161,7 +174,10 @@
 }</string>
     </property>
     <property name="text">
-     <string>Deactive</string>
+     <string>Inactive</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QPushButton" name="status_button">
@@ -402,9 +418,9 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>100</x>
       <y>80</y>
-      <width>251</width>
+      <width>261</width>
       <height>20</height>
      </rect>
     </property>
@@ -420,9 +436,6 @@
       <width>80</width>
       <height>26</height>
      </rect>
-    </property>
-    <property name="toolTip">
-     <string>Enable anti man in the middle service</string>
     </property>
     <property name="styleSheet">
      <string notr="true">#anti_mitm_button {
