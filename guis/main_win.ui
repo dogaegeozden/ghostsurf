@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>370</width>
+    <width>331</width>
     <height>291</height>
    </rect>
   </property>
@@ -55,7 +55,7 @@
      <rect>
       <x>99</x>
       <y>10</y>
-      <width>261</width>
+      <width>221</width>
       <height>71</height>
      </rect>
     </property>
@@ -98,7 +98,7 @@
    <widget class="QPushButton" name="change_ip_button">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>120</x>
       <y>240</y>
       <width>90</width>
       <height>30</height>
@@ -111,7 +111,7 @@
    <widget class="QPushButton" name="my_ip_button">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>220</x>
       <y>240</y>
       <width>90</width>
       <height>30</height>
@@ -124,7 +124,7 @@
    <widget class="QLabel" name="status_header_label">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>160</x>
       <y>100</y>
       <width>80</width>
       <height>20</height>
@@ -154,7 +154,7 @@
    <widget class="QLabel" name="status_label">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>240</x>
       <y>100</y>
       <width>70</width>
       <height>20</height>
@@ -183,9 +183,9 @@
    <widget class="QPushButton" name="status_button">
     <property name="geometry">
      <rect>
-      <x>235</x>
+      <x>239</x>
       <y>180</y>
-      <width>90</width>
+      <width>70</width>
       <height>30</height>
      </rect>
     </property>
@@ -196,7 +196,7 @@
    <widget class="QPushButton" name="info_button">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>160</x>
       <y>180</y>
       <width>30</width>
       <height>30</height>
@@ -221,7 +221,7 @@
    <widget class="QPushButton" name="pandora_bomb_button">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>280</x>
       <y>140</y>
       <width>30</width>
       <height>30</height>
@@ -269,7 +269,7 @@
    <widget class="QPushButton" name="reset_button">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>120</x>
       <y>180</y>
       <width>30</width>
       <height>30</height>
@@ -294,7 +294,7 @@
    <widget class="QPushButton" name="mac_changer_button">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>160</x>
       <y>140</y>
       <width>30</width>
       <height>30</height>
@@ -319,7 +319,7 @@
    <widget class="QPushButton" name="log_shredder_button">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>240</x>
       <y>140</y>
       <width>30</width>
       <height>30</height>
@@ -344,7 +344,7 @@
    <widget class="QPushButton" name="hostname_changer_button">
     <property name="geometry">
      <rect>
-      <x>150</x>
+      <x>120</x>
       <y>140</y>
       <width>30</width>
       <height>30</height>
@@ -369,7 +369,7 @@
    <widget class="QPushButton" name="dns_changer_button">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>200</x>
       <y>140</y>
       <width>30</width>
       <height>30</height>
@@ -420,7 +420,7 @@
      <rect>
       <x>100</x>
       <y>80</y>
-      <width>261</width>
+      <width>220</width>
       <height>20</height>
      </rect>
     </property>

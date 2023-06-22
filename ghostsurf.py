@@ -113,7 +113,7 @@ def change_the_mac_address():
 
 
     # Sending a notification to inform the user that the operation is starting
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Executing the mac_changer.sh script"')
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Changing the mac address"')
 
     # Creating a question dialog window
     question_dialog = QMessageBox()
