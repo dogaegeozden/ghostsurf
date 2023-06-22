@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>410</width>
-    <height>240</height>
+    <width>370</width>
+    <height>291</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -48,10 +48,10 @@
    <widget class="QLabel" name="title_label">
     <property name="geometry">
      <rect>
-      <x>130</x>
-      <y>20</y>
-      <width>250</width>
-      <height>50</height>
+      <x>99</x>
+      <y>10</y>
+      <width>261</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="font">
@@ -75,8 +75,8 @@
    <widget class="QPushButton" name="start_stop_button">
     <property name="geometry">
      <rect>
-      <x>35</x>
-      <y>150</y>
+      <x>20</x>
+      <y>240</y>
       <width>90</width>
       <height>30</height>
      </rect>
@@ -93,8 +93,8 @@
    <widget class="QPushButton" name="change_ip_button">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>150</y>
+      <x>140</x>
+      <y>240</y>
       <width>90</width>
       <height>30</height>
      </rect>
@@ -106,8 +106,8 @@
    <widget class="QPushButton" name="my_ip_button">
     <property name="geometry">
      <rect>
-      <x>285</x>
-      <y>150</y>
+      <x>260</x>
+      <y>240</y>
       <width>90</width>
       <height>30</height>
      </rect>
@@ -119,10 +119,10 @@
    <widget class="QLabel" name="status_header_label">
     <property name="geometry">
      <rect>
-      <x>105</x>
-      <y>90</y>
-      <width>81</width>
-      <height>30</height>
+      <x>190</x>
+      <y>100</y>
+      <width>80</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="font">
@@ -143,10 +143,10 @@
    <widget class="QLabel" name="status_label">
     <property name="geometry">
      <rect>
-      <x>190</x>
-      <y>90</y>
-      <width>91</width>
-      <height>30</height>
+      <x>280</x>
+      <y>100</y>
+      <width>80</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="font">
@@ -167,10 +167,10 @@
    <widget class="QPushButton" name="status_button">
     <property name="geometry">
      <rect>
-      <x>285</x>
-      <y>90</y>
+      <x>235</x>
+      <y>180</y>
       <width>90</width>
-      <height>25</height>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -180,8 +180,8 @@
    <widget class="QPushButton" name="info_button">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>200</y>
+      <x>190</x>
+      <y>180</y>
       <width>30</width>
       <height>30</height>
      </rect>
@@ -205,8 +205,8 @@
    <widget class="QPushButton" name="pandora_bomb_button">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>200</y>
+      <x>310</x>
+      <y>140</y>
       <width>30</width>
       <height>30</height>
      </rect>
@@ -230,8 +230,8 @@
    <widget class="QPushButton" name="ultra_ghost_button">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>202</y>
+      <x>10</x>
+      <y>150</y>
       <width>80</width>
       <height>26</height>
      </rect>
@@ -253,8 +253,8 @@
    <widget class="QPushButton" name="reset_button">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>200</y>
+      <x>150</x>
+      <y>180</y>
       <width>30</width>
       <height>30</height>
      </rect>
@@ -278,8 +278,8 @@
    <widget class="QPushButton" name="mac_changer_button">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>200</y>
+      <x>190</x>
+      <y>140</y>
       <width>30</width>
       <height>30</height>
      </rect>
@@ -303,8 +303,8 @@
    <widget class="QPushButton" name="log_shredder_button">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>200</y>
+      <x>270</x>
+      <y>140</y>
       <width>30</width>
       <height>30</height>
      </rect>
@@ -328,8 +328,8 @@
    <widget class="QPushButton" name="hostname_changer_button">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>200</y>
+      <x>150</x>
+      <y>140</y>
       <width>30</width>
       <height>30</height>
      </rect>
@@ -353,8 +353,8 @@
    <widget class="QPushButton" name="dns_changer_button">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>200</y>
+      <x>230</x>
+      <y>140</y>
       <width>30</width>
       <height>30</height>
      </rect>
@@ -370,6 +370,69 @@
     <property name="icon">
      <iconset resource="../resources.qrc">
       <normaloff>:/icons/dns_changer.svg</normaloff>:/icons/dns_changer.svg</iconset>
+    </property>
+   </widget>
+   <widget class="QLabel" name="control_deck_label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>110</y>
+      <width>90</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Z003</family>
+      <pointsize>13</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">#control_deck_label {
+	color: white;
+}</string>
+    </property>
+    <property name="text">
+     <string>Control Deck</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>80</y>
+      <width>251</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="anti_mitm_button">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>190</y>
+      <width>80</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Enable anti man in the middle service</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">#anti_mitm_button {
+	background: red;
+	border-radius: 4px;
+	border: 1px solid black;
+}</string>
+    </property>
+    <property name="text">
+     <string>N/A</string>
     </property>
    </widget>
   </widget>

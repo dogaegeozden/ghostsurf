@@ -18,7 +18,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(410, 240)
+        MainWindow.resize(370, 291)
         icon = QIcon()
         icon.addFile(u":/logos/ghostsurf.png", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
@@ -34,7 +34,7 @@ class Ui_MainWindow(object):
         self.logo_label.setScaledContents(True)
         self.title_label = QLabel(self.centralwidget)
         self.title_label.setObjectName(u"title_label")
-        self.title_label.setGeometry(QRect(130, 20, 250, 50))
+        self.title_label.setGeometry(QRect(99, 10, 261, 71))
         font = QFont()
         font.setFamily(u"Dyuthi")
         font.setPointSize(35)
@@ -45,19 +45,19 @@ class Ui_MainWindow(object):
         self.title_label.setAlignment(Qt.AlignCenter)
         self.start_stop_button = QPushButton(self.centralwidget)
         self.start_stop_button.setObjectName(u"start_stop_button")
-        self.start_stop_button.setGeometry(QRect(35, 150, 90, 30))
+        self.start_stop_button.setGeometry(QRect(20, 240, 90, 30))
         font1 = QFont()
         font1.setFamily(u"Ubuntu")
         self.start_stop_button.setFont(font1)
         self.change_ip_button = QPushButton(self.centralwidget)
         self.change_ip_button.setObjectName(u"change_ip_button")
-        self.change_ip_button.setGeometry(QRect(160, 150, 90, 30))
+        self.change_ip_button.setGeometry(QRect(140, 240, 90, 30))
         self.my_ip_button = QPushButton(self.centralwidget)
         self.my_ip_button.setObjectName(u"my_ip_button")
-        self.my_ip_button.setGeometry(QRect(285, 150, 90, 30))
+        self.my_ip_button.setGeometry(QRect(260, 240, 90, 30))
         self.status_header_label = QLabel(self.centralwidget)
         self.status_header_label.setObjectName(u"status_header_label")
-        self.status_header_label.setGeometry(QRect(105, 90, 81, 30))
+        self.status_header_label.setGeometry(QRect(190, 100, 80, 20))
         font2 = QFont()
         font2.setBold(True)
         font2.setWeight(75)
@@ -67,17 +67,17 @@ class Ui_MainWindow(object):
 "}")
         self.status_label = QLabel(self.centralwidget)
         self.status_label.setObjectName(u"status_label")
-        self.status_label.setGeometry(QRect(190, 90, 91, 30))
+        self.status_label.setGeometry(QRect(280, 100, 80, 20))
         self.status_label.setFont(font2)
         self.status_label.setStyleSheet(u"#status_label {\n"
 "	color: red;\n"
 "}")
         self.status_button = QPushButton(self.centralwidget)
         self.status_button.setObjectName(u"status_button")
-        self.status_button.setGeometry(QRect(285, 90, 90, 25))
+        self.status_button.setGeometry(QRect(235, 180, 90, 30))
         self.info_button = QPushButton(self.centralwidget)
         self.info_button.setObjectName(u"info_button")
-        self.info_button.setGeometry(QRect(370, 200, 30, 30))
+        self.info_button.setGeometry(QRect(190, 180, 30, 30))
         self.info_button.setStyleSheet(u"#info_button {\n"
 "	background: #231f1f;\n"
 "}")
@@ -86,7 +86,7 @@ class Ui_MainWindow(object):
         self.info_button.setIcon(icon1)
         self.pandora_bomb_button = QPushButton(self.centralwidget)
         self.pandora_bomb_button.setObjectName(u"pandora_bomb_button")
-        self.pandora_bomb_button.setGeometry(QRect(330, 200, 30, 30))
+        self.pandora_bomb_button.setGeometry(QRect(310, 140, 30, 30))
         self.pandora_bomb_button.setStyleSheet(u"#pandora_bomb_button {\n"
 "	background: #231f1f;\n"
 "}")
@@ -95,7 +95,7 @@ class Ui_MainWindow(object):
         self.pandora_bomb_button.setIcon(icon2)
         self.ultra_ghost_button = QPushButton(self.centralwidget)
         self.ultra_ghost_button.setObjectName(u"ultra_ghost_button")
-        self.ultra_ghost_button.setGeometry(QRect(80, 202, 80, 26))
+        self.ultra_ghost_button.setGeometry(QRect(10, 150, 80, 26))
         self.ultra_ghost_button.setStyleSheet(u"#ultra_ghost_button {\n"
 "	background: red;\n"
 "	border-radius: 4px;\n"
@@ -103,7 +103,7 @@ class Ui_MainWindow(object):
 "}")
         self.reset_button = QPushButton(self.centralwidget)
         self.reset_button.setObjectName(u"reset_button")
-        self.reset_button.setGeometry(QRect(10, 200, 30, 30))
+        self.reset_button.setGeometry(QRect(150, 180, 30, 30))
         self.reset_button.setStyleSheet(u"#reset_button {\n"
 "	background: #231f1f;\n"
 "}")
@@ -112,7 +112,7 @@ class Ui_MainWindow(object):
         self.reset_button.setIcon(icon3)
         self.mac_changer_button = QPushButton(self.centralwidget)
         self.mac_changer_button.setObjectName(u"mac_changer_button")
-        self.mac_changer_button.setGeometry(QRect(290, 200, 30, 30))
+        self.mac_changer_button.setGeometry(QRect(190, 140, 30, 30))
         self.mac_changer_button.setStyleSheet(u"#mac_changer_button {\n"
 "	background: #231f1f;\n"
 "}")
@@ -121,7 +121,7 @@ class Ui_MainWindow(object):
         self.mac_changer_button.setIcon(icon4)
         self.log_shredder_button = QPushButton(self.centralwidget)
         self.log_shredder_button.setObjectName(u"log_shredder_button")
-        self.log_shredder_button.setGeometry(QRect(250, 200, 30, 30))
+        self.log_shredder_button.setGeometry(QRect(270, 140, 30, 30))
         self.log_shredder_button.setStyleSheet(u"#log_shredder_button {\n"
 "	background: #231f1f;\n"
 "}")
@@ -130,7 +130,7 @@ class Ui_MainWindow(object):
         self.log_shredder_button.setIcon(icon5)
         self.hostname_changer_button = QPushButton(self.centralwidget)
         self.hostname_changer_button.setObjectName(u"hostname_changer_button")
-        self.hostname_changer_button.setGeometry(QRect(210, 200, 30, 30))
+        self.hostname_changer_button.setGeometry(QRect(150, 140, 30, 30))
         self.hostname_changer_button.setStyleSheet(u"#hostname_changer_button {\n"
 "	background: #231f1f;\n"
 "}")
@@ -139,13 +139,39 @@ class Ui_MainWindow(object):
         self.hostname_changer_button.setIcon(icon6)
         self.dns_changer_button = QPushButton(self.centralwidget)
         self.dns_changer_button.setObjectName(u"dns_changer_button")
-        self.dns_changer_button.setGeometry(QRect(170, 200, 30, 30))
+        self.dns_changer_button.setGeometry(QRect(230, 140, 30, 30))
         self.dns_changer_button.setStyleSheet(u"#dns_changer_button {\n"
 "	background: #231f1f;\n"
 "}")
         icon7 = QIcon()
         icon7.addFile(u":/icons/dns_changer.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.dns_changer_button.setIcon(icon7)
+        self.control_deck_label = QLabel(self.centralwidget)
+        self.control_deck_label.setObjectName(u"control_deck_label")
+        self.control_deck_label.setGeometry(QRect(10, 110, 90, 20))
+        font3 = QFont()
+        font3.setFamily(u"Z003")
+        font3.setPointSize(13)
+        font3.setBold(False)
+        font3.setItalic(False)
+        font3.setWeight(50)
+        self.control_deck_label.setFont(font3)
+        self.control_deck_label.setStyleSheet(u"#control_deck_label {\n"
+"	color: white;\n"
+"}")
+        self.line = QFrame(self.centralwidget)
+        self.line.setObjectName(u"line")
+        self.line.setGeometry(QRect(110, 80, 251, 20))
+        self.line.setFrameShape(QFrame.HLine)
+        self.line.setFrameShadow(QFrame.Sunken)
+        self.anti_mitm_button = QPushButton(self.centralwidget)
+        self.anti_mitm_button.setObjectName(u"anti_mitm_button")
+        self.anti_mitm_button.setGeometry(QRect(10, 190, 80, 26))
+        self.anti_mitm_button.setStyleSheet(u"#anti_mitm_button {\n"
+"	background: red;\n"
+"	border-radius: 4px;\n"
+"	border: 1px solid black;\n"
+"}")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -195,5 +221,10 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(tooltip)
         self.hostname_changer_button.setText("")
         self.dns_changer_button.setText("")
+        self.control_deck_label.setText(QCoreApplication.translate("MainWindow", u"Control Deck", None))
+#if QT_CONFIG(tooltip)
+        self.anti_mitm_button.setToolTip(QCoreApplication.translate("MainWindow", u"Enable anti man in the middle service", None))
+#endif // QT_CONFIG(tooltip)
+        self.anti_mitm_button.setText(QCoreApplication.translate("MainWindow", u"N/A", None))
     # retranslateUi
 
