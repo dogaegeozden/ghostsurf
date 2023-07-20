@@ -32,6 +32,7 @@ basicConfig(level=DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 # disable(CRITICAL)
 
 # GLOBAL VARIABLES
+
 # Creating a variable called base_dir which leads to the current working directory.
 base_dir = path.dirname(__file__)
 
@@ -40,6 +41,45 @@ tick = QImage(str(Path(base_dir, "icons", "tick.png")))
 
 # Creating a path which leads to the cross.png file
 cross = QImage(str(Path(base_dir, "icons", "cross.png")))
+
+
+# CONFIGURATION FILE PATHS
+ghostsurf_configuration_file_path = "/opt/ghostsurf/configuration_files/ghostsurf.conf"
+
+dns_changer_resolv_conf_file_path = "/opt/ghostsurf/configuration_files/dns_changer.resolv.conf"
+
+custom_resolv_configuration_file_path = "/opt/ghostsurf/configuration_files/resolv.conf.custom"
+
+custom_firefox_preferences_file_path = "/opt/ghostsurf/configuration_files/firefox_prefs.js.custom"
+
+original_resolv_configuration_file_path = "/etc/resolv.conf"
+
+# ICON FILE PATH
+ghostsurf_logo_file_path = "/opt/ghostsurf/icons/ghostsurf.png"
+
+
+# BASH SCRIPT FILE PATHS
+mac_changer_script_file_path = "/opt/ghostsurf/bash_scripts/mac_changer.sh"
+
+fast_bomb_script_file_path = "/opt/ghostsurf/bash_scripts/fast_bomb.sh"
+
+secure_bomb_script_file_path = "/opt/ghostsurf/bash_scripts/secure_bomb.sh"
+
+reset_script_file_path = "/opt/ghostsurf/bash_scripts/reset.sh"
+
+start_transparent_proxy_script_file_path = "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"
+
+stop_transparent_proxy_script_file_path = "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"
+
+hostname_changer_script_file_path = "/opt/ghostsurf/bash_scripts/hostname_changer.sh"
+
+save_iptables_script_file_path = "/opt/ghostsurf/bash_scripts/save_iptables_rules.sh"
+
+init_script_file_path = "/opt/ghostsurf/bash_scripts/init.sh"
+
+# BACKUP FILE PATH
+timezone_backup_file_path = "/opt/ghostsurf/backup_files/timezone.backup"
+
 
 def main():
     """The function which runs the entire application"""
@@ -63,7 +103,7 @@ def get_the_public_ip_address():
     sleep(1.5)
 
     # Sending notification to let the user know that the application is trying to connect to the server
-    system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Trying to connect to the server"')
+    system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Trying to connect to the server"')
 
     # Waiting for 1.5 seconds
     sleep(1.5)
@@ -98,7 +138,7 @@ def get_the_public_ip_address():
         message = "Couldn't connect to the server!"
 
     # Sending notification
-    system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "{message}"')
+    system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "{message}"')
 
 def anonymize_the_browser():
     """A function which anonymizes firefox by changing it's preferences"""
@@ -110,7 +150,7 @@ def anonymize_the_browser():
     prefs_file_path = Path(popen(f'echo "{user_pwd}" | sudo -S find /home/$username -name prefs.js').read()[:-1])
 
     # Custom prefs file path
-    custom_prefs_file_path = Path("/opt/ghostsurf/configuration_files/firefox_prefs.js.custom")
+    custom_prefs_file_path = Path(custom_firefox_preferences_file_path)
 
     # Checking if the path that leads to custom preferences file is exists
     if custom_prefs_file_path.exists() == True:
@@ -125,7 +165,7 @@ def anonymize_the_browser():
     else:
 
         # Sending a notification to inform the user that the operation is starting
-        system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Custom preferences file not found. Try to reinstall ghostsurf!"')
+        system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Custom preferences file not found. Try to reinstall ghostsurf!"')
 
     # Checking if the path that leads to firefox's preferences file is exists
     if prefs_file_path.exists() == True:
@@ -140,7 +180,7 @@ def anonymize_the_browser():
     else:
 
         # Sending a notification to inform the user that the operation is starting
-        system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Firefox\'s preferences file not found!"')
+        system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Firefox\'s preferences file not found!"')
 
     # Creating an empty list to store original file's key names
     list_of_original_file_keys = []
@@ -224,13 +264,13 @@ def kill_log_files():
     """A function which overrides the log files in the system"""
     
     # Sending a notification to inform the user that the operation is starting
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Executing the log_shredder.sh script"')
+    system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Executing the log_shredder.sh script"')
 
     # Executing the mac_changer script.
-    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/mac_changer.sh"')
+    system(f'echo "{user_pwd}" | sudo -S {mac_changer_script_file_path}')
 
     # Sending a notification to inform the user that the operation is done
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Log shredding is done"')
+    system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Log shredding is done"')
 
 
 def change_the_mac_address():
@@ -249,7 +289,7 @@ def change_the_mac_address():
             internet_adaptor_name = popen("ip route show default | awk '/default/ {print $5}'").read()[:-1]
 
             # Executing the mac_changer script.
-            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/mac_changer.sh"')
+            system(f'echo "{user_pwd}" | sudo -S {mac_changer_script_file_path}')
 
             # Waiting for 4 seconds
             sleep(4)
@@ -258,16 +298,16 @@ def change_the_mac_address():
             system(f'echo "{user_pwd}" | sudo -S nmcli d connect {internet_adaptor_name}')
 
             # Sending a notification to inform the user that the operation is done
-            system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Mac address has been changed"')
+            system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Mac address has been changed"')
 
         # Checking if the user pressed to the no button
         elif user_answer == "&No":
             
             # Executing the mac_changer script.
-            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/mac_changer.sh"')
+            system(f'echo "{user_pwd}" | sudo -S {mac_changer_script_file_path}')
 
             # Sending a notification to inform the user that the operation is done
-            system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Mac Changing operation is done"')
+            system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Mac Changing operation is done"')
 
         # Checking if the didn't pressed to bot yes and not buttons 
         else:
@@ -276,7 +316,7 @@ def change_the_mac_address():
             debug("Operation canceled")
 
     # Sending a notification to inform the user that the operation is starting
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Changing the mac address"')
+    system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Changing the mac address"')
 
     # Creating a question dialog window
     question_dialog = QMessageBox()
@@ -312,25 +352,25 @@ def wipe_the_memory():
         if user_answer == "&Yes":
             
             # Sending a notification to inform the user that the process is starting
-            system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Trying to wipe the memory and drop caches. This might take some time!"')
+            system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Trying to wipe the memory and drop caches. This might take some time!"')
 
             # Executing the bomb.sh file to wipe the memory securely
-            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/fast_bomb.sh"')
+            system(f'echo "{user_pwd}" | sudo -S {fast_bomb_script_file_path}')
 
             # Sending a notification to let the user know what the application just did
-            system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Caches are dropped and memory is wiped"')
+            system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Caches are dropped and memory is wiped"')
             
         # Checking if the user pressed to the no button
         elif user_answer == "&No":
 
             # Sending a notification to inform the user that the process is starting
-            system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Trying to wipe the memory and drop caches. This might take some time!"')
+            system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Trying to wipe the memory and drop caches. This might take some time!"')
 
             # Executing the bomb.sh file to wipe the memory securely
-            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/secure_bomb.sh"')
+            system(f'echo "{user_pwd}" | sudo -S "{secure_bomb_script_file_path}"')
 
             # Sending a notification to let the user know what the application just did
-            system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Caches are dropped and memory is wiped"')
+            system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Caches are dropped and memory is wiped"')
 
         # Checking if the didn't pressed to bot yes and not buttons 
         else:
@@ -363,13 +403,13 @@ def reset_ghostsurf_settings():
     """A function which resets the ghostsurf settings"""
 
     # Sending a notification to inform the user that the operation is starting
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Executing the reset.sh script"')
+    system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Executing the reset.sh script"')
 
     # Executing the reset.sh script.
-    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/reset.sh"')
+    system(f'echo "{user_pwd}" | sudo -S "{reset_script_file_path}"')
 
     # Sending a notification to inform the user that the operation is done
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Reseting is done"')
+    system(f'notify-send -i "{ghostsurf_logo_file_path} "-t 300 "Reseting is done"')
 
 # Creating a data class called ChacklistModel to control how data objects will be created
 class ChecklistModel(QAbstractListModel):
@@ -465,7 +505,7 @@ class ChecklistDialog(QDialog, Ui_ChecklistDialog):
             """A function which checks if you are using privacy focused name servers"""
 
             # Opening the dns_changer.resolv.conf file in reading mode as privacy_focused_nameserver_file
-            with open("/opt/ghostsurf/configuration_files/dns_changer.resolv.conf", "r") as privacy_focused_nameserver_file:
+            with open(dns_changer_resolv_conf_file_path, "r") as privacy_focused_nameserver_file:
 
                 # Reading privacy_focused_nameserver_file's lines
                 privacy_focused_nameservers = privacy_focused_nameserver_file.read()
@@ -474,7 +514,7 @@ class ChecklistDialog(QDialog, Ui_ChecklistDialog):
             tor_nameserver = "nameserver 127.0.0.1\n"
 
             # Opening the resolv.conf file in reading mode as resolv_conf_file
-            with open("/etc/resolv.conf", "r") as resolv_conf_file:
+            with open(original_resolv_configuration_file_path, "r") as resolv_conf_file:
 
                 # Reading resolv_conf_file's contents
                 resolv_conf_file_contents = resolv_conf_file.read() 
@@ -503,7 +543,7 @@ class ChecklistDialog(QDialog, Ui_ChecklistDialog):
             """A function which checks if browser anonymization preferences are in use"""
 
             # Opening firefox_prefs.js.custom file in reading mode as custom_firefox_prefs_file
-            with open("/opt/ghostsurf/configuration_files/firefox_prefs.js.custom", "r") as custom_firefox_prefs_file:
+            with open(custom_firefox_preferences_file_path, "r") as custom_firefox_prefs_file:
                 cfpf_lines = custom_firefox_prefs_file.readlines()
 
             # Finding the prefs.js file of firefox using a system command.
@@ -527,7 +567,7 @@ class ChecklistDialog(QDialog, Ui_ChecklistDialog):
         def check_different_timezone_usage():
             """A function which checks if a different timezone is set in the system"""
 
-            with open("/opt/ghostsurf/backup_files/timezone.backup", "r") as original_timezone_file:
+            with open(timezone_backup_file_path, "r") as original_timezone_file:
                 otf_content = original_timezone_file.read()[:-2]
 
             current_timezone = popen("timedatectl show | grep Timezone | sed 's/Timezone=//g'").read()
@@ -707,7 +747,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         tor_status = popen(f'echo "{user_pwd}" | sudo -S systemctl status tor.service').read()
         
         # Opening the ghostsurf.conf file in reading mode
-        with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "r") as c:
+        with open(ghostsurf_configuration_file_path, "r") as c:
             
             # Reading the lines of ghostsurf.conf file
             c_contents = c.readlines()
@@ -857,10 +897,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             debug("Rebooting the system")
 
             # Executing the stop script
-            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
+            system(f'echo "{user_pwd}" | sudo -S {stop_transparent_proxy_script_file_path}')
 
             # Executing the hostname_changer script
-            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/hostname_changer.sh"')
+            system(f'echo "{user_pwd}" | sudo -S {hostname_changer_script_file_path}')
 
             # Rebooting the system
             system(f'echo "{user_pwd}" | sudo -S reboot')
@@ -875,7 +915,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """A function which changes the nameservers in the resolv.conf file"""
 
         # Sending a notification to inform the user that the operation is starting
-        system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Changing the nameservers"')
+        system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Changing the nameservers"')
 
         # Getting the working status of the application from the start_stop_button's text
         working_status = self.start_stop_button.text()
@@ -884,16 +924,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if working_status == "Stop":
             
             # Copying and pasting custom nameservers for tor on resolv.conf file
-            system(f'echo "{user_pwd}" | sudo -S cp "/opt/ghostsurf/configuration_files/resolv.conf.custom" "/etc/resolv.conf"')
+            system(f'echo "{user_pwd}" | sudo -S cp "{custom_resolv_configuration_file_path}" "{original_resolv_configuration_file_path}"')
 
         # Checking if transparent proxy is off
         else:
 
             # Copying and pasting dns_changer nameservers to on resolv.conf file
-            system(f'echo "{user_pwd}" | sudo -S cp "/opt/ghostsurf/configuration_files/dns_changer.resolv.conf" "/etc/resolv.conf"')
+            system(f'echo "{user_pwd}" | sudo -S cp "{dns_changer_resolv_conf_file_path}" "{original_resolv_configuration_file_path}"')
 
         # Sending a notification to inform the user that the operation is done
-        system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Nameservers has been changed"')
+        system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Nameservers has been changed"')
 
     def reset_settings(self):
         """A function which resets ghostsurf settings"""
@@ -935,13 +975,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             debug("Enabling ghostsurf at boot")
 
             # Executing the start script
-            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
+            system(f'echo "{user_pwd}" | sudo -S {start_transparent_proxy_script_file_path}')
 
             # Executing the save script
-            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/save_iptables_rules.sh"')
+            system(f'echo "{user_pwd}" | sudo -S {save_iptables_script_file_path}')
 
             # Opening the ghostsurf.conf file in read mode
-            with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "r") as a:
+            with open(ghostsurf_configuration_file_path, "r") as a:
 
                 # Reading the lines of the ghostsurf.conf file
                 a_contents = a.readlines()
@@ -956,7 +996,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     a_contents[line_index]="enabled_at_boot=yes\n"
 
             # Opening the ghostsurf.conf file in write mode
-            with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "w") as b:
+            with open(ghostsurf_configuration_file_path, "w") as b:
 
                 # Writing the new contents to file
                 b.write('\n'.join(a_contents))
@@ -983,10 +1023,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             debug("Disabling ghostsurf at boot")
 
             # Executing the stop script
-            system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
+            system(f'echo "{user_pwd}" | sudo -S {stop_transparent_proxy_script_file_path}')
 
             # Opening the ghostsurf.conf file in read mode
-            with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "r") as a:
+            with open(ghostsurf_configuration_file_path, "r") as a:
                 
                 # Reading the lines of ghostsurf.conf file and creating a list out of them
                 a_contents = a.readlines()
@@ -1001,7 +1041,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     a_contents[line_index]="enabled_at_boot=no\n"
 
             # Opening the ghostsurf.conf file in write mode
-            with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "w") as b:
+            with open(ghostsurf_configuration_file_path, "w") as b:
                 
                 # Writing the new contents in to file
                 b.write('\n'.join(a_contents))
@@ -1052,12 +1092,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 debug("Yes button is clicked")
 
                 # Executing the init script.
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/init.sh"')
+                system(f'echo "{user_pwd}" | sudo -S {init_script_file_path}')
 
                 anonymize_the_browser()
 
                 # Executing the start script
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
+                system(f'echo "{user_pwd}" | sudo -S {start_transparent_proxy_script_file_path}')
 
                 # Changing the start_stop_button's text value to Stop.
                 self.start_stop_button.setText("Stop")
@@ -1071,7 +1111,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 anonymize_the_browser()
 
                 # Executing the start script
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
+                system(f'echo "{user_pwd}" | sudo -S {start_transparent_proxy_script_file_path}')
 
                 # Changing the start_stop_button's text value to Stop.
                 self.start_stop_button.setText("Stop")
@@ -1092,13 +1132,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if user_answer == "&Yes":
 
                  # Executing the init script.
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/init.sh"')
+                system(f'echo "{user_pwd}" | sudo -S {init_script_file_path}')
 
                 # Executing the stop script.
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
+                system(f'echo "{user_pwd}" | sudo -S {stop_transparent_proxy_script_file_path}')
 
                 # Opening the ghostsurf.conf file in read mode
-                with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "r") as d:
+                with open(ghostsurf_configuration_file_path, "r") as d:
 
                     # Reading the lines of the file
                     d_contents = d.readlines()
@@ -1113,7 +1153,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         d_contents[line_index] = "enabled_at_boot=no\n"
 
                 # Opening the ghostsurf.conf file in write mode
-                with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "w") as e:
+                with open(ghostsurf_configuration_file_path, "w") as e:
 
                     # Writing the new contents into file
                     e.write("\n".join(d_contents))
@@ -1131,10 +1171,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             elif user_answer == "&No":
 
                 # Executing the stop script.
-                system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/stop_transparent_proxy.sh"')
+                system(f'echo "{user_pwd}" | sudo -S {stop_transparent_proxy_script_file_path}')
 
                 # Opening the ghostsurf.conf file in read mode
-                with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "r") as d:
+                with open(ghostsurf_configuration_file_path, "r") as d:
 
                     # Reading the lines of the file
                     d_contents = d.readlines()
@@ -1149,7 +1189,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                         d_contents[line_index] = "enabled_at_boot=no\n"
 
                 # Opening the ghostsurf.conf file in write mode
-                with open("/opt/ghostsurf/configuration_files/ghostsurf.conf", "w") as e:
+                with open(ghostsurf_configuration_file_path, "w") as e:
 
                     # Writing the new contents into file
                     e.write("\n".join(d_contents))
