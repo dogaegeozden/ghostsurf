@@ -93,6 +93,9 @@
       <strikeout>false</strikeout>
      </font>
     </property>
+    <property name="toolTip">
+     <string>Start the ghostsurf</string>
+    </property>
     <property name="text">
      <string>Start</string>
     </property>
@@ -106,6 +109,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>Change my ip address</string>
+    </property>
     <property name="text">
      <string>Change IP</string>
     </property>
@@ -118,6 +124,9 @@
       <width>90</width>
       <height>30</height>
      </rect>
+    </property>
+    <property name="toolTip">
+     <string>Display my ip address</string>
     </property>
     <property name="text">
      <string>My IP</string>
@@ -192,6 +201,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>Refresh the tor status</string>
+    </property>
     <property name="text">
      <string>Status</string>
     </property>
@@ -199,7 +211,7 @@
    <widget class="QPushButton" name="info_button">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>200</x>
       <y>180</y>
       <width>30</width>
       <height>30</height>
@@ -272,7 +284,7 @@
    <widget class="QPushButton" name="reset_button">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>160</x>
       <y>180</y>
       <width>30</width>
       <height>30</height>
@@ -378,6 +390,9 @@
       <height>30</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>Change the nameservers with appropriate ones</string>
+    </property>
     <property name="styleSheet">
      <string notr="true">#dns_changer_button {
 	background: #231f1f;
@@ -419,7 +434,7 @@
      <string>Control Deck</string>
     </property>
    </widget>
-   <widget class="Line" name="line">
+   <widget class="Line" name="horizontal_line">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -450,6 +465,31 @@
     </property>
     <property name="text">
      <string>N/A</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="run_fast_check_button">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>180</y>
+      <width>30</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string>Run the checklist</string>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">#run_fast_check_button {
+	background: #000064;
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="../resources.qrc">
+      <normaloff>:/icons/run_fast_check.svg</normaloff>:/icons/run_fast_check.svg</iconset>
     </property>
    </widget>
   </widget>
