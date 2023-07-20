@@ -93,7 +93,7 @@ class Ui_MainWindow(object):
         self.status_button.setGeometry(QRect(239, 180, 70, 30))
         self.info_button = QPushButton(self.centralwidget)
         self.info_button.setObjectName(u"info_button")
-        self.info_button.setGeometry(QRect(160, 180, 30, 30))
+        self.info_button.setGeometry(QRect(200, 180, 30, 30))
         self.info_button.setStyleSheet(u"#info_button {\n"
 "	background: #231f1f;\n"
 "}")
@@ -119,7 +119,7 @@ class Ui_MainWindow(object):
 "}")
         self.reset_button = QPushButton(self.centralwidget)
         self.reset_button.setObjectName(u"reset_button")
-        self.reset_button.setGeometry(QRect(120, 180, 30, 30))
+        self.reset_button.setGeometry(QRect(160, 180, 30, 30))
         self.reset_button.setStyleSheet(u"#reset_button {\n"
 "	background: #231f1f;\n"
 "}")
@@ -176,11 +176,11 @@ class Ui_MainWindow(object):
         self.control_deck_label.setStyleSheet(u"#control_deck_label {\n"
 "	color: white;\n"
 "}")
-        self.line = QFrame(self.centralwidget)
-        self.line.setObjectName(u"line")
-        self.line.setGeometry(QRect(100, 80, 220, 20))
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
+        self.horizontal_line = QFrame(self.centralwidget)
+        self.horizontal_line.setObjectName(u"horizontal_line")
+        self.horizontal_line.setGeometry(QRect(100, 80, 220, 20))
+        self.horizontal_line.setFrameShape(QFrame.HLine)
+        self.horizontal_line.setFrameShadow(QFrame.Sunken)
         self.anti_mitm_button = QPushButton(self.centralwidget)
         self.anti_mitm_button.setObjectName(u"anti_mitm_button")
         self.anti_mitm_button.setGeometry(QRect(10, 190, 80, 26))
@@ -189,6 +189,15 @@ class Ui_MainWindow(object):
 "	border-radius: 4px;\n"
 "	border: 1px solid black;\n"
 "}")
+        self.run_fast_check_button = QPushButton(self.centralwidget)
+        self.run_fast_check_button.setObjectName(u"run_fast_check_button")
+        self.run_fast_check_button.setGeometry(QRect(120, 180, 30, 30))
+        self.run_fast_check_button.setStyleSheet(u"#run_fast_check_button {\n"
+"	background: #000064;\n"
+"}")
+        icon8 = QIcon()
+        icon8.addFile(u":/icons/run_fast_check.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.run_fast_check_button.setIcon(icon8)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -237,8 +246,15 @@ class Ui_MainWindow(object):
         self.hostname_changer_button.setToolTip(QCoreApplication.translate("MainWindow", u"Change the hostname", None))
 #endif // QT_CONFIG(tooltip)
         self.hostname_changer_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.dns_changer_button.setToolTip(QCoreApplication.translate("MainWindow", u"Change the nameservers with appropriate ones", None))
+#endif // QT_CONFIG(tooltip)
         self.dns_changer_button.setText("")
         self.control_deck_label.setText(QCoreApplication.translate("MainWindow", u"Control Deck", None))
         self.anti_mitm_button.setText(QCoreApplication.translate("MainWindow", u"N/A", None))
+#if QT_CONFIG(tooltip)
+        self.run_fast_check_button.setToolTip(QCoreApplication.translate("MainWindow", u"Run the checklist", None))
+#endif // QT_CONFIG(tooltip)
+        self.run_fast_check_button.setText("")
     # retranslateUi
 
