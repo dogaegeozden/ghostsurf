@@ -6,16 +6,21 @@ from pathlib import Path
 from logging import basicConfig, DEBUG, debug, disable, CRITICAL
 from webbrowser import open as wbopen
 from threading import Thread
-from time import sleep
 from re import compile
+from time import sleep
+from getpass import getuser
+from pathlib import Path
+from socket import gethostname
 
 # PySide2
 from PySide2.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox, QLineEdit
-from PySide2.QtGui import QPixmap, QIcon
+from PySide2.QtGui import QPixmap, QIcon, QImage
+from PySide2.QtCore import QAbstractListModel, Qt
 
 # Guis
 from guis.main_win_ui import Ui_MainWindow
 from guis.password_win_ui import Ui_PasswordDialog
+from guis.checklist_win_ui import Ui_ChecklistDialog
 
 # Resources
 import resources_rc
@@ -29,6 +34,12 @@ basicConfig(level=DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 # GLOBAL VARIABLES
 # Creating a variable called base_dir which leads to the current working directory.
 base_dir = path.dirname(__file__)
+
+# Creating a path which leads to the tick.png file
+tick = QImage(str(Path(base_dir, "icons", "tick.png")))
+
+# Creating a path which leads to the cross.png file
+cross = QImage(str(Path(base_dir, "icons", "cross.png")))
 
 def main():
     """The function which runs the entire application"""
@@ -44,18 +55,170 @@ def main():
 
     # Executing the app
     app.exec_()
+
+def get_the_public_ip_address():
+    """A function which tries to displays the user's public ip address with notifications"""
+
+    # Waiting for 1.5 seconds
+    sleep(1.5)
+
+    # Sending notification to let the user know that the application is trying to connect to the server
+    system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Trying to connect to the server"')
+
+    # Waiting for 1.5 seconds
+    sleep(1.5)
+
+    # Trying to execute the code block that is located inside this block
+    try:
+        # Sending a get request to "https://ifconfig.io" to get the public ip address.
+        public_ip_address = popen(f'echo "{user_pwd}" | sudo -S curl --connect-timeout 14.15 "https://ifconfig.io"').read()[:-1]
+
+        # Creating a pattern for ip address validation
+        ip_addr_regex = compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}')
+        
+        # Checking if the get request's response is an ip address
+        result = ip_addr_regex.search(public_ip_address).group()
+
+        # Checking if pattern validation's result is equal to the get request's response
+        if result == public_ip_address:
+
+            # Creating a message that contain's the public ip address
+            message = f'Your public ip address is {public_ip_address}'
+
+        # Checking if the pattern validation's result is not equal to the get request's response
+        else:
             
-def reset_ghostsurf_settings():
-    """A function which resets the ghostsurf settings"""
+            # Creating a message that says "Couldn't connect to the server!"
+            message = "Couldn't connect to the server!"
 
-    # Sending a notification to inform the user that the operation is starting
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Executing the reset.sh script"')
+    # Instructing the computer about what to do if the application fails to send execute the code which is inside the try block
+    except:
 
-    # Executing the reset.sh script.
-    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/reset.sh"')
+        # Creating a message that informs the user that it can't connect to the internet
+        message = "Couldn't connect to the server!"
 
-    # Sending a notification to inform the user that the operation is done
-    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Reseting is done"')
+    # Sending notification
+    system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "{message}"')
+
+def anonymize_the_browser():
+    """A function which anonymizes firefox by changing it's preferences"""
+
+    # Getting the username
+    current_username = getuser()
+    
+    # Finding the prefs.js file of firefox using a system command
+    prefs_file_path = Path(popen(f'echo "{user_pwd}" | sudo -S find /home/$username -name prefs.js').read()[:-1])
+
+    # Custom prefs file path
+    custom_prefs_file_path = Path("/opt/ghostsurf/configuration_files/firefox_prefs.js.custom")
+
+    # Checking if the path that leads to custom preferences file is exists
+    if custom_prefs_file_path.exists() == True:
+
+        # Opening the custom preferences file in read mode
+        with open(custom_prefs_file_path, "r") as the_custom_prefs_file:
+
+            # Creating a list of lines by reading the file
+            list_of_custom_prefs_file_lines = the_custom_prefs_file.readlines()
+
+    # Checking if the path is not exists
+    else:
+
+        # Sending a notification to inform the user that the operation is starting
+        system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Custom preferences file not found. Try to reinstall ghostsurf!"')
+
+    # Checking if the path that leads to firefox's preferences file is exists
+    if prefs_file_path.exists() == True:
+        
+        # Opening the prefs_file_path in reading mode
+        with open(prefs_file_path, "r") as firefox_prefs_file:
+
+            # Readling each line from the file and creating a list from those lines
+            list_of_firefox_prefs_file_lines = firefox_prefs_file.readlines()
+    
+    # Checking if the path is not exists
+    else:
+
+        # Sending a notification to inform the user that the operation is starting
+        system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Firefox\'s preferences file not found!"')
+
+    # Creating an empty list to store original file's key names
+    list_of_original_file_keys = []
+
+    # Iterating line by line in the list_of_firefox_prefs_file_lines list
+    for original_line in list_of_firefox_prefs_file_lines:
+
+        # Checking if the original_line is including '"' and "," at the same time. 
+        if '"' in original_line and "," in original_line:
+            
+            # Extracting the original key name from the original line
+            original_key_name = original_line.split('"')[1]
+            
+            # Extacting the value from the original line
+            original_value = original_line.split('"')[2][2:-3]
+
+            # Appending the key name to the list_of_original_file_keys list
+            list_of_original_file_keys.append(original_key_name)
+
+            # Iterating line by line in the list_of_custom_prefs_file_lines
+            for custom_line in list_of_custom_prefs_file_lines:
+
+                # Extrating the key name from the custom preference line               
+                custom_key_name = custom_line.split('"')[1]
+                
+                # Extracting the value from custom preference line
+                custom_value = custom_line.split('"')[2][2:-3]
+                
+                # Checking if the custom_key_name is equal to original_key_name
+                if custom_key_name == original_key_name:
+                    
+                    # Creating a preferences string
+                    special_line = f'user_pref("{original_key_name}", {custom_value});\n'
+
+                    # Creating an integer that corresponds to the original_line's location in the list
+                    target_lines_index_num = list_of_firefox_prefs_file_lines.index(original_line)
+                    
+                    # Altering the list_of_firefox_prefs_file_lines list
+                    list_of_firefox_prefs_file_lines[target_lines_index_num] = special_line
+
+    # Iterating through each line in the list_of_custom_prefs_file_lines
+    for custom_line in list_of_custom_prefs_file_lines:
+
+        # Creating a custom_key_name 
+        custom_key_name = custom_line.split('"')[1]
+
+        # Creatinga a custom variable
+        custom_value = custom_line.split('"')[2][2:-3]
+
+        # Creating user preferences using the custom_key_name and the custom_value variables that have just been created
+        special_custom_line = f'user_pref("{custom_key_name}", {custom_value});\n'
+
+        # Checking if the custom key is not in the list of original file keys
+        if custom_key_name not in list_of_original_file_keys: 
+            
+            # Appending the special custom line to the list_of_firefox_prefs_file
+            list_of_firefox_prefs_file_lines.append(special_custom_line)
+
+    # Opening the prefs_file_path in writing mode with firefox_prefs_file object name
+    with open(prefs_file_path, "w") as firefox_prefs_file:
+        
+        # Writing the list_of_firefox_prefs_file_lines list to firefox_prefs_file line by line
+        firefox_prefs_file.writelines(list_of_firefox_prefs_file_lines)
+
+def manage_netfilter_service():
+    """A function which starts and enables netfilter service if it's not"""
+
+    # Checking if the netfilter-persistent service is inactive
+    if 'inactive' in popen(f'echo "{user_pwd}" | sudo -S systemctl status netfilter-persistent').read():
+
+        # Starting the netfilter-persistent service
+        system(f'echo {user_pwd} | sudo -S systemctl start netfilter-persistent')
+
+    # Checking if the netfilter-persistent service is disabled
+    if 'disabled' in popen(f'echo "{user_pwd}" | sudo -S systemctl status netfilter-persistent').read():
+
+        # Enabling the netfilter service
+        system(f'echo {user_pwd} | sudo -S systemctl enable netfilter-persistent')
 
 def kill_log_files():
     """A function which overrides the log files in the system"""
@@ -68,6 +231,7 @@ def kill_log_files():
 
     # Sending a notification to inform the user that the operation is done
     system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Log shredding is done"')
+
 
 def change_the_mac_address():
     """A function which changes the mac address"""
@@ -111,7 +275,6 @@ def change_the_mac_address():
             # Printing "Operation canceled in debug mode"
             debug("Operation canceled")
 
-
     # Sending a notification to inform the user that the operation is starting
     system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Changing the mac address"')
 
@@ -135,21 +298,6 @@ def change_the_mac_address():
 
     # Showing the question dialog
     question_dialog.exec_()
-
-def manage_netfilter_service():
-    """A function which starts and enables netfilter service if it's not"""
-
-    # Checking if the netfilter-persistent service is inactive
-    if 'inactive' in popen(f'echo "{user_pwd}" | sudo -S systemctl status netfilter-persistent').read():
-
-        # Starting the netfilter-persistent service
-        system(f'echo {user_pwd} | sudo -S systemctl start netfilter-persistent')
-
-    # Checking if the netfilter-persistent service is disabled
-    if 'disabled' in popen(f'echo "{user_pwd}" | sudo -S systemctl status netfilter-persistent').read():
-
-        # Enabling the netfilter service
-        system(f'echo {user_pwd} | sudo -S systemctl enable netfilter-persistent')
 
 def wipe_the_memory():
     """A function which drops caches, wipes the memory securely and notifies the user"""
@@ -210,51 +358,238 @@ def wipe_the_memory():
 
     # Showing the question dialog
     question_dialog.exec_()
+    
+def reset_ghostsurf_settings():
+    """A function which resets the ghostsurf settings"""
 
-def get_the_public_ip_address():
-    """A function which tries to displays the user's public ip address with notifications"""
+    # Sending a notification to inform the user that the operation is starting
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Executing the reset.sh script"')
 
-    # Waiting for 1.5 seconds
-    sleep(1.5)
+    # Executing the reset.sh script.
+    system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/reset.sh"')
 
-    # Sending notification to let the user know that the application is trying to connect to the server
-    system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Trying to connect to the server"')
+    # Sending a notification to inform the user that the operation is done
+    system('notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "Reseting is done"')
 
-    # Waiting for 1.5 seconds
-    sleep(1.5)
+# Creating a data class called ChacklistModel to control how data objects will be created
+class ChecklistModel(QAbstractListModel):
+    
+    def __init__(self, list_items=None):
+        super().__init__()
+        self.list_items = list_items or []
 
-    # Trying to execute the code block that is located inside this block
-    try:
-        # Sending a get request to "https://ifconfig.io" to get the public ip address.
-        public_ip_address = popen(f'echo "{user_pwd}" | sudo -S curl --connect-timeout 14.15 "https://ifconfig.io"').read()[:-1]
+    def data(self, index, role):
+        if role == Qt.DisplayRole:
+            status, text = self.list_items[index.row()]
+            return text
 
-        # Creating a pattern for ip address validation
-        ip_addr_regex = compile(r'\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}')
+        if role == Qt.DecorationRole:
+            status, text = self.list_items[index.row()]
+
+            if status:
+                return tick
+            else:
+                return cross
+
+    def rowCount(self, index):
+        return len(self.list_items)
+
+# Creating a dialog class called PasswordDialog
+class ChecklistDialog(QDialog, Ui_ChecklistDialog):
+
+    def __init__(self, *args, **kwargs):
+        """An init function which makes the window self contained""" 
+
+        # Calling super function with init
+        super().__init__(*args, **kwargs)
+
+        # Loading the GUI
+        self.setupUi(self)
         
-        # Checking if the get request's response is an ip address
-        result = ip_addr_regex.search(public_ip_address).group()
+        # Creating a list model
+        self.model = ChecklistModel()
 
-        # Checking if pattern validation's result is equal to the get request's response
-        if result == public_ip_address:
+        # Setting the checklist_list_view object's list model
+        self.checklist_list_view.setModel(self.model)
 
-            # Creating a message that contain's the public ip address
-            message = f'Your public ip address is {public_ip_address}'
+        checklist_items_dict = {
+            'Using fake hostname': False, 
+            'Using fake mac address': False, 
+            'Using appropriate nameservers': False, 
+            'Using browser anonymization preferences': False, 
+            'Using different timezone': False, 
+            'Using a tor connection': False, 
+            'Using man in the middle protection': False 
+        }
 
-        # Checking if the pattern validation's result is not equal to the get request's response
-        else:
+        def check_fake_hostname_usage():
+            """A function which checks the hostname"""
+
+            # Creating a list of fake hostnames
+            list_of_fake_hostnames = ["Windows10-Enterprise ", "Windows10-Pro", "Windows10-Enterprise-LTSC ", "Windows8.1O-EM", "Windows8-Enterprise", "Windows8.1-Pro", "Windows7-Professional", "Windows7-Enterprise", "Windows7-Ultimate", "Windows-Vista-Business", "WindowsXP-Professional", "macOS11", "OSX10.11", "MacBook-Air", "MacBook", "MacBook-Pro"]
             
-            # Creating a message that says "Couldn't connect to the server!"
-            message = "Couldn't connect to the server!"
+            # Getting the current hostname
+            current_hostname = gethostname()
 
+            # Checking if the current hostname is in the list of fake hostnames
+            if current_hostname in list_of_fake_hostnames:
 
-    # Instructing the computer about what to do if the application fails to send execute the code which is inside the try block
-    except:
+                # Updating the 'Using fake hostname' key's value pair to True
+                checklist_items_dict['Using fake hostname'] = True
 
-        # Creating a message that informs the user that it can't connect to the internet
-        message = "Couldn't connect to the server!"
+        def check_fake_mac_address_usage():
+            """A function which checks wheather or not you are using fake mac address"""
 
-    # Sending notification
-    system(f'notify-send -i "/opt/ghostsurf/icons/ghostsurf.png" -t 300 "{message}"')
+            # Getting the active network adaptor's name
+            active_network_adaptor_name = popen("ip route show default | awk '/default/ {print $5}'").read()
+
+            # Getting mac address information
+            mac_address_info = popen(f'macchanger -s {active_network_adaptor_name}').read().split("\n")[:-1]
+
+            # Getting the permanent mac address
+            permanent_mac_address = mac_address_info[1].split(" ")[2]
+
+            # Getting the current mac address
+            current_mac_address = mac_address_info[0].split(" ")[4]
+
+            # Printing the permanent mac address and the current mac address in debug mode.
+            debug(f'Permanent Mac Address = {permanent_mac_address}\nCurrent Mac Address = {current_mac_address}')
+
+            # Checking if the current mac address is not equal to the permanent mac address
+            if current_mac_address != permanent_mac_address:
+
+                # Setting the 'Using fake mac address' key's value pair to True
+                checklist_items_dict['Using fake mac address'] = True
+
+        def check_appropriate_nameserver_usage():
+            """A function which checks if you are using privacy focused name servers"""
+
+            # Opening the dns_changer.resolv.conf file in reading mode as privacy_focused_nameserver_file
+            with open("/opt/ghostsurf/configuration_files/dns_changer.resolv.conf", "r") as privacy_focused_nameserver_file:
+
+                # Reading privacy_focused_nameserver_file's lines
+                privacy_focused_nameservers = privacy_focused_nameserver_file.read()
+
+            # Creating a variable that holds the tor nameserver specification 
+            tor_nameserver = "nameserver 127.0.0.1\n"
+
+            # Opening the resolv.conf file in reading mode as resolv_conf_file
+            with open("/etc/resolv.conf", "r") as resolv_conf_file:
+
+                # Reading resolv_conf_file's contents
+                resolv_conf_file_contents = resolv_conf_file.read() 
+
+            debug(f'Start stop button\'s text = {main_window.start_stop_button.text()}')
+
+            debug(f'Privacy Focused Nameservers = {privacy_focused_nameservers}\nResolv.conf File = {resolv_conf_file_contents}\nTor Nameserver = {tor_nameserver}')
+        
+            # Checking if start_stop_button's text in the main window is equal to Start string.
+            if main_window.start_stop_button.text() == "Start":
+
+                # Checking if resolv_conf_file_contents is equal to privacy_focused_nameservers
+                if resolv_conf_file_contents == privacy_focused_nameservers:
+
+                    # Setting the 'Using appropriate nameservers' key's value pair to True
+                    checklist_items_dict['Using appropriate nameservers'] = True
+
+            # Checking if start_stop_button's text in the main window is not equal to Start string.
+            else:
+                if resolv_conf_file_contents == tor_nameserver:
+
+                    # Setting the 'Using appropriate nameservers' key's value pair to True
+                    checklist_items_dict['Using appropriate nameservers'] = True
+
+        def check_browser_anonymization_preferences_usage():
+            """A function which checks if browser anonymization preferences are in use"""
+
+            # Opening firefox_prefs.js.custom file in reading mode as custom_firefox_prefs_file
+            with open("/opt/ghostsurf/configuration_files/firefox_prefs.js.custom", "r") as custom_firefox_prefs_file:
+                cfpf_lines = custom_firefox_prefs_file.readlines()
+
+            # Finding the prefs.js file of firefox using a system command.
+            prefs_file_path = Path(popen(f'echo "{user_pwd}" | sudo -S find /home/$username -name prefs.js').read()[:-1])
+
+            # Opening the original prefs.js file in reading mode as original_firefox_prefs_file 
+            with open(prefs_file_path, "r") as original_firefox_prefs_file:
+
+                # Reading the original_firefox_prefs_file lines 
+                ofpf_lines = original_firefox_prefs_file.readlines()
+
+            # Creating a boolean value which is True is all lines in the custom firefox preferences file is available in the original firefox preferences file lines
+            is_all_prefs_set = all(ele in ofpf_lines for ele in cfpf_lines)
+
+            # Printing custom firefox preferences file lines, original firefox preferences file lines and is all preferences set variable's value in debug mode.
+            debug(f'Custom Firefox Preferences File Lines = {cfpf_lines}\n\n\nOriginal Firefox Preferences File Lines = {ofpf_lines}\nIs All Preferences Set = {is_all_prefs_set}')
+
+            # Setting the 'Using browser anonymization preferences' key's value pair to True
+            checklist_items_dict['Using browser anonymization preferences'] = is_all_prefs_set
+
+        def check_different_timezone_usage():
+            """A function which checks if a different timezone is set in the system"""
+
+            with open("/opt/ghostsurf/backup_files/timezone.backup", "r") as original_timezone_file:
+                otf_content = original_timezone_file.read()[:-2]
+
+            current_timezone = popen("timedatectl show | grep Timezone | sed 's/Timezone=//g'").read()
+
+            is_timezone_different = bool(otf_content!=current_timezone)
+            
+            debug(f'Original Timezone = {otf_content}\nCurrent Timezone = {current_timezone}\nIs Timezone Different = {is_timezone_different}')
+
+            # Setting the 'Using different timezone' key's value pair to True
+            checklist_items_dict['Using different timezone'] = is_timezone_different
+
+        def check_tor_connection_usage():
+            """A function which checks if a transparent proxy is working."""
+
+            # Sending a get request to https://check.torproject.org to learn if transparent proxy set correctly
+            tor_connection_status = str(popen(f'curl -s https://check.torproject.org/ | grep -q Congratulations && echo "Connected through Tor" || echo "Not connected through Tor"').read())[:-1]
+
+            # Creaing a boolean
+            is_transparent_proxy_set_correctly = bool(tor_connection_status=="Connected through Tor")
+
+            # Printing the if transparent proxy set correctly in debug mode
+            debug(f'Check Tor Project Result = {tor_connection_status}\nIs Transparent Proxy Set Correctly = {is_transparent_proxy_set_correctly}')
+
+            # Setting the 'Using different timezone' key's value pair to True
+            checklist_items_dict['Using a tor connection'] = is_transparent_proxy_set_correctly
+
+        def run_all_the_checks():
+            """A function which calls all of the checking functions"""
+
+            # Calling the check_fake_hostname_usage function.
+            check_fake_hostname_usage()
+
+            # Calling the check_fake_mac_address_usage function.
+            check_fake_mac_address_usage()
+
+            # Calling the check_appropriate_nameserver_usage function.
+            check_appropriate_nameserver_usage()
+
+            # Calling the check_browser_anonymization_preferences_usage function.
+            check_browser_anonymization_preferences_usage()
+
+            # Calling the check_different_timezone_usage function.
+            check_different_timezone_usage()
+
+            # Calling the check_tor_connection_usage function.
+            check_tor_connection_usage()
+
+        # Calling the run_all_the_checks function
+        run_all_the_checks()
+
+        def add_listitems():
+            """A function which adds the checklist items to the checklist"""
+
+            for key, value in checklist_items_dict.items():
+            
+                # Access the list via the model.
+                self.model.list_items.append((value, key))
+            
+                # Trigger refresh.
+                self.model.layoutChanged.emit()
+
+        add_listitems()
 
 # Creating a dialog class called PasswordDialog
 class PasswordDialog(QDialog, Ui_PasswordDialog):
@@ -328,7 +663,8 @@ class PasswordDialog(QDialog, Ui_PasswordDialog):
             # Closing password dialog window
             self.close()
 
-            # Creating a main_window object from MainWindow class
+            # Creating a main_window object from MainWindow class with a global scope
+            global main_window
             main_window = MainWindow()
 
             # Showing the main window
@@ -363,6 +699,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Loading the GUI
         self.setupUi(self)
+
+        # Calling the manage_netfilter_service function.
+        manage_netfilter_service()
 
         # Checking tor services status
         tor_status = popen(f'echo "{user_pwd}" | sudo -S systemctl status tor.service').read()
@@ -475,6 +814,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Connecting the hostname_changer_button with the change_hostname function in a way that the function will going to trigger with a press signal
         self.hostname_changer_button.pressed.connect(self.change_hostname)
 
+        # Connecting the run_fast_check_button with the display_checklist function in a way that the function will going to trigger with a press signal
+        self.run_fast_check_button.pressed.connect(self.run_fast_check)
+
+    def run_fast_check(self):
+        """A function which runs a fast check and displays the checklist in a window"""
+
+        # Printing the operation's summary in debug mode        
+        debug("Running a fast check")
+
+        # Creating an object from the dialog class
+        checklist_dialog = ChecklistDialog()
+
+        # Executing the object to display the window.
+        checklist_dialog.exec_()
 
     def change_hostname(self):
         """A function which changes the hostname"""
@@ -518,7 +871,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Printing "Operation canceled" in debug mode
             debug("Operation canceled")
 
-
     def change_dns(self):
         """A function which changes the nameservers in the resolv.conf file"""
 
@@ -552,7 +904,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Starting the thread
         reset_thread.start()
 
-
     def shred_log_files(self):
         """A function which shreds the log files"""
 
@@ -562,7 +913,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Starting the thread
         log_kill_thread.start()
 
-
     def change_mac_address(self):
         """A function which changes the mac address"""
         
@@ -571,7 +921,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Starting the thread
         mac_changer_thread.start()
-
 
     def ultra_ghost_mode(self):
         """A function which enables/disables ghostsurf at boot"""
@@ -670,8 +1019,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.ultra_ghost_button.setText("disabled")
 
             # Setting the style sheet of the ultra_ghost_button 
-            self.ultra_ghost_button.setStyleSheet(u"#ultra_ghost_button {background: red; border-radius: 4px; border: 1px solid black}")
-            
+            self.ultra_ghost_button.setStyleSheet(u"#ultra_ghost_button {background: red; border-radius: 4px; border: 1px solid black}")  
 
     def wipe_memory_securely(self):
         """A function which wipes the memory securely"""
@@ -687,7 +1035,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Opening the info page of this application in the default browser
         wbopen("https://www.github.com/dogaegeozden/ghostsurf#readme")
-
 
     def start_stop(self):
         """A function which redirects all internet traffic over tor"""
@@ -707,6 +1054,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # Executing the init script.
                 system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/init.sh"')
 
+                anonymize_the_browser()
+
                 # Executing the start script
                 system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
 
@@ -718,6 +1067,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                 # Printing the name of the button that is clicked in debug mode
                 debug("No button is clicked")
+                
+                anonymize_the_browser()
 
                 # Executing the start script
                 system(f'echo "{user_pwd}" | sudo -S "/opt/ghostsurf/bash_scripts/start_transparent_proxy.sh"')
@@ -731,7 +1082,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # Printing "Operation canceled in debug mode"
                 debug("Operation canceled")
 
-        
         def stop_button_question_dialog_processor(i):
             """A function which process the input coming from the dialog box that is opened after the stop button is pressed to identify what app should do"""
 
@@ -872,7 +1222,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             # Showing the question dialog
             question_dialog.exec_() 
-
 
         # Reading the tor service's status by running a system command.
         tor_status = popen(f'echo "{user_pwd}" | sudo -S systemctl status tor.service').read()
