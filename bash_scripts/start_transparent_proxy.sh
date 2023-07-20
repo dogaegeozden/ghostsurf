@@ -18,9 +18,6 @@ main() {
     # Calling the setup_configuration_files function.
     setup_configuration_files
 
-    # Calling the set_browser_anonymization function
-    set_browser_anonymization
-
     # Calling set_up_iptables_rules function.
     set_up_iptables_rules
 
@@ -58,9 +55,6 @@ declare_variables() {
     # Creating path which lead to the preferences script of firefox
     pref_path="$(find /home/$username -name prefs.js)"
 
-    # Creating a list of network interfaces
-    list_of_network_interfaces=$(ip -o link show | awk -F': ' '{print $2}')
-
 }
 
 set_timezone_change() {
@@ -93,27 +87,6 @@ setup_configuration_files() {
     systemctl --system daemon-reload
 
 }
-
-set_browser_anonymization() {
-    # A function which changes the firefox configurations to set browser anonymization
-    
-    # Checking if the file in the $pref_path is exists. Hint: Do not touch to the part that reads the custom file and modifies the prefs file
-    if [ -f $pref_path ]; then
-
-        while IFS= read -r line; do
-
-            if ! grep -qF "$line" $pref_path; then
-
-                echo "$line" >> $pref_path
-
-            fi
-
-        done < "/opt/ghostsurf/scripts/firefox_prefs.js.custom"
-
-    fi
-
-}
-
 
 set_up_iptables_rules() {
     # A function which sets up iptables rules
