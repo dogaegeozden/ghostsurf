@@ -42,7 +42,6 @@ tick = QImage(str(Path(base_dir, "icons", "tick.png")))
 # Creating a path which leads to the cross.png file
 cross = QImage(str(Path(base_dir, "icons", "cross.png")))
 
-
 # CONFIGURATION FILE PATHS
 ghostsurf_configuration_file_path = "/opt/ghostsurf/configuration_files/ghostsurf.conf"
 
@@ -56,7 +55,6 @@ original_resolv_configuration_file_path = "/etc/resolv.conf"
 
 # ICON FILE PATH
 ghostsurf_logo_file_path = "/opt/ghostsurf/icons/ghostsurf.png"
-
 
 # BASH SCRIPT FILE PATHS
 mac_changer_script_file_path = "/opt/ghostsurf/bash_scripts/mac_changer.sh"
@@ -79,7 +77,6 @@ init_script_file_path = "/opt/ghostsurf/bash_scripts/init.sh"
 
 # BACKUP FILE PATH
 timezone_backup_file_path = "/opt/ghostsurf/backup_files/timezone.backup"
-
 
 def main():
     """The function which runs the entire application"""
@@ -147,7 +144,7 @@ def anonymize_the_browser():
     current_username = getuser()
     
     # Finding the prefs.js file of firefox using a system command
-    prefs_file_path = Path(popen(f'echo "{user_pwd}" | sudo -S find /home/$username -name prefs.js').read()[:-1])
+    prefs_file_path = Path(popen(f'echo "{user_pwd}" | sudo -S find "/home/{current_username}" -name prefs.js').read()[:-1])
 
     # Custom prefs file path
     custom_prefs_file_path = Path(custom_firefox_preferences_file_path)
@@ -542,12 +539,17 @@ class ChecklistDialog(QDialog, Ui_ChecklistDialog):
         def check_browser_anonymization_preferences_usage():
             """A function which checks if browser anonymization preferences are in use"""
 
+            # Getting the username of the user who is currently logged in
+            current_username = getuser()
+
             # Opening firefox_prefs.js.custom file in reading mode as custom_firefox_prefs_file
             with open(custom_firefox_preferences_file_path, "r") as custom_firefox_prefs_file:
+
+                # Reading the lines of custom_firefox_prefs_file file
                 cfpf_lines = custom_firefox_prefs_file.readlines()
 
             # Finding the prefs.js file of firefox using a system command.
-            prefs_file_path = Path(popen(f'echo "{user_pwd}" | sudo -S find /home/$username -name prefs.js').read()[:-1])
+            prefs_file_path = Path(popen(f'echo "{user_pwd}" | sudo -S find "/home/{current_username}" -name prefs.js').read()[:-1])
 
             # Opening the original prefs.js file in reading mode as original_firefox_prefs_file 
             with open(prefs_file_path, "r") as original_firefox_prefs_file:
@@ -567,13 +569,19 @@ class ChecklistDialog(QDialog, Ui_ChecklistDialog):
         def check_different_timezone_usage():
             """A function which checks if a different timezone is set in the system"""
 
+            # Opening the file in timezone_backup_file_path in reading mode with original_timezone_file name
             with open(timezone_backup_file_path, "r") as original_timezone_file:
-                otf_content = original_timezone_file.read()[:-2]
 
-            current_timezone = popen("timedatectl show | grep Timezone | sed 's/Timezone=//g'").read()
+                # Reading the file's contents
+                otf_content = original_timezone_file.read()[:-1]
 
+            # Getting the current timezone using system commands
+            current_timezone = popen("timedatectl show | grep Timezone | sed 's/Timezone=//g'").read()[:-1]
+
+            # Creating a boolean by checking if otf_content is not equal to current_timezone
             is_timezone_different = bool(otf_content!=current_timezone)
             
+            # Printing the original timezone, current time zone and the is_timezone_different variable's value in debug mode
             debug(f'Original Timezone = {otf_content}\nCurrent Timezone = {current_timezone}\nIs Timezone Different = {is_timezone_different}')
 
             # Setting the 'Using different timezone' key's value pair to True
@@ -621,6 +629,7 @@ class ChecklistDialog(QDialog, Ui_ChecklistDialog):
         def add_listitems():
             """A function which adds the checklist items to the checklist"""
 
+            # Looping through each key and value in the checklist_items_dict dictionary's items
             for key, value in checklist_items_dict.items():
             
                 # Access the list via the model.
@@ -629,6 +638,7 @@ class ChecklistDialog(QDialog, Ui_ChecklistDialog):
                 # Trigger refresh.
                 self.model.layoutChanged.emit()
 
+        # Calling the add_listitems function.
         add_listitems()
 
 # Creating a dialog class called PasswordDialog
