@@ -18,6 +18,8 @@ class Ui_ChecklistDialog(object):
         if not ChecklistDialog.objectName():
             ChecklistDialog.setObjectName(u"ChecklistDialog")
         ChecklistDialog.resize(290, 270)
+        ChecklistDialog.setMinimumSize(QSize(290, 270))
+        ChecklistDialog.setMaximumSize(QSize(290, 270))
         ChecklistDialog.setStyleSheet(u"#ChecklistDialog {\n"
 "	background: #231f1f;\n"
 "}")
@@ -37,7 +39,9 @@ class Ui_ChecklistDialog(object):
         self.window_title.setAlignment(Qt.AlignCenter)
         self.checklist_list_view = QListView(ChecklistDialog)
         self.checklist_list_view.setObjectName(u"checklist_list_view")
-        self.checklist_list_view.setGeometry(QRect(0, 60, 290, 210))
+        self.checklist_list_view.setGeometry(QRect(0, 60, 290, 270))
+        self.checklist_list_view.setMinimumSize(QSize(290, 270))
+        self.checklist_list_view.setMaximumSize(QSize(290, 270))
         font1 = QFont()
         font1.setFamily(u"Ubuntu")
         font1.setBold(False)

@@ -19,6 +19,13 @@ class Ui_PasswordDialog(object):
         if not PasswordDialog.objectName():
             PasswordDialog.setObjectName(u"PasswordDialog")
         PasswordDialog.resize(250, 200)
+        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(PasswordDialog.sizePolicy().hasHeightForWidth())
+        PasswordDialog.setSizePolicy(sizePolicy)
+        PasswordDialog.setMinimumSize(QSize(250, 200))
+        PasswordDialog.setMaximumSize(QSize(250, 200))
         icon = QIcon()
         icon.addFile(u":/logos/ghostsurf.png", QSize(), QIcon.Normal, QIcon.Off)
         PasswordDialog.setWindowIcon(icon)
