@@ -13,49 +13,54 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 
-class Ui_ChecklistDialog(object):
-    def setupUi(self, ChecklistDialog):
-        if not ChecklistDialog.objectName():
-            ChecklistDialog.setObjectName(u"ChecklistDialog")
-        ChecklistDialog.resize(290, 270)
-        ChecklistDialog.setMinimumSize(QSize(290, 270))
-        ChecklistDialog.setMaximumSize(QSize(290, 270))
-        ChecklistDialog.setStyleSheet(u"#ChecklistDialog {\n"
+class Ui_ChecklistWindow(object):
+    def setupUi(self, ChecklistWindow):
+        if not ChecklistWindow.objectName():
+            ChecklistWindow.setObjectName(u"ChecklistWindow")
+        ChecklistWindow.resize(290, 270)
+        ChecklistWindow.setMinimumSize(QSize(290, 270))
+        ChecklistWindow.setMaximumSize(QSize(290, 270))
+        ChecklistWindow.setStyleSheet(u"#ChecklistWindow {\n"
 "	background: #231f1f;\n"
 "}")
-        self.window_title = QLabel(ChecklistDialog)
-        self.window_title.setObjectName(u"window_title")
-        self.window_title.setGeometry(QRect(0, 9, 290, 40))
+        self.checklist_list_view = QListView(ChecklistWindow)
+        self.checklist_list_view.setObjectName(u"checklist_list_view")
+        self.checklist_list_view.setGeometry(QRect(0, 50, 290, 220))
+        self.checklist_list_view.setMinimumSize(QSize(290, 220))
+        self.checklist_list_view.setMaximumSize(QSize(290, 220))
         font = QFont()
-        font.setFamily(u"C059")
-        font.setPointSize(15)
+        font.setFamily(u"Ubuntu")
         font.setBold(False)
-        font.setItalic(True)
+        font.setItalic(False)
         font.setWeight(50)
-        self.window_title.setFont(font)
+        self.checklist_list_view.setFont(font)
+        self.window_title = QLabel(ChecklistWindow)
+        self.window_title.setObjectName(u"window_title")
+        self.window_title.setGeometry(QRect(0, 10, 290, 40))
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.window_title.sizePolicy().hasHeightForWidth())
+        self.window_title.setSizePolicy(sizePolicy)
+        font1 = QFont()
+        font1.setFamily(u"C059")
+        font1.setPointSize(15)
+        font1.setBold(False)
+        font1.setItalic(True)
+        font1.setWeight(50)
+        self.window_title.setFont(font1)
         self.window_title.setStyleSheet(u"#window_title {\n"
 "	color: white;\n"
 "}")
         self.window_title.setAlignment(Qt.AlignCenter)
-        self.checklist_list_view = QListView(ChecklistDialog)
-        self.checklist_list_view.setObjectName(u"checklist_list_view")
-        self.checklist_list_view.setGeometry(QRect(0, 60, 290, 270))
-        self.checklist_list_view.setMinimumSize(QSize(290, 270))
-        self.checklist_list_view.setMaximumSize(QSize(290, 270))
-        font1 = QFont()
-        font1.setFamily(u"Ubuntu")
-        font1.setBold(False)
-        font1.setItalic(False)
-        font1.setWeight(50)
-        self.checklist_list_view.setFont(font1)
 
-        self.retranslateUi(ChecklistDialog)
+        self.retranslateUi(ChecklistWindow)
 
-        QMetaObject.connectSlotsByName(ChecklistDialog)
+        QMetaObject.connectSlotsByName(ChecklistWindow)
     # setupUi
 
-    def retranslateUi(self, ChecklistDialog):
-        ChecklistDialog.setWindowTitle(QCoreApplication.translate("ChecklistDialog", u"Checklist", None))
-        self.window_title.setText(QCoreApplication.translate("ChecklistDialog", u"Anonymity Checklist", None))
+    def retranslateUi(self, ChecklistWindow):
+        ChecklistWindow.setWindowTitle(QCoreApplication.translate("ChecklistWindow", u"Form", None))
+        self.window_title.setText(QCoreApplication.translate("ChecklistWindow", u"Anonymity Checklist", None))
     # retranslateUi
 

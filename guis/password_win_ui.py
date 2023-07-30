@@ -14,45 +14,41 @@ from PySide2.QtWidgets import *
 
 import resources_rc
 
-class Ui_PasswordDialog(object):
-    def setupUi(self, PasswordDialog):
-        if not PasswordDialog.objectName():
-            PasswordDialog.setObjectName(u"PasswordDialog")
-        PasswordDialog.resize(250, 200)
+class Ui_PasswordWindow(object):
+    def setupUi(self, PasswordWindow):
+        if not PasswordWindow.objectName():
+            PasswordWindow.setObjectName(u"PasswordWindow")
+        PasswordWindow.resize(250, 200)
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(PasswordDialog.sizePolicy().hasHeightForWidth())
-        PasswordDialog.setSizePolicy(sizePolicy)
-        PasswordDialog.setMinimumSize(QSize(250, 200))
-        PasswordDialog.setMaximumSize(QSize(250, 200))
-        icon = QIcon()
-        icon.addFile(u":/logos/ghostsurf.png", QSize(), QIcon.Normal, QIcon.Off)
-        PasswordDialog.setWindowIcon(icon)
-        PasswordDialog.setStyleSheet(u"#PasswordDialog {\n"
+        sizePolicy.setHeightForWidth(PasswordWindow.sizePolicy().hasHeightForWidth())
+        PasswordWindow.setSizePolicy(sizePolicy)
+        PasswordWindow.setMinimumSize(QSize(250, 200))
+        PasswordWindow.setMaximumSize(QSize(250, 200))
+        PasswordWindow.setStyleSheet(u"#PasswordWindow {\n"
 "	background: #231f1f;\n"
 "}")
-        PasswordDialog.setInputMethodHints(Qt.ImhNone)
-        self.password_line_edit = QLineEdit(PasswordDialog)
+        self.password_line_edit = QLineEdit(PasswordWindow)
         self.password_line_edit.setObjectName(u"password_line_edit")
         self.password_line_edit.setGeometry(QRect(50, 100, 150, 30))
         self.password_line_edit.setInputMethodHints(Qt.ImhHiddenText|Qt.ImhNoAutoUppercase|Qt.ImhNoPredictiveText|Qt.ImhSensitiveData)
         self.password_line_edit.setEchoMode(QLineEdit.Password)
         self.password_line_edit.setAlignment(Qt.AlignCenter)
-        self.submit_button = QPushButton(PasswordDialog)
-        self.submit_button.setObjectName(u"submit_button")
-        self.submit_button.setGeometry(QRect(80, 145, 90, 25))
-        self.visibility_button = QPushButton(PasswordDialog)
+        self.visibility_button = QPushButton(PasswordWindow)
         self.visibility_button.setObjectName(u"visibility_button")
         self.visibility_button.setGeometry(QRect(210, 108, 15, 15))
         self.visibility_button.setStyleSheet(u"#visibility_button {\n"
 "	background: #231f1f;\n"
 "}")
-        icon1 = QIcon()
-        icon1.addFile(u":/icons/eye_closed.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon1.addFile(u":/icons/eye_open.svg", QSize(), QIcon.Normal, QIcon.On)
-        self.visibility_button.setIcon(icon1)
-        self.description_text = QLabel(PasswordDialog)
+        icon = QIcon()
+        icon.addFile(u":/icons/eye_closed.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon.addFile(u":/icons/eye_open.svg", QSize(), QIcon.Normal, QIcon.On)
+        self.visibility_button.setIcon(icon)
+        self.submit_button = QPushButton(PasswordWindow)
+        self.submit_button.setObjectName(u"submit_button")
+        self.submit_button.setGeometry(QRect(80, 145, 90, 25))
+        self.description_text = QLabel(PasswordWindow)
         self.description_text.setObjectName(u"description_text")
         self.description_text.setGeometry(QRect(20, 20, 210, 70))
         font = QFont()
@@ -66,17 +62,17 @@ class Ui_PasswordDialog(object):
         self.description_text.setAlignment(Qt.AlignCenter)
         self.description_text.setWordWrap(True)
 
-        self.retranslateUi(PasswordDialog)
+        self.retranslateUi(PasswordWindow)
 
-        QMetaObject.connectSlotsByName(PasswordDialog)
+        QMetaObject.connectSlotsByName(PasswordWindow)
     # setupUi
 
-    def retranslateUi(self, PasswordDialog):
-        PasswordDialog.setWindowTitle(QCoreApplication.translate("PasswordDialog", u"Password", None))
+    def retranslateUi(self, PasswordWindow):
+        PasswordWindow.setWindowTitle(QCoreApplication.translate("PasswordWindow", u"Password", None))
         self.password_line_edit.setText("")
-        self.password_line_edit.setPlaceholderText(QCoreApplication.translate("PasswordDialog", u"User Password...", None))
-        self.submit_button.setText(QCoreApplication.translate("PasswordDialog", u"Submit", None))
+        self.password_line_edit.setPlaceholderText(QCoreApplication.translate("PasswordWindow", u"User Password...", None))
         self.visibility_button.setText("")
-        self.description_text.setText(QCoreApplication.translate("PasswordDialog", u"Enter the password to get the root privileges", None))
+        self.submit_button.setText(QCoreApplication.translate("PasswordWindow", u"Submit", None))
+        self.description_text.setText(QCoreApplication.translate("PasswordWindow", u"Enter the password to get the root privileges", None))
     # retranslateUi
 

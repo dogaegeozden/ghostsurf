@@ -13,14 +13,14 @@ from pathlib import Path
 from socket import gethostname
 
 # PySide2
-from PySide2.QtWidgets import QApplication, QDialog, QMainWindow, QMessageBox, QLineEdit
+from PySide2.QtWidgets import QApplication, QWidget, QMainWindow, QMessageBox, QLineEdit
 from PySide2.QtGui import QPixmap, QIcon, QImage
 from PySide2.QtCore import QAbstractListModel, Qt
 
 # Guis
 from guis.main_win_ui import Ui_MainWindow
-from guis.password_win_ui import Ui_PasswordDialog
-from guis.checklist_win_ui import Ui_ChecklistDialog
+from guis.password_win_ui import Ui_PasswordWindow
+from guis.checklist_win_ui import Ui_ChecklistWindow
 
 # Resources
 import resources_rc
@@ -432,7 +432,7 @@ class ChecklistModel(QAbstractListModel):
         return len(self.list_items)
 
 # Creating a dialog class called PasswordDialog
-class ChecklistDialog(QDialog, Ui_ChecklistDialog):
+class ChecklistWindow(QWidget, Ui_ChecklistWindow):
 
     def __init__(self, *args, **kwargs):
         """An init function which makes the window self contained""" 
@@ -642,7 +642,7 @@ class ChecklistDialog(QDialog, Ui_ChecklistDialog):
         add_listitems()
 
 # Creating a dialog class called PasswordDialog
-class PasswordDialog(QDialog, Ui_PasswordDialog):
+class PasswordDialog(QWidget, Ui_PasswordWindow):
 
     def __init__(self, *args, **kwargs):
         """An init function which makes the window self contained""" 
@@ -874,10 +874,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         debug("Running a fast check")
 
         # Creating an object from the dialog class
-        checklist_dialog = ChecklistDialog()
+        checklist_window = ChecklistWindow()
 
         # Executing the object to display the window.
-        checklist_dialog.exec_()
+        checklist_window.show()
 
     def change_hostname(self):
         """A function which changes the hostname"""

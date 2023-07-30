@@ -50,6 +50,18 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
+   <property name="minimumSize">
+    <size>
+     <width>330</width>
+     <height>290</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>330</width>
+     <height>290</height>
+    </size>
+   </property>
    <property name="styleSheet">
     <string notr="true">#centralwidget {
 	background: #231f1f;
