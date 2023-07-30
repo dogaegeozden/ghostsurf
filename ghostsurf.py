@@ -16,7 +16,7 @@ from sys import exit as sysexit
 # PySide2
 from PySide2.QtWidgets import QApplication, QWidget, QMainWindow, QMessageBox, QLineEdit
 from PySide2.QtGui import QPixmap, QIcon, QImage
-from PySide2.QtCore import QAbstractListModel, Qt
+from PySide2.QtCore import QAbstractListModel, Qt, QRunnable, QThreadPool, Slot
 
 # Guis
 from guis.main_win_ui import Ui_MainWindow
@@ -30,7 +30,7 @@ import resources_rc
 basicConfig(level=DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Disabling the debugging feature. Hint: Comment out this line to enable debugging.
-disable(CRITICAL)
+# disable(CRITICAL)
 
 # GLOBAL VARIABLES
 
@@ -93,6 +93,22 @@ def main():
 
     # Executing the app
     sysexit(app.exec_())
+
+class Worker(QRunnable):
+    """A Worker thread class"""
+    
+    @Slot()
+    def run(self):
+        """A function which shows the ChecklistWindow"""
+
+        # Printing the operation's summary in debug mode        
+        debug("Opening the checklist window")
+
+        # Creating an object from the dialog class
+        main_window.checklist_window = ChecklistWindow()
+
+        # Executing the object to display the window.
+        main_window.checklist_window.show()
 
 def get_the_public_ip_address():
     """A function which tries to displays the user's public ip address with notifications"""
@@ -409,8 +425,8 @@ def reset_ghostsurf_settings():
     # Sending a notification to inform the user that the operation is done
     system(f'notify-send -i "{ghostsurf_logo_file_path} "-t 300 "Reseting is done"')
 
-# Creating a data class called ChacklistModel to control how data objects will be created
 class ChecklistModel(QAbstractListModel):
+    """A data class called ChacklistModel to control how data objects will be created"""
     
     def __init__(self, list_items=None):
         super().__init__()
@@ -432,8 +448,8 @@ class ChecklistModel(QAbstractListModel):
     def rowCount(self, index):
         return len(self.list_items)
 
-# Creating a window class called ChecklistWindow
 class ChecklistWindow(QWidget, Ui_ChecklistWindow):
+    """A window class called ChecklistWindow created with QWidget subclass and Ui_ChecklistWindow user interface"""
 
     def __init__(self, *args, **kwargs):
         """An init function which makes the window self contained""" 
@@ -642,8 +658,8 @@ class ChecklistWindow(QWidget, Ui_ChecklistWindow):
         # Calling the add_listitems function.
         add_listitems()
 
-# Creating a window class called PasswordWindow
 class PasswordWindow(QWidget, Ui_PasswordWindow):
+    """A window class called that is created with QWdiged subclass and Ui_PasswordWindow user interface"""
 
     def __init__(self, *args, **kwargs):
         """An init function which makes the window self contained""" 
@@ -739,8 +755,8 @@ class PasswordWindow(QWidget, Ui_PasswordWindow):
             # Showing the warning dialog
             warning_dialog.exec_()
 
-# Creating a MainWindow class
 class MainWindow(QMainWindow, Ui_MainWindow):
+    """A MainWindow class created with QMainWindow subclass and Ui_MainWindow user interface"""
 
     def __init__(self, *args, **kwargs):
         """An init function which makes the window self contained""" 
@@ -750,6 +766,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Loading the GUI
         self.setupUi(self)
+        
+        # Creating the thread pool
+        self.threadpool = QThreadPool()
 
         # Calling the manage_netfilter_service function.
         manage_netfilter_service()
@@ -874,11 +893,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Printing the operation's summary in debug mode        
         debug("Running a fast check")
 
-        # Creating an object from the dialog class
-        self.checklist_window = ChecklistWindow()
+        # # Creating an object from the dialog class
+        # self.checklist_window = ChecklistWindow()
 
-        # Executing the object to display the window.
-        self.checklist_window.show()
+        # # Executing the object to display the window.
+        # self.checklist_window.show()
+
+        # Initializing the Worker
+        worker = Worker()
+
+        # Starting the worker
+        self.threadpool.start(worker)
 
     def change_hostname(self):
         """A function which changes the hostname"""
