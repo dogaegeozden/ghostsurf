@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Anonymity Checklist</string>
   </property>
   <property name="styleSheet">
    <string notr="true">#ChecklistWindow {

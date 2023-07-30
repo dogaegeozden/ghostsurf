@@ -60,7 +60,7 @@ class Ui_ChecklistWindow(object):
     # setupUi
 
     def retranslateUi(self, ChecklistWindow):
-        ChecklistWindow.setWindowTitle(QCoreApplication.translate("ChecklistWindow", u"Form", None))
+        ChecklistWindow.setWindowTitle(QCoreApplication.translate("ChecklistWindow", u"Anonymity Checklist", None))
         self.window_title.setText(QCoreApplication.translate("ChecklistWindow", u"Anonymity Checklist", None))
     # retranslateUi
 

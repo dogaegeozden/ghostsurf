@@ -11,6 +11,7 @@ from time import sleep
 from getpass import getuser
 from pathlib import Path
 from socket import gethostname
+from sys import exit as sysexit
 
 # PySide2
 from PySide2.QtWidgets import QApplication, QWidget, QMainWindow, QMessageBox, QLineEdit
@@ -29,7 +30,7 @@ import resources_rc
 basicConfig(level=DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Disabling the debugging feature. Hint: Comment out this line to enable debugging.
-# disable(CRITICAL)
+disable(CRITICAL)
 
 # GLOBAL VARIABLES
 
@@ -84,14 +85,14 @@ def main():
     # Creating an app object from QApplication
     app = QApplication([])
 
-    # Creating a password_dialog object from PasswordDialog class
-    password_dialog = PasswordDialog()
+    # Creating a password_window object from PasswordWindow class
+    password_window = PasswordWindow()
 
-    # Showing the password dialog
-    password_dialog.show()
+    # Showing the password window
+    password_window.show()
 
     # Executing the app
-    app.exec_()
+    sysexit(app.exec_())
 
 def get_the_public_ip_address():
     """A function which tries to displays the user's public ip address with notifications"""
@@ -431,7 +432,7 @@ class ChecklistModel(QAbstractListModel):
     def rowCount(self, index):
         return len(self.list_items)
 
-# Creating a dialog class called PasswordDialog
+# Creating a window class called ChecklistWindow
 class ChecklistWindow(QWidget, Ui_ChecklistWindow):
 
     def __init__(self, *args, **kwargs):
@@ -641,8 +642,8 @@ class ChecklistWindow(QWidget, Ui_ChecklistWindow):
         # Calling the add_listitems function.
         add_listitems()
 
-# Creating a dialog class called PasswordDialog
-class PasswordDialog(QWidget, Ui_PasswordWindow):
+# Creating a window class called PasswordWindow
+class PasswordWindow(QWidget, Ui_PasswordWindow):
 
     def __init__(self, *args, **kwargs):
         """An init function which makes the window self contained""" 
@@ -710,7 +711,7 @@ class PasswordDialog(QWidget, Ui_PasswordWindow):
         # Checking if the username is equal to root
         if user_name == "root\n":
 
-            # Closing password dialog window
+            # Closing password window
             self.close()
 
             # Creating a main_window object from MainWindow class with a global scope
@@ -718,7 +719,7 @@ class PasswordDialog(QWidget, Ui_PasswordWindow):
             main_window = MainWindow()
 
             # Showing the main window
-            main_window.show().exec_()
+            main_window.show()
 
         # Checking if the username is not equal to root
         else:
@@ -874,10 +875,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         debug("Running a fast check")
 
         # Creating an object from the dialog class
-        checklist_window = ChecklistWindow()
+        self.checklist_window = ChecklistWindow()
 
         # Executing the object to display the window.
-        checklist_window.show()
+        self.checklist_window.show()
 
     def change_hostname(self):
         """A function which changes the hostname"""
