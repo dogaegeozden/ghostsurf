@@ -26,6 +26,9 @@ class Ui_PasswordWindow(object):
         PasswordWindow.setSizePolicy(sizePolicy)
         PasswordWindow.setMinimumSize(QSize(250, 200))
         PasswordWindow.setMaximumSize(QSize(250, 200))
+        icon = QIcon()
+        icon.addFile(u":/logos/ghostsurf.png", QSize(), QIcon.Normal, QIcon.Off)
+        PasswordWindow.setWindowIcon(icon)
         PasswordWindow.setStyleSheet(u"#PasswordWindow {\n"
 "	background: #231f1f;\n"
 "}")
@@ -41,10 +44,10 @@ class Ui_PasswordWindow(object):
         self.visibility_button.setStyleSheet(u"#visibility_button {\n"
 "	background: #231f1f;\n"
 "}")
-        icon = QIcon()
-        icon.addFile(u":/icons/eye_closed.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon.addFile(u":/icons/eye_open.svg", QSize(), QIcon.Normal, QIcon.On)
-        self.visibility_button.setIcon(icon)
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/eye_closed.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/icons/eye_open.svg", QSize(), QIcon.Normal, QIcon.On)
+        self.visibility_button.setIcon(icon1)
         self.submit_button = QPushButton(PasswordWindow)
         self.submit_button.setObjectName(u"submit_button")
         self.submit_button.setGeometry(QRect(80, 145, 90, 25))

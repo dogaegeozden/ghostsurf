@@ -12,6 +12,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
+import resources_rc
 
 class Ui_ChecklistWindow(object):
     def setupUi(self, ChecklistWindow):
@@ -20,6 +21,9 @@ class Ui_ChecklistWindow(object):
         ChecklistWindow.resize(290, 270)
         ChecklistWindow.setMinimumSize(QSize(290, 270))
         ChecklistWindow.setMaximumSize(QSize(290, 270))
+        icon = QIcon()
+        icon.addFile(u":/logos/ghostsurf.png", QSize(), QIcon.Normal, QIcon.Off)
+        ChecklistWindow.setWindowIcon(icon)
         ChecklistWindow.setStyleSheet(u"#ChecklistWindow {\n"
 "	background: #231f1f;\n"
 "}")
