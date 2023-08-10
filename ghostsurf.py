@@ -14,9 +14,9 @@ from socket import gethostname
 from sys import exit as sysexit
 
 # PySide2
-from PySide2.QtWidgets import QApplication, QWidget, QMainWindow, QMessageBox, QLineEdit
+from PySide2.QtWidgets import QApplication, QWidget, QMainWindow, QMessageBox, QLineEdit, QListView, QVBoxLayout
 from PySide2.QtGui import QPixmap, QIcon, QImage
-from PySide2.QtCore import QAbstractListModel, Qt, QRunnable, QThreadPool, Slot
+from PySide2.QtCore import QAbstractListModel, Qt, QRunnable, QThreadPool, QThread, QObject, Signal, Slot
 
 # Guis
 from guis.main_win_ui import Ui_MainWindow
@@ -30,7 +30,7 @@ import resources_rc
 basicConfig(level=DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Disabling the debugging feature. Hint: Comment out this line to enable debugging.
-# disable(CRITICAL)
+disable(CRITICAL)
 
 # GLOBAL VARIABLES
 
@@ -79,6 +79,17 @@ init_script_file_path = "/opt/ghostsurf/bash_scripts/init.sh"
 # BACKUP FILE PATH
 timezone_backup_file_path = "/opt/ghostsurf/backup_files/timezone.backup"
 
+# Creating a dictionary to store checklist keys and values
+checklist_items_dict = {
+    'Using fake hostname': False, 
+    'Using fake mac address': False, 
+    'Using appropriate nameservers': False, 
+    'Using browser anonymization preferences': False, 
+    'Using different timezone': False, 
+    'Using a tor connection': False, 
+    'Using man in the middle protection': False 
+}
+
 def main():
     """The function which runs the entire application"""
 
@@ -94,22 +105,189 @@ def main():
     # Executing the app
     sysexit(app.exec_())
 
+class WorkerSignals(QObject):
+    """A worker signals class which defines the signals available from a running worker thread"""
+
+    list_item = Signal(str)
+
 class Worker(QRunnable):
-    """A Worker thread class"""
-    
+    """A worker class which inherits from QRunnable to handle worker thread setup, signals and wrap-up"""
+
+    def __init__(self):
+        super().__init__()
+
+        self.signals = WorkerSignals()
+
     @Slot()
     def run(self):
-        """A function which shows the ChecklistWindow"""
+        
+        # Calling the check_fake_hostname_usage function.
+        check_fake_hostname_usage()
 
-        # Printing the operation's summary in debug mode        
-        debug("Opening the checklist window")
+        # Calling the check_fake_mac_address_usage function.
+        check_fake_mac_address_usage()
 
-        # Creating an object from the dialog class
-        main_window.checklist_window = ChecklistWindow()
+        # Calling the check_appropriate_nameserver_usage function.
+        check_appropriate_nameserver_usage()
 
-        # Executing the object to display the window.
-        main_window.checklist_window.show()
+        # Calling the check_browser_anonymization_preferences_usage function.
+        check_browser_anonymization_preferences_usage()
 
+        # Calling the check_different_timezone_usage function.
+        check_different_timezone_usage()
+
+        # Calling the check_tor_connection_usage function.
+        check_tor_connection_usage()
+
+        for key in checklist_items_dict.keys():
+            
+            self.signals.list_item.emit(key)
+
+            sleep(1)
+
+def check_fake_hostname_usage():
+    """A function which checks the hostname"""
+
+    # Creating a list of fake hostnames
+    list_of_fake_hostnames = ["Windows10-Enterprise ", "Windows10-Pro", "Windows10-Enterprise-LTSC ", "Windows8.1O-EM", "Windows8-Enterprise", "Windows8.1-Pro", "Windows7-Professional", "Windows7-Enterprise", "Windows7-Ultimate", "Windows-Vista-Business", "WindowsXP-Professional", "macOS11", "OSX10.11", "MacBook-Air", "MacBook", "MacBook-Pro"]
+    
+    # Getting the current hostname
+    current_hostname = gethostname()
+
+    # Checking if the current hostname is in the list of fake hostnames
+    if current_hostname in list_of_fake_hostnames:
+
+        # Updating the 'Using fake hostname' key's value pair to True
+        checklist_items_dict['Using fake hostname'] = True
+
+def check_fake_mac_address_usage():
+    """A function which checks wheather or not you are using fake mac address"""
+
+    # Getting the active network adaptor's name
+    active_network_adaptor_name = popen("ip route show default | awk '/default/ {print $5}'").read()
+
+    # Getting mac address information
+    mac_address_info = popen(f'macchanger -s {active_network_adaptor_name}').read().split("\n")[:-1]
+
+    # Getting the permanent mac address
+    permanent_mac_address = mac_address_info[1].split(" ")[2]
+
+    # Getting the current mac address
+    current_mac_address = mac_address_info[0].split(" ")[4]
+
+    # Printing the permanent mac address and the current mac address in debug mode.
+    debug(f'Permanent Mac Address = {permanent_mac_address}\nCurrent Mac Address = {current_mac_address}')
+
+    # Checking if the current mac address is not equal to the permanent mac address
+    if current_mac_address != permanent_mac_address:
+
+        # Setting the 'Using fake mac address' key's value pair to True
+        checklist_items_dict['Using fake mac address'] = True
+
+def check_appropriate_nameserver_usage():
+    """A function which checks if you are using privacy focused name servers"""
+
+    # Opening the dns_changer.resolv.conf file in reading mode as privacy_focused_nameserver_file
+    with open(dns_changer_resolv_conf_file_path, "r") as privacy_focused_nameserver_file:
+
+        # Reading privacy_focused_nameserver_file's lines
+        privacy_focused_nameservers = privacy_focused_nameserver_file.read()
+
+    # Creating a variable that holds the tor nameserver specification 
+    tor_nameserver = "nameserver 127.0.0.1\n"
+
+    # Opening the resolv.conf file in reading mode as resolv_conf_file
+    with open(original_resolv_configuration_file_path, "r") as resolv_conf_file:
+
+        # Reading resolv_conf_file's contents
+        resolv_conf_file_contents = resolv_conf_file.read() 
+
+    debug(f'Start stop button\'s text = {main_window.start_stop_button.text()}')
+
+    debug(f'Privacy Focused Nameservers = {privacy_focused_nameservers}\nResolv.conf File = {resolv_conf_file_contents}\nTor Nameserver = {tor_nameserver}')
+
+    # Checking if start_stop_button's text in the main window is equal to Start string.
+    if main_window.start_stop_button.text() == "Start":
+
+        # Checking if resolv_conf_file_contents is equal to privacy_focused_nameservers
+        if resolv_conf_file_contents == privacy_focused_nameservers:
+
+            # Setting the 'Using appropriate nameservers' key's value pair to True
+            checklist_items_dict['Using appropriate nameservers'] = True
+
+    # Checking if start_stop_button's text in the main window is not equal to Start string.
+    else:
+        if resolv_conf_file_contents == tor_nameserver:
+
+            # Setting the 'Using appropriate nameservers' key's value pair to True
+            checklist_items_dict['Using appropriate nameservers'] = True
+
+def check_browser_anonymization_preferences_usage():
+    """A function which checks if browser anonymization preferences are in use"""
+
+    # Getting the username of the user who is currently logged in
+    current_username = getuser()
+
+    # Opening firefox_prefs.js.custom file in reading mode as custom_firefox_prefs_file
+    with open(custom_firefox_preferences_file_path, "r") as custom_firefox_prefs_file:
+
+        # Reading the lines of custom_firefox_prefs_file file
+        cfpf_lines = custom_firefox_prefs_file.readlines()
+
+    # Finding the prefs.js file of firefox using a system command.
+    prefs_file_path = Path(popen(f'echo "{user_pwd}" | sudo -S find "/home/{current_username}" -name prefs.js').read()[:-1])
+
+    # Opening the original prefs.js file in reading mode as original_firefox_prefs_file 
+    with open(prefs_file_path, "r") as original_firefox_prefs_file:
+
+        # Reading the original_firefox_prefs_file lines 
+        ofpf_lines = original_firefox_prefs_file.readlines()
+
+    # Creating a boolean value which is True is all lines in the custom firefox preferences file is available in the original firefox preferences file lines
+    is_all_prefs_set = all(ele in ofpf_lines for ele in cfpf_lines)
+
+    # Printing custom firefox preferences file lines, original firefox preferences file lines and is all preferences set variable's value in debug mode.
+    debug(f'Custom Firefox Preferences File Lines = {cfpf_lines}\n\n\nOriginal Firefox Preferences File Lines = {ofpf_lines}\nIs All Preferences Set = {is_all_prefs_set}')
+
+    # Setting the 'Using browser anonymization preferences' key's value pair to True
+    checklist_items_dict['Using browser anonymization preferences'] = is_all_prefs_set
+
+def check_different_timezone_usage():
+    """A function which checks if a different timezone is set in the system"""
+
+    # Opening the file in timezone_backup_file_path in reading mode with original_timezone_file name
+    with open(timezone_backup_file_path, "r") as original_timezone_file:
+
+        # Reading the file's contents
+        otf_content = original_timezone_file.read()[:-1]
+
+    # Getting the current timezone using system commands
+    current_timezone = popen("timedatectl show | grep Timezone | sed 's/Timezone=//g'").read()[:-1]
+
+    # Creating a boolean by checking if otf_content is not equal to current_timezone
+    is_timezone_different = bool(otf_content!=current_timezone)
+    
+    # Printing the original timezone, current time zone and the is_timezone_different variable's value in debug mode
+    debug(f'Original Timezone = {otf_content}\nCurrent Timezone = {current_timezone}\nIs Timezone Different = {is_timezone_different}')
+
+    # Setting the 'Using different timezone' key's value pair to True
+    checklist_items_dict['Using different timezone'] = is_timezone_different
+
+def check_tor_connection_usage():
+    """A function which checks if a transparent proxy is working."""
+
+    # Sending a get request to https://check.torproject.org to learn if transparent proxy set correctly
+    tor_connection_status = str(popen(f'curl -s https://check.torproject.org/ | grep -q Congratulations && echo "Connected through Tor" || echo "Not connected through Tor"').read())[:-1]
+
+    # Creaing a boolean
+    is_transparent_proxy_set_correctly = bool(tor_connection_status=="Connected through Tor")
+
+    # Printing the if transparent proxy set correctly in debug mode
+    debug(f'Check Tor Project Result = {tor_connection_status}\nIs Transparent Proxy Set Correctly = {is_transparent_proxy_set_correctly}')
+
+    # Setting the 'Using different timezone' key's value pair to True
+    checklist_items_dict['Using a tor connection'] = is_transparent_proxy_set_correctly
+    
 def get_the_public_ip_address():
     """A function which tries to displays the user's public ip address with notifications"""
 
@@ -459,204 +637,30 @@ class ChecklistWindow(QWidget, Ui_ChecklistWindow):
 
         # Loading the GUI
         self.setupUi(self)
-        
+
         # Creating a list model
         self.model = ChecklistModel()
+
+        # Creating the thread pool
+        self.threadpool = QThreadPool()
 
         # Setting the checklist_list_view object's list model
         self.checklist_list_view.setModel(self.model)
 
-        checklist_items_dict = {
-            'Using fake hostname': False, 
-            'Using fake mac address': False, 
-            'Using appropriate nameservers': False, 
-            'Using browser anonymization preferences': False, 
-            'Using different timezone': False, 
-            'Using a tor connection': False, 
-            'Using man in the middle protection': False 
-        }
+        worker = Worker()
 
-        def check_fake_hostname_usage():
-            """A function which checks the hostname"""
+        worker.signals.list_item.connect(self.run_all_the_checks)
 
-            # Creating a list of fake hostnames
-            list_of_fake_hostnames = ["Windows10-Enterprise ", "Windows10-Pro", "Windows10-Enterprise-LTSC ", "Windows8.1O-EM", "Windows8-Enterprise", "Windows8.1-Pro", "Windows7-Professional", "Windows7-Enterprise", "Windows7-Ultimate", "Windows-Vista-Business", "WindowsXP-Professional", "macOS11", "OSX10.11", "MacBook-Air", "MacBook", "MacBook-Pro"]
-            
-            # Getting the current hostname
-            current_hostname = gethostname()
+        self.threadpool.start(worker)
 
-            # Checking if the current hostname is in the list of fake hostnames
-            if current_hostname in list_of_fake_hostnames:
+    def run_all_the_checks(self, key):
+        """A function which calls all of the checking functions and adds the checklist items to the checklist"""
 
-                # Updating the 'Using fake hostname' key's value pair to True
-                checklist_items_dict['Using fake hostname'] = True
+        # Access the list via the model.
+        self.model.list_items.append((checklist_items_dict[key], key))
 
-        def check_fake_mac_address_usage():
-            """A function which checks wheather or not you are using fake mac address"""
-
-            # Getting the active network adaptor's name
-            active_network_adaptor_name = popen("ip route show default | awk '/default/ {print $5}'").read()
-
-            # Getting mac address information
-            mac_address_info = popen(f'macchanger -s {active_network_adaptor_name}').read().split("\n")[:-1]
-
-            # Getting the permanent mac address
-            permanent_mac_address = mac_address_info[1].split(" ")[2]
-
-            # Getting the current mac address
-            current_mac_address = mac_address_info[0].split(" ")[4]
-
-            # Printing the permanent mac address and the current mac address in debug mode.
-            debug(f'Permanent Mac Address = {permanent_mac_address}\nCurrent Mac Address = {current_mac_address}')
-
-            # Checking if the current mac address is not equal to the permanent mac address
-            if current_mac_address != permanent_mac_address:
-
-                # Setting the 'Using fake mac address' key's value pair to True
-                checklist_items_dict['Using fake mac address'] = True
-
-        def check_appropriate_nameserver_usage():
-            """A function which checks if you are using privacy focused name servers"""
-
-            # Opening the dns_changer.resolv.conf file in reading mode as privacy_focused_nameserver_file
-            with open(dns_changer_resolv_conf_file_path, "r") as privacy_focused_nameserver_file:
-
-                # Reading privacy_focused_nameserver_file's lines
-                privacy_focused_nameservers = privacy_focused_nameserver_file.read()
-
-            # Creating a variable that holds the tor nameserver specification 
-            tor_nameserver = "nameserver 127.0.0.1\n"
-
-            # Opening the resolv.conf file in reading mode as resolv_conf_file
-            with open(original_resolv_configuration_file_path, "r") as resolv_conf_file:
-
-                # Reading resolv_conf_file's contents
-                resolv_conf_file_contents = resolv_conf_file.read() 
-
-            debug(f'Start stop button\'s text = {main_window.start_stop_button.text()}')
-
-            debug(f'Privacy Focused Nameservers = {privacy_focused_nameservers}\nResolv.conf File = {resolv_conf_file_contents}\nTor Nameserver = {tor_nameserver}')
-        
-            # Checking if start_stop_button's text in the main window is equal to Start string.
-            if main_window.start_stop_button.text() == "Start":
-
-                # Checking if resolv_conf_file_contents is equal to privacy_focused_nameservers
-                if resolv_conf_file_contents == privacy_focused_nameservers:
-
-                    # Setting the 'Using appropriate nameservers' key's value pair to True
-                    checklist_items_dict['Using appropriate nameservers'] = True
-
-            # Checking if start_stop_button's text in the main window is not equal to Start string.
-            else:
-                if resolv_conf_file_contents == tor_nameserver:
-
-                    # Setting the 'Using appropriate nameservers' key's value pair to True
-                    checklist_items_dict['Using appropriate nameservers'] = True
-
-        def check_browser_anonymization_preferences_usage():
-            """A function which checks if browser anonymization preferences are in use"""
-
-            # Getting the username of the user who is currently logged in
-            current_username = getuser()
-
-            # Opening firefox_prefs.js.custom file in reading mode as custom_firefox_prefs_file
-            with open(custom_firefox_preferences_file_path, "r") as custom_firefox_prefs_file:
-
-                # Reading the lines of custom_firefox_prefs_file file
-                cfpf_lines = custom_firefox_prefs_file.readlines()
-
-            # Finding the prefs.js file of firefox using a system command.
-            prefs_file_path = Path(popen(f'echo "{user_pwd}" | sudo -S find "/home/{current_username}" -name prefs.js').read()[:-1])
-
-            # Opening the original prefs.js file in reading mode as original_firefox_prefs_file 
-            with open(prefs_file_path, "r") as original_firefox_prefs_file:
-
-                # Reading the original_firefox_prefs_file lines 
-                ofpf_lines = original_firefox_prefs_file.readlines()
-
-            # Creating a boolean value which is True is all lines in the custom firefox preferences file is available in the original firefox preferences file lines
-            is_all_prefs_set = all(ele in ofpf_lines for ele in cfpf_lines)
-
-            # Printing custom firefox preferences file lines, original firefox preferences file lines and is all preferences set variable's value in debug mode.
-            debug(f'Custom Firefox Preferences File Lines = {cfpf_lines}\n\n\nOriginal Firefox Preferences File Lines = {ofpf_lines}\nIs All Preferences Set = {is_all_prefs_set}')
-
-            # Setting the 'Using browser anonymization preferences' key's value pair to True
-            checklist_items_dict['Using browser anonymization preferences'] = is_all_prefs_set
-
-        def check_different_timezone_usage():
-            """A function which checks if a different timezone is set in the system"""
-
-            # Opening the file in timezone_backup_file_path in reading mode with original_timezone_file name
-            with open(timezone_backup_file_path, "r") as original_timezone_file:
-
-                # Reading the file's contents
-                otf_content = original_timezone_file.read()[:-1]
-
-            # Getting the current timezone using system commands
-            current_timezone = popen("timedatectl show | grep Timezone | sed 's/Timezone=//g'").read()[:-1]
-
-            # Creating a boolean by checking if otf_content is not equal to current_timezone
-            is_timezone_different = bool(otf_content!=current_timezone)
-            
-            # Printing the original timezone, current time zone and the is_timezone_different variable's value in debug mode
-            debug(f'Original Timezone = {otf_content}\nCurrent Timezone = {current_timezone}\nIs Timezone Different = {is_timezone_different}')
-
-            # Setting the 'Using different timezone' key's value pair to True
-            checklist_items_dict['Using different timezone'] = is_timezone_different
-
-        def check_tor_connection_usage():
-            """A function which checks if a transparent proxy is working."""
-
-            # Sending a get request to https://check.torproject.org to learn if transparent proxy set correctly
-            tor_connection_status = str(popen(f'curl -s https://check.torproject.org/ | grep -q Congratulations && echo "Connected through Tor" || echo "Not connected through Tor"').read())[:-1]
-
-            # Creaing a boolean
-            is_transparent_proxy_set_correctly = bool(tor_connection_status=="Connected through Tor")
-
-            # Printing the if transparent proxy set correctly in debug mode
-            debug(f'Check Tor Project Result = {tor_connection_status}\nIs Transparent Proxy Set Correctly = {is_transparent_proxy_set_correctly}')
-
-            # Setting the 'Using different timezone' key's value pair to True
-            checklist_items_dict['Using a tor connection'] = is_transparent_proxy_set_correctly
-
-        def run_all_the_checks():
-            """A function which calls all of the checking functions"""
-
-            # Calling the check_fake_hostname_usage function.
-            check_fake_hostname_usage()
-
-            # Calling the check_fake_mac_address_usage function.
-            check_fake_mac_address_usage()
-
-            # Calling the check_appropriate_nameserver_usage function.
-            check_appropriate_nameserver_usage()
-
-            # Calling the check_browser_anonymization_preferences_usage function.
-            check_browser_anonymization_preferences_usage()
-
-            # Calling the check_different_timezone_usage function.
-            check_different_timezone_usage()
-
-            # Calling the check_tor_connection_usage function.
-            check_tor_connection_usage()
-
-        # Calling the run_all_the_checks function
-        run_all_the_checks()
-
-        def add_listitems():
-            """A function which adds the checklist items to the checklist"""
-
-            # Looping through each key and value in the checklist_items_dict dictionary's items
-            for key, value in checklist_items_dict.items():
-            
-                # Access the list via the model.
-                self.model.list_items.append((value, key))
-            
-                # Trigger refresh.
-                self.model.layoutChanged.emit()
-
-        # Calling the add_listitems function.
-        add_listitems()
+        # Trigger refresh.
+        self.model.layoutChanged.emit()
 
 class PasswordWindow(QWidget, Ui_PasswordWindow):
     """A window class called that is created with QWdiged subclass and Ui_PasswordWindow user interface"""
@@ -766,9 +770,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # Loading the GUI
         self.setupUi(self)
-        
-        # Creating the thread pool
-        self.threadpool = QThreadPool()
 
         # Calling the manage_netfilter_service function.
         manage_netfilter_service()
@@ -887,23 +888,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Connecting the run_fast_check_button with the display_checklist function in a way that the function will going to trigger with a press signal
         self.run_fast_check_button.pressed.connect(self.run_fast_check)
 
+
     def run_fast_check(self):
         """A function which runs a fast check and displays the checklist in a window"""
 
         # Printing the operation's summary in debug mode        
         debug("Running a fast check")
 
-        # # Creating an object from the dialog class
-        # self.checklist_window = ChecklistWindow()
+        # Creating an object from the dialog class
+        self.checklist_window = ChecklistWindow()
 
-        # # Executing the object to display the window.
-        # self.checklist_window.show()
+        # Executing the object to display the window.
+        self.checklist_window.show()
 
-        # Initializing the Worker
-        worker = Worker()
-
-        # Starting the worker
-        self.threadpool.start(worker)
 
     def change_hostname(self):
         """A function which changes the hostname"""

@@ -29,34 +29,15 @@ class Ui_ChecklistWindow(object):
 "}")
         self.checklist_list_view = QListView(ChecklistWindow)
         self.checklist_list_view.setObjectName(u"checklist_list_view")
-        self.checklist_list_view.setGeometry(QRect(0, 50, 290, 220))
-        self.checklist_list_view.setMinimumSize(QSize(290, 220))
-        self.checklist_list_view.setMaximumSize(QSize(290, 220))
+        self.checklist_list_view.setGeometry(QRect(0, 0, 290, 270))
+        self.checklist_list_view.setMinimumSize(QSize(0, 0))
+        self.checklist_list_view.setMaximumSize(QSize(16777215, 16777215))
         font = QFont()
         font.setFamily(u"Ubuntu")
         font.setBold(False)
         font.setItalic(False)
         font.setWeight(50)
         self.checklist_list_view.setFont(font)
-        self.window_title = QLabel(ChecklistWindow)
-        self.window_title.setObjectName(u"window_title")
-        self.window_title.setGeometry(QRect(0, 10, 290, 40))
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.window_title.sizePolicy().hasHeightForWidth())
-        self.window_title.setSizePolicy(sizePolicy)
-        font1 = QFont()
-        font1.setFamily(u"C059")
-        font1.setPointSize(15)
-        font1.setBold(False)
-        font1.setItalic(True)
-        font1.setWeight(50)
-        self.window_title.setFont(font1)
-        self.window_title.setStyleSheet(u"#window_title {\n"
-"	color: white;\n"
-"}")
-        self.window_title.setAlignment(Qt.AlignCenter)
 
         self.retranslateUi(ChecklistWindow)
 
@@ -65,6 +46,5 @@ class Ui_ChecklistWindow(object):
 
     def retranslateUi(self, ChecklistWindow):
         ChecklistWindow.setWindowTitle(QCoreApplication.translate("ChecklistWindow", u"Anonymity Checklist", None))
-        self.window_title.setText(QCoreApplication.translate("ChecklistWindow", u"Anonymity Checklist", None))
     # retranslateUi
 
