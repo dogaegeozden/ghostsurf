@@ -1,13 +1,50 @@
 # GHOSTSURF 
 ![GhostsurfLogo](https://raw.githubusercontent.com/dogaegeozden/ghostsurf/main/logos/ghostsurf_rounded.png)
 
-Ghostsurf is a desktop application which redirects your internet traffic over tor. You can use it to surf on the internet anonymously. Read the following articles to get more information. 
+Ghostsurf is a hacking tool which you can use to hide your identity.
+
+<br>
 
 [Wikipedia: Tor Anonimity Network](https://en.wikipedia.org/wiki/Tor_%2anonymity_network%29)
 
 [Tor Project Website](https://www.torproject.org/)
 
 [Transparent Proxy Brief Notes](https://gitlab.torproject.org/legacy/trac/-/wikis/doc/TransparentProxy#brief-notes)
+
+[Tips on Remaining Anonymous](https://www.whonix.org/wiki/Tips_on_Remaining_Anonymous)
+
+<br>
+
+## FEATURES
+
+__Start/Stop Button:__ Starts/Stops the transparent proxy and changes the system's timezone
+
+__Change IP Button:__ Changes the ip address
+
+__My IP Button:__ Displays your current public ip address
+
+__Hostname Changer Button:__ Changes the hostname with a fake one
+
+__Mac Address Changer Button:__ Changes the mac address with a fake one
+
+__Name Servers Changer Button:__ Changes the nameservers with appropriate ones(localhost or privacy focuseds)
+
+__Log Shredder Button:__ Overwrites the log files
+
+__Pandora Bomb Button:__ Wipes the memory
+
+__Browser Anonymization Button:__ Sets the firefox preferences to enhance browser anonymization
+
+__Status Button:__ Updates the tor status text
+
+__Checklist Button:__ Runs a checklist to display the features that you are using
+
+__Reset Button:__ Reset ghostsurf modifications
+
+__White Rabbit Button:__ Opens the help page on the browser
+
+__Enable Ghostsurf at Boot Switch:__ Enables ghostsurf boot
+
 
 <br>
 
@@ -46,13 +83,50 @@ Ghostsurf is identifying your ip address by sending a get request to https://ifc
 # GHOSTSURF 
 ![GhostsurfLogo](https://raw.githubusercontent.com/dogaegeozden/ghostsurf/main/logos/ghostsurf_rounded.png)
 
-Ghostsurf cihazın internet trafiğini tor üzerinden yönlendiren bir bilgisayar uygulamasıdır. İnternette kimlğin gizli olarak haraket etmeni sağlar. Daha fazla bilgi için aşağıdaki makaleleri oku.
+Ghostsurf kullanıcıların kimliklerini gizlemelerini sağlayan bir hackleme aracıdır.
+
+<br>
 
 [Wikipedia: Tor Anonimity Network](https://en.wikipedia.org/wiki/Tor_%2anonymity_network%29)
 
 [Tor Project Website](https://www.torproject.org/)
 
 [Transparent Proxy Brief Notes](https://gitlab.torproject.org/legacy/trac/-/wikis/doc/TransparentProxy#brief-notes)
+
+[Tips on Remaining Anonymous](https://www.whonix.org/wiki/Tips_on_Remaining_Anonymous)
+
+<br>
+
+## ÖZELLİKLER
+
+__Start/Stop Button:__ Transparent proxy'i durdurur veya başlatır ve sistemin zaman dilimini değiştirir
+
+__Change IP Button:__ İp addresini değiştirir
+
+__My IP Button:__ Topluma gözükzen ip adresini gösterir
+
+__Hostname Changer Button:__ Sahte ana bilgisayar adı atar bilgisayara
+
+__Mac Address Changer Button:__ Mac adresini değiştirir
+
+__Name Servers Changer Button:__ Ad sunucusu ayarlarını uygun olanlarıyla değiştirir(yerel sunucu veya özel odaklı)
+
+__Log Shredder Button:__ Kayıt dosyalarının uzerine yazar
+
+__Pandora Bomb Button:__ Belleği siler
+
+__Browser Anonymization Button:__ Arama motorunun tercihlerini anonimleşmeyi attırıcak şekilde değiştirir
+
+__Status Button:__ Tor durumunu günceller
+
+__Checklist Button:__ Kontrol listesi oluşturur
+
+__Reset Button:__ Ghostsurf değişikliklerini sıfırlar
+
+__White Rabbit Button:__ Yardım sayfasını açar
+
+__Enable Ghostsurf at Boot Switch:__ Ghostsurf'ü başlangıçta başlamaya ayarlar
+
 
 <br>
 
