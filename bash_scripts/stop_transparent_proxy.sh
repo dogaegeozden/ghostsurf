@@ -12,11 +12,8 @@ main() {
     # Calling the enable_ipv6 function.
     enable_ipv6
 
-    # Calling the stop_browser_anonymization function
-    stop_browser_anonymization
-
     # Calling set_iptables_rules_v4and6 function.
-    set_iptables_rules_v4and6
+    setup_iptables_rules_v4and6
 
     # Calling stop_tor_service function.
     stop_tor_service    
@@ -53,20 +50,7 @@ enable_ipv6() {
 
 }
 
-stop_browser_anonymization() {
-    # A function which restores the original prefs.js file to drop browser anonymization 
-    
-    # Checking if the file in the pref_path is exists 
-    if [[ -f $pref_path ]]; then
-
-        # Copying the back up file and overriding the original one with it
-        cp "/opt/ghostsurf/backup_files/prefs.js.backup" "$pref_path"
-
-    fi
-
-}
-
-set_iptables_rules_v4and6 () {
+setup_iptables_rules_v4and6 () {
     # A function which restores iptables policies
 
     # Clearing the previous rules
@@ -78,7 +62,6 @@ set_iptables_rules_v4and6 () {
     ip6tables -t filter -X
     ip6tables -t nat -F
     ip6tables -t nat -X
-
 
     # Default Drop: Drop all packages coming into, coming into the server but that are routed to somewhere else and coming out of the server. So, the packages can be accepted, sended or, routed only in the ways that you stated.
     # INPUT Chain: Network packages coming into the server.
@@ -129,16 +112,11 @@ stop_tor_service() {
 
     # Stopping the tor service
     systemctl stop tor
-    
+
 }
 
 restore_default_configuration_files() {
     # A function which restores the default configuration files. Hint: Ghostsurf defaults baby!!. Reset if you don't like them.
-
-    ## Benefits of changing nameservers:
-    ### Prevents internet service providers from logging and tracking your queries
-    ### Bypassing DNS filtering or cencorships
-    ### Overcoming geographical restirictions
 
     # Restoring the torrc file
     cp /opt/ghostsurf/backup_files/torrc.backup /etc/tor/torrc

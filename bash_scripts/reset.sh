@@ -28,6 +28,7 @@ declare_variables() {
 
     # Getting the current hostname using a system command
     current_hostname="$(hostname)"
+
 }
 
 reset_configuration_files() {
@@ -61,12 +62,11 @@ enable_ipv6() {
 
 }
 
-reset_mac_address () {
+reset_mac_address() {
 
     # Creating a list of network interfaces
     list_of_network_interfaces=$(ip -o link show | awk -F': ' '{print $2}')
 
-    
     # Iterating over each interface in the list_of_network_interfaces
 	for interface in $list_of_network_interfaces; do
 

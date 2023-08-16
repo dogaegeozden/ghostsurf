@@ -36,6 +36,8 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
         self.centralwidget.setSizePolicy(sizePolicy)
+        self.centralwidget.setMinimumSize(QSize(330, 290))
+        self.centralwidget.setMaximumSize(QSize(330, 290))
         self.centralwidget.setStyleSheet(u"#centralwidget {\n"
 "	background: #231f1f;\n"
 "}")
@@ -97,12 +99,9 @@ class Ui_MainWindow(object):
 "	color: red;\n"
 "}")
         self.status_label.setAlignment(Qt.AlignCenter)
-        self.status_button = QPushButton(self.centralwidget)
-        self.status_button.setObjectName(u"status_button")
-        self.status_button.setGeometry(QRect(239, 180, 70, 30))
         self.info_button = QPushButton(self.centralwidget)
         self.info_button.setObjectName(u"info_button")
-        self.info_button.setGeometry(QRect(200, 180, 30, 30))
+        self.info_button.setGeometry(QRect(280, 180, 30, 30))
         self.info_button.setStyleSheet(u"#info_button {\n"
 "	background: #231f1f;\n"
 "}")
@@ -128,7 +127,7 @@ class Ui_MainWindow(object):
 "}")
         self.reset_button = QPushButton(self.centralwidget)
         self.reset_button.setObjectName(u"reset_button")
-        self.reset_button.setGeometry(QRect(160, 180, 30, 30))
+        self.reset_button.setGeometry(QRect(240, 180, 30, 30))
         self.reset_button.setStyleSheet(u"#reset_button {\n"
 "	background: #231f1f;\n"
 "}")
@@ -200,13 +199,31 @@ class Ui_MainWindow(object):
 "}")
         self.run_fast_check_button = QPushButton(self.centralwidget)
         self.run_fast_check_button.setObjectName(u"run_fast_check_button")
-        self.run_fast_check_button.setGeometry(QRect(120, 180, 30, 30))
+        self.run_fast_check_button.setGeometry(QRect(200, 180, 30, 30))
         self.run_fast_check_button.setStyleSheet(u"#run_fast_check_button {\n"
 "	background: #000064;\n"
 "}")
         icon8 = QIcon()
         icon8.addFile(u":/icons/run_fast_check.svg", QSize(), QIcon.Normal, QIcon.Off)
         self.run_fast_check_button.setIcon(icon8)
+        self.browser_anonymizer_button = QPushButton(self.centralwidget)
+        self.browser_anonymizer_button.setObjectName(u"browser_anonymizer_button")
+        self.browser_anonymizer_button.setGeometry(QRect(120, 180, 30, 30))
+        self.browser_anonymizer_button.setStyleSheet(u"#browser_anonymizer_button {\n"
+"	background: #231f1f;\n"
+"}")
+        icon9 = QIcon()
+        icon9.addFile(u":/icons/browser.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.browser_anonymizer_button.setIcon(icon9)
+        self.status_button = QPushButton(self.centralwidget)
+        self.status_button.setObjectName(u"status_button")
+        self.status_button.setGeometry(QRect(160, 180, 30, 30))
+        self.status_button.setStyleSheet(u"#status_button {\n"
+"	background: #231f1f;\n"
+"}")
+        icon10 = QIcon()
+        icon10.addFile(u":/icons/status.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.status_button.setIcon(icon10)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -235,10 +252,6 @@ class Ui_MainWindow(object):
         self.my_ip_button.setText(QCoreApplication.translate("MainWindow", u"My IP", None))
         self.status_header_label.setText(QCoreApplication.translate("MainWindow", u"Tor Status:", None))
         self.status_label.setText(QCoreApplication.translate("MainWindow", u"Inactive", None))
-#if QT_CONFIG(tooltip)
-        self.status_button.setToolTip(QCoreApplication.translate("MainWindow", u"Refresh the tor status", None))
-#endif // QT_CONFIG(tooltip)
-        self.status_button.setText(QCoreApplication.translate("MainWindow", u"Status", None))
 #if QT_CONFIG(tooltip)
         self.info_button.setToolTip(QCoreApplication.translate("MainWindow", u"See the help page", None))
 #endif // QT_CONFIG(tooltip)
@@ -277,5 +290,13 @@ class Ui_MainWindow(object):
         self.run_fast_check_button.setToolTip(QCoreApplication.translate("MainWindow", u"Run the checklist", None))
 #endif // QT_CONFIG(tooltip)
         self.run_fast_check_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.browser_anonymizer_button.setToolTip(QCoreApplication.translate("MainWindow", u"Setup browser anonymization settings", None))
+#endif // QT_CONFIG(tooltip)
+        self.browser_anonymizer_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.status_button.setToolTip(QCoreApplication.translate("MainWindow", u"Update tor status", None))
+#endif // QT_CONFIG(tooltip)
+        self.status_button.setText("")
     # retranslateUi
 

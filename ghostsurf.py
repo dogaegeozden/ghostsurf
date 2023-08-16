@@ -143,7 +143,7 @@ class Worker(QRunnable):
             
             self.signals.list_item.emit(key)
 
-            sleep(1)
+            sleep(0.02)
 
 def check_fake_hostname_usage():
     """A function which checks the hostname"""
@@ -282,7 +282,7 @@ def check_tor_connection_usage():
     # Creaing a boolean
     is_transparent_proxy_set_correctly = bool(tor_connection_status=="Connected through Tor")
 
-    # Printing the if transparent proxy set correctly in debug mode
+    # Printing if transparent proxy set correctly in debug mode
     debug(f'Check Tor Project Result = {tor_connection_status}\nIs Transparent Proxy Set Correctly = {is_transparent_proxy_set_correctly}')
 
     # Setting the 'Using different timezone' key's value pair to True
@@ -331,111 +331,6 @@ def get_the_public_ip_address():
 
     # Sending notification
     system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "{message}"')
-
-def anonymize_the_browser():
-    """A function which anonymizes firefox by changing it's preferences"""
-
-    # Getting the username
-    current_username = getuser()
-    
-    # Finding the prefs.js file of firefox using a system command
-    prefs_file_path = Path(popen(f'echo "{user_pwd}" | sudo -S find "/home/{current_username}" -name prefs.js').read()[:-1])
-
-    # Custom prefs file path
-    custom_prefs_file_path = Path(custom_firefox_preferences_file_path)
-
-    # Checking if the path that leads to custom preferences file is exists
-    if custom_prefs_file_path.exists() == True:
-
-        # Opening the custom preferences file in read mode
-        with open(custom_prefs_file_path, "r") as the_custom_prefs_file:
-
-            # Creating a list of lines by reading the file
-            list_of_custom_prefs_file_lines = the_custom_prefs_file.readlines()
-
-    # Checking if the path is not exists
-    else:
-
-        # Sending a notification to inform the user that the operation is starting
-        system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Custom preferences file not found. Try to reinstall ghostsurf!"')
-
-    # Checking if the path that leads to firefox's preferences file is exists
-    if prefs_file_path.exists() == True:
-        
-        # Opening the prefs_file_path in reading mode
-        with open(prefs_file_path, "r") as firefox_prefs_file:
-
-            # Readling each line from the file and creating a list from those lines
-            list_of_firefox_prefs_file_lines = firefox_prefs_file.readlines()
-    
-    # Checking if the path is not exists
-    else:
-
-        # Sending a notification to inform the user that the operation is starting
-        system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Firefox\'s preferences file not found!"')
-
-    # Creating an empty list to store original file's key names
-    list_of_original_file_keys = []
-
-    # Iterating line by line in the list_of_firefox_prefs_file_lines list
-    for original_line in list_of_firefox_prefs_file_lines:
-
-        # Checking if the original_line is including '"' and "," at the same time. 
-        if '"' in original_line and "," in original_line:
-            
-            # Extracting the original key name from the original line
-            original_key_name = original_line.split('"')[1]
-            
-            # Extacting the value from the original line
-            original_value = original_line.split('"')[2][2:-3]
-
-            # Appending the key name to the list_of_original_file_keys list
-            list_of_original_file_keys.append(original_key_name)
-
-            # Iterating line by line in the list_of_custom_prefs_file_lines
-            for custom_line in list_of_custom_prefs_file_lines:
-
-                # Extrating the key name from the custom preference line               
-                custom_key_name = custom_line.split('"')[1]
-                
-                # Extracting the value from custom preference line
-                custom_value = custom_line.split('"')[2][2:-3]
-                
-                # Checking if the custom_key_name is equal to original_key_name
-                if custom_key_name == original_key_name:
-                    
-                    # Creating a preferences string
-                    special_line = f'user_pref("{original_key_name}", {custom_value});\n'
-
-                    # Creating an integer that corresponds to the original_line's location in the list
-                    target_lines_index_num = list_of_firefox_prefs_file_lines.index(original_line)
-                    
-                    # Altering the list_of_firefox_prefs_file_lines list
-                    list_of_firefox_prefs_file_lines[target_lines_index_num] = special_line
-
-    # Iterating through each line in the list_of_custom_prefs_file_lines
-    for custom_line in list_of_custom_prefs_file_lines:
-
-        # Creating a custom_key_name 
-        custom_key_name = custom_line.split('"')[1]
-
-        # Creatinga a custom variable
-        custom_value = custom_line.split('"')[2][2:-3]
-
-        # Creating user preferences using the custom_key_name and the custom_value variables that have just been created
-        special_custom_line = f'user_pref("{custom_key_name}", {custom_value});\n'
-
-        # Checking if the custom key is not in the list of original file keys
-        if custom_key_name not in list_of_original_file_keys: 
-            
-            # Appending the special custom line to the list_of_firefox_prefs_file
-            list_of_firefox_prefs_file_lines.append(special_custom_line)
-
-    # Opening the prefs_file_path in writing mode with firefox_prefs_file object name
-    with open(prefs_file_path, "w") as firefox_prefs_file:
-        
-        # Writing the list_of_firefox_prefs_file_lines list to firefox_prefs_file line by line
-        firefox_prefs_file.writelines(list_of_firefox_prefs_file_lines)
 
 def manage_netfilter_service():
     """A function which starts and enables netfilter service if it's not"""
@@ -888,6 +783,113 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Connecting the run_fast_check_button with the display_checklist function in a way that the function will going to trigger with a press signal
         self.run_fast_check_button.pressed.connect(self.run_fast_check)
 
+        # Connecting the browser_anonymizer_button with the anonymize_the_browser function in way that the function will going to trigger with a press signal
+        self.browser_anonymizer_button.pressed.connect(self.anonymize_the_browser)
+
+    def anonymize_the_browser(self):
+        """A function which anonymizes firefox by changing it's preferences"""
+
+        # Getting the username
+        current_username = getuser()
+        
+        # Finding the prefs.js file of firefox using a system command
+        prefs_file_path = Path(popen(f'echo "{user_pwd}" | sudo -S find "/home/{current_username}" -name prefs.js').read()[:-1])
+
+        # Custom prefs file path
+        custom_prefs_file_path = Path(custom_firefox_preferences_file_path)
+
+        # Checking if the path that leads to custom preferences file is exists
+        if custom_prefs_file_path.exists() == True:
+
+            # Opening the custom preferences file in read mode
+            with open(custom_prefs_file_path, "r") as the_custom_prefs_file:
+
+                # Creating a list of lines by reading the file
+                list_of_custom_prefs_file_lines = the_custom_prefs_file.readlines()
+
+        # Checking if the path is not exists
+        else:
+
+            # Sending a notification to inform the user that the operation is starting
+            system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Custom preferences file not found. Try to reinstall ghostsurf!"')
+
+        # Checking if the path that leads to firefox's preferences file is exists
+        if prefs_file_path.exists() == True:
+            
+            # Opening the prefs_file_path in reading mode
+            with open(prefs_file_path, "r") as firefox_prefs_file:
+
+                # Readling each line from the file and creating a list from those lines
+                list_of_firefox_prefs_file_lines = firefox_prefs_file.readlines()
+        
+        # Checking if the path is not exists
+        else:
+
+            # Sending a notification to inform the user that the operation is starting
+            system(f'notify-send -i "{ghostsurf_logo_file_path}" -t 300 "Firefox\'s preferences file not found!"')
+
+        # Creating an empty list to store original file's key names
+        list_of_original_file_keys = []
+
+        # Iterating line by line in the list_of_firefox_prefs_file_lines list
+        for original_line in list_of_firefox_prefs_file_lines:
+
+            # Checking if the original_line is including '"' and "," at the same time. 
+            if '"' in original_line and "," in original_line:
+                
+                # Extracting the original key name from the original line
+                original_key_name = original_line.split('"')[1]
+                
+                # Extacting the value from the original line
+                original_value = original_line.split('"')[2][2:-3]
+
+                # Appending the key name to the list_of_original_file_keys list
+                list_of_original_file_keys.append(original_key_name)
+
+                # Iterating line by line in the list_of_custom_prefs_file_lines
+                for custom_line in list_of_custom_prefs_file_lines:
+
+                    # Extrating the key name from the custom preference line               
+                    custom_key_name = custom_line.split('"')[1]
+                    
+                    # Extracting the value from custom preference line
+                    custom_value = custom_line.split('"')[2][2:-3]
+                    
+                    # Checking if the custom_key_name is equal to original_key_name
+                    if custom_key_name == original_key_name:
+                        
+                        # Creating a preferences string
+                        special_line = f'user_pref("{original_key_name}", {custom_value});\n'
+
+                        # Creating an integer that corresponds to the original_line's location in the list
+                        target_lines_index_num = list_of_firefox_prefs_file_lines.index(original_line)
+                        
+                        # Altering the list_of_firefox_prefs_file_lines list
+                        list_of_firefox_prefs_file_lines[target_lines_index_num] = special_line
+
+        # Iterating through each line in the list_of_custom_prefs_file_lines
+        for custom_line in list_of_custom_prefs_file_lines:
+
+            # Creating a custom_key_name 
+            custom_key_name = custom_line.split('"')[1]
+
+            # Creatinga a custom variable
+            custom_value = custom_line.split('"')[2][2:-3]
+
+            # Creating user preferences using the custom_key_name and the custom_value variables that have just been created
+            special_custom_line = f'user_pref("{custom_key_name}", {custom_value});\n'
+
+            # Checking if the custom key is not in the list of original file keys
+            if custom_key_name not in list_of_original_file_keys: 
+                
+                # Appending the special custom line to the list_of_firefox_prefs_file
+                list_of_firefox_prefs_file_lines.append(special_custom_line)
+
+        # Opening the prefs_file_path in writing mode with firefox_prefs_file object name
+        with open(prefs_file_path, "w") as firefox_prefs_file:
+            
+            # Writing the list_of_firefox_prefs_file_lines list to firefox_prefs_file line by line
+            firefox_prefs_file.writelines(list_of_firefox_prefs_file_lines)
 
     def run_fast_check(self):
         """A function which runs a fast check and displays the checklist in a window"""
@@ -1127,8 +1129,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # Executing the init script.
                 system(f'echo "{user_pwd}" | sudo -S {init_script_file_path}')
 
-                anonymize_the_browser()
-
                 # Executing the start script
                 system(f'echo "{user_pwd}" | sudo -S {start_transparent_proxy_script_file_path}')
 
@@ -1141,8 +1141,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # Printing the name of the button that is clicked in debug mode
                 debug("No button is clicked")
                 
-                anonymize_the_browser()
-
                 # Executing the start script
                 system(f'echo "{user_pwd}" | sudo -S {start_transparent_proxy_script_file_path}')
 

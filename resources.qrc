@@ -11,6 +11,8 @@
         <file alias="hostname_changer.svg">icons/hostname_changer.svg</file>
         <file alias="dns_changer.svg">icons/dns_changer.svg</file>
         <file alias="run_fast_check.svg">icons/run_fast_check.svg</file>
+        <file alias="browser.svg">icons/browser.svg</file>
+        <file alias="status.svg">icons/status.svg</file>
     </qresource>
     <qresource prefix="/logos">
         <file alias="ghostsurf.png">logos/ghostsurf.png</file>

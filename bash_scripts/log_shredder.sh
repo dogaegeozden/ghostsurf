@@ -33,7 +33,6 @@ start_log_killer() {
 
     done &>/dev/null
 
-
 }
 
 # Calling the main function.
