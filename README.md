@@ -15,7 +15,7 @@ Ghostsurf is a hacking tool which you can use to hide your identity.
 
 <br>
 
-## FEATURES
+## CONTROL DECK
 
 __Start/Stop Button:__ Starts/Stops the transparent proxy and changes the system's timezone
 
@@ -97,7 +97,7 @@ Ghostsurf kullanıcıların kimliklerini gizlemelerini sağlayan bir hackleme ar
 
 <br>
 
-## ÖZELLİKLER
+## KONTROL GÜVERTESİ
 
 __Start/Stop Button:__ Transparent proxy'i durdurur veya başlatır ve sistemin zaman dilimini değiştirir
 
