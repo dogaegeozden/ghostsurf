@@ -66,9 +66,6 @@ __Enable Ghostsurf at Boot Switch:__ Enables ghostsurf boot
 
 <br>
 
-
-![AppScreenShot](https://raw.githubusercontent.com/dogaegeozden/ghostsurf/main/app_images/app_sc.png)
-
 ## HELP
 
 Ghostsurf is identifying your ip address by sending a get request to https://ifconfig.io. And, if the app sends too many requests in short time that may cause issues and you may not get a proper response.
@@ -147,8 +144,6 @@ __Enable Ghostsurf at Boot Switch:__ Ghostsurf'ü başlangıçta başlamaya ayar
        ghostsurf
 
 <br>
-
-![AppScreenShot](https://raw.githubusercontent.com/dogaegeozden/ghostsurf/main/app_images/app_sc.png)
 
 ## YARDIM
 
